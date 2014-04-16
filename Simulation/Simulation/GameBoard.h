@@ -22,6 +22,7 @@
 #import "Obstacle.h"
 #import "GridSpace.h"
 #import "Beacon.h"
+#import "Robot.h"
 
 #include "GameBoard.h"
 #include "Drawing.h"
@@ -40,7 +41,8 @@ using namespace std;
 
 
 
-
+void MoveRobot();
+void RotateRobot();
 
 //Need public init function
 
@@ -48,6 +50,7 @@ void InitGameBoard();
 
 //Need public drawing function
 void DrawBoardComponents();
+
 
 
 

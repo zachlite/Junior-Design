@@ -22,6 +22,8 @@ void RegisterObstacle(Obstacle *obstacle);
 
 void InitBeacons();
 
+void InitRobot();
+
 
 //Private Drawing Functions
 void DrawGrid();
@@ -29,6 +31,7 @@ void DrawObstacles();
 void DrawArenaBoundary();
 void DrawGridUnits();
 void DrawBeacons();
+void DrawRobot();
 
 //Private Math Functions
 float distanceBetween(CGPoint p1, CGPoint p2);
@@ -47,6 +50,8 @@ NSMutableArray *ArrayThatHoldsObstacles = [NSMutableArray arrayWithCapacity:1];
 NSMutableArray *ArrayThatHoldsGridSpaces = [NSMutableArray arrayWithCapacity:5184];
 //NSMutableArray *ArrayThatHoldsSonarField = [NSMutableArray arrayWithCapacity:1];
 NSMutableArray *ArrayThatHoldsBeacons = [NSMutableArray arrayWithCapacity:3];
+
+NSArray *RobotHolder;
 
 
 
@@ -82,7 +87,7 @@ void InitGameBoard()
 
     InitBeacons();
     
-    
+    InitRobot();
     
     
 }
@@ -223,8 +228,6 @@ void RegisterGridSpace(GridSpace *gridSpace)
     
 }
 
-
-
 void InitBeacons()
 {
     NSLog(@"Beacons Initialized");
@@ -251,6 +254,23 @@ void InitBeacons()
     
 }
 
+void InitRobot()
+{
+    NSLog(@"Robot Initialized");
+    
+    Robot *robot = [[Robot alloc] initWithFrame:CGRectMake(300, 300, Inches_To_Pixels(6), Inches_To_Pixels(6))];
+    //[robot initObstacleWithAngle:0.0];
+    
+    RobotHolder = [NSArray arrayWithObject:robot];
+    
+        NSLog(@"P1: %f %f", (robot.P1.x),(robot.P1.y));
+        NSLog(@"P2 : %f %f", (robot.P2.x), (robot.P2.y));
+        NSLog(@"P3 : %f %f", (robot.P3.x), (robot.P3.y));
+        NSLog(@"P4 : %f %f", (robot.P4.x), (robot.P4.y));
+    
+}
+
+
 
 /*
  
@@ -265,6 +285,26 @@ void InitBeacons()
 
  
  */
+
+void MoveRobot()
+{
+    Robot *robot = [RobotHolder firstObject];
+
+    [robot updateFrameOrigin:CGPointMake(robot.P1.x,robot.P1.y+1.0)];
+    [robot updateSensorFrameOrigin:CGPointMake(robot.sensors.P1.x, robot.sensors.P1.y+1.0)];
+    
+
+    
+}
+
+void RotateRobot()
+{
+    Robot *robot = [RobotHolder firstObject];
+    
+    [robot initObstacleWithAngle:robot.Angle+.1];
+    [robot.sensors initObstacleWithAngle:robot.sensors.Angle+.1];
+
+}
 
 
 void PositionBeaconsClickedAtCoordinate(CGPoint mouseCoord)
@@ -334,7 +374,7 @@ void DrawBoardComponents()
     DrawObstacles();
     DrawGridUnits();
     DrawBeacons();
-    
+    DrawRobot();
 }
 
 
@@ -438,7 +478,10 @@ void DrawBeacons()
     }
 }
 
-
+void DrawRobot()
+{
+    Draw_Robot([RobotHolder firstObject]);
+}
 
 
 

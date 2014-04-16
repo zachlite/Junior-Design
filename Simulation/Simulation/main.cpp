@@ -54,7 +54,6 @@ int main(int argc, char** argv)
 
     InitGameBoard();
     
-    //InitRobot();
     
     
     bool runProgram = true;
@@ -103,8 +102,13 @@ int main(int argc, char** argv)
         {
             ResetBeaconManipulation();
         }
+
         
+        //MoveRobot();
         
+        RotateRobot();
+        
+
         
         
         
@@ -115,7 +119,7 @@ int main(int argc, char** argv)
         glOrtho(0,Width_Of_Viewport_In_Pixels,Height_Of_Viewport_In_Pixels,0,-1,1);//set the matrix
         /////////////////////////////////////////////
     
- 
+   
        
         DrawBoardComponents();
        
@@ -181,6 +185,8 @@ void Setup_Window_And_Rendering(int screenWidth, int screenHeight)
     glViewport(0,0,screenWidth,screenHeight); //viewing area
         
     glShadeModel(GL_SMOOTH);//shader model
+    
+    
         
     glMatrixMode(GL_PROJECTION);//2D rendering
     glLoadIdentity();//"save" it

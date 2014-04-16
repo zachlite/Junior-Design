@@ -18,6 +18,7 @@
 #import "GridSpace.h"
 #import "SonarField.h"
 #import "Beacon.h"
+#import "Robot.h"
 
 #define CircleEdges 100
 
@@ -46,4 +47,6 @@ void Draw_Obstacle(Obstacle *obstacle);
 void Draw_Grid_Unit(GridSpace *gridUnit);
 
 void Draw_Beacon(Beacon *beacon);
+
+void Draw_Robot(Robot *robot);
 //void Draw_Sonar_Field(SonarField *sonarField);

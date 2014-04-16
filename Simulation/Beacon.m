@@ -9,7 +9,7 @@
 #import "Beacon.h"
 
 #define DefaultLightRadiusAvailable 2.0 //feet
-#define DefaultLightRadiusCaptured 1.0 //feet
+#define DefaultLightRadiusCaptured 0.25 //feet
 #define DefaultIRRadius .5 //foot
 
 

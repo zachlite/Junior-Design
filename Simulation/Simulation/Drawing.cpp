@@ -63,13 +63,12 @@ void Draw_Line(CGPoint start, CGPoint end, bool INCR_of_twelve)
 void Draw_Boundary(CGPoint p1, CGPoint p2, CGPoint p3, CGPoint p4)
 {
     glBegin(GL_LINE_LOOP);
-    glLineWidth(20);
+    glLineWidth(10.0f);
 
     glColor4ub(70,135,237,255);
     glVertex2f(p1.x, p1.y);
     glVertex2f(p2.x, p2.y);
     glVertex2f(p3.x, p3.y);
-    
     glVertex2f(p4.x, p4.y);
     glEnd();
     
@@ -203,6 +202,46 @@ void Draw_Beacon(Beacon *beacon)
     
 }
 
+
+void Draw_Robot(Robot *robot)
+{
+    
+    
+ 
+
+    //Sensors
+    
+    glBegin(GL_QUADS);
+    glColor4ub(0.0,45.0,100.0,100.0);
+    glVertex2f(robot.sensors.P1.x, robot.sensors.P1.y);
+    glVertex2f(robot.sensors.P2.x, robot.sensors.P2.y);
+    glVertex2f(robot.sensors.P3.x, robot.sensors.P3.y);
+    glVertex2f(robot.sensors.P4.x, robot.sensors.P4.y);
+    glEnd();
+  
+    
+    
+    //Robot
+    
+    glBegin(GL_QUADS);
+    glColor4ub(180.0,45.0,0.0,255.0);
+    glVertex2f(robot.P1.x, robot.P1.y);
+    glVertex2f(robot.P2.x, robot.P2.y);
+    glVertex2f(robot.P3.x, robot.P3.y);
+    glVertex2f(robot.P4.x, robot.P4.y);
+    glEnd();
+
+
+    glBegin(GL_LINES);
+    glLineWidth(5.0);
+    glColor4ub(255.0,255.0,255.0,255.0);
+    glVertex2f(robot.P1.x, robot.P1.y);
+    glVertex2f(robot.P2.x, robot.P2.y);
+    glEnd();
+    
+  
+    
+}
 
 void Draw_Sonar_Field(SonarField *sonarField)
 {
