@@ -9,19 +9,32 @@
 #ifndef __Simulation__GameBoard__
 #define __Simulation__GameBoard__
 
+
 #import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+
 
 #include "SDL/SDL_opengl.h"
 #include "SDL/SDL.h"
 
-#define Width 768
-#define Height 768
-#define GridSpacing 1 //inch
 
+//Include Dependencies Here
 #import "Obstacle.h"
 #import "GridSpace.h"
-//#import "SonarField.h"
-//using namespace std;
+#import "Beacon.h"
+
+#include "GameBoard.h"
+#include "Drawing.h"
+#include "math.h"
+
+#include "includes.h"
+
+
+
+
+#import <iostream>
+using namespace std;
+
 
 #endif /* defined(__Simulation__GameBoard__) */
 
@@ -29,12 +42,19 @@
 
 
 
-void DrawGrid();
-void DrawArenaBoundary();
+//Need public init function
 
-void InitializeNavigationGrid();
-void RegisterGridSpace(GridSpace *gridSpace);
-void DrawGridUnits();
+void InitGameBoard();
+
+//Need public drawing function
+void DrawBoardComponents();
+
+
+
+void CheckIfClickedAtCoordinate(CGPoint mouseCoord);
+void PositionBeaconsClickedAtCoordinate(CGPoint mouseCoord);
+void ResetBeaconManipulation();
+
 
 
 //void SetSonarField(float angle);
@@ -42,29 +62,14 @@ void DrawGridUnits();
 //void DrawSonarField();
 
 
-void CreateObstacles();
-void CreateObstacle(CGPoint origin, CGSize size, CGFloat angle);
-void RegisterObstacle(Obstacle *obstacle);
-void DrawObstacles();
+
 
 
 //BOOL SonarFieldIntersectsObstacle();
 
-float distanceBetween(CGPoint p1, CGPoint p2);
-float AreaOfTriangle(CGPoint p1, CGPoint p2, CGPoint p3);
-float slope(float y2, float y1, float x2, float x1);
-float b_intercept_of_line(float slope, CGPoint point);
 
 
 
-float Pixels_To_Inches(float pixels);
-float Inches_To_Pixels(int inches);
-
-struct Coordinate {
-    int x;
-    int y;
-};
-//typedef struct Coordinate Coordinate;
 
 
-struct Coordinate InitCoordinate(int x, int y);
+

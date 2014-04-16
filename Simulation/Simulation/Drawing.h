@@ -17,6 +17,12 @@
 #import "Obstacle.h"
 #import "GridSpace.h"
 #import "SonarField.h"
+#import "Beacon.h"
+
+#define CircleEdges 100
+
+const float PI = 3.1415927;
+
 using namespace std;
 #endif /* defined(__Simulation__Drawing__) */
 
@@ -26,11 +32,11 @@ void Draw_Rectangle (unsigned char R, unsigned char G, unsigned char B, unsigned
 
 
 
-void Draw_Boundary(struct Coordinate *p1, struct Coordinate *p2, struct Coordinate *p3, struct Coordinate *p4);
+void Draw_Boundary(CGPoint p1, CGPoint p2, CGPoint p3, CGPoint p4);
 //void Draw_Boundary(int p1_x, int p1_y, int p2_x, int p2_y, int p3_x, int p3_y, int p4_x, int p4_y);
 
-
-void Draw_Line(struct Coordinate *start, struct Coordinate *end, bool INCR_of_twelve);
+void Draw_Line(CGPoint start, CGPoint end, bool INCR_of_twelve);
+//void Draw_Line(struct Coordinate *start, struct Coordinate *end, bool INCR_of_twelve);
 //void Draw_Line(int start_x, int start_y, int end_x, int end_y, bool INCR_of_twelve);
 
 //void Draw_Obstacle(struct Coordinate *origin, struct Size *size);
@@ -39,4 +45,5 @@ void Draw_Obstacle(Obstacle *obstacle);
 
 void Draw_Grid_Unit(GridSpace *gridUnit);
 
-void Draw_Sonar_Field(SonarField *sonarField);
+void Draw_Beacon(Beacon *beacon);
+//void Draw_Sonar_Field(SonarField *sonarField);

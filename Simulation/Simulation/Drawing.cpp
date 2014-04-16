@@ -43,7 +43,7 @@ void Draw_Line(int start_x, int start_y, int end_x, int end_y, bool INCR_of_twel
 }
  */
 
-void Draw_Line(struct Coordinate *start, struct Coordinate *end, bool INCR_of_twelve)
+void Draw_Line(CGPoint start, CGPoint end, bool INCR_of_twelve)
 {
     glBegin(GL_LINES);
     if (INCR_of_twelve)
@@ -54,22 +54,24 @@ void Draw_Line(struct Coordinate *start, struct Coordinate *end, bool INCR_of_tw
     {
         glColor4ub(200,200,200,255);
     }
-    glVertex2f(start->x, start->y);
-    glVertex2f(end->x, end->y);
+    glVertex2f(start.x, start.y);
+    glVertex2f(end.x, end.y);
     glEnd();
     glLineWidth(.5f);
 }
 
-void Draw_Boundary(struct Coordinate *p1, struct Coordinate *p2, struct Coordinate *p3, struct Coordinate *p4)
+void Draw_Boundary(CGPoint p1, CGPoint p2, CGPoint p3, CGPoint p4)
 {
     glBegin(GL_LINE_LOOP);
+    glLineWidth(20);
+
     glColor4ub(70,135,237,255);
-    glVertex2f(p1->x, p1->y);
-    glVertex2f(p2->x, p2->y);
-    glVertex2f(p3->x, p3->y);
-    glVertex2f(p4->x, p4->y);
+    glVertex2f(p1.x, p1.y);
+    glVertex2f(p2.x, p2.y);
+    glVertex2f(p3.x, p3.y);
+    
+    glVertex2f(p4.x, p4.y);
     glEnd();
-    glLineWidth(2);
     
 }
 
@@ -102,7 +104,7 @@ void Draw_Grid_Unit(GridSpace *gridUnit)
     NSColor *color = gridUnit.GridColor;
     GLbyte redByte, greenByte, blueByte, alphaByte;
     
-    redByte = [color greenComponent];
+    redByte = [color redComponent];
     greenByte = [color greenComponent];
     blueByte = [color blueComponent];
     alphaByte = [color alphaComponent];
@@ -122,6 +124,86 @@ void Draw_Grid_Unit(GridSpace *gridUnit)
     
 }
 
+void Draw_Beacon(Beacon *beacon)
+{
+    
+    CGPoint center = CGPointMake(NSMidX([beacon frame]), NSMidY([beacon frame]));
+    //need to figure out a better system for coordinates regarding beacon frame
+    
+    //visible light is represented as a line loop
+    
+    NSColor *light_color = beacon.LightColor;
+    //NSLog(@"%@ beacon light color", [beacon.LightColor description]);
+    GLbyte redByte, greenByte, blueByte, alphaByte;
+    
+    redByte = [light_color redComponent] * 255.0;
+    greenByte = [light_color greenComponent]* 255.0;
+    blueByte = [light_color blueComponent]* 255.0;
+    alphaByte = [light_color alphaComponent]* 255.0;
+    
+
+    
+    glBegin(GL_LINE_LOOP);
+    glColor4ub(redByte,greenByte,blueByte,alphaByte);
+
+        for (float angle = 0; angle < CircleEdges; angle += 1)
+        {
+
+            CGPoint newCoordinate = CGPointMake(center.x + [beacon.LightFieldRadius floatValue] * cosf((angle*2*PI)/CircleEdges), center.y + [beacon.LightFieldRadius floatValue] * sinf((angle*2*PI)/CircleEdges));
+            glVertex2f(newCoordinate.x, newCoordinate.y);
+
+        }
+
+        
+    glEnd();
+
+    
+    
+    
+    
+    //IR light is represented as a circle
+    NSColor *IR_color = beacon.IRLightColor;
+
+    redByte = [IR_color redComponent] * 255.0;
+    greenByte = [IR_color greenComponent]* 255.0;
+    blueByte = [IR_color blueComponent]* 255.0;
+    alphaByte = [IR_color alphaComponent]* 100.0;
+    
+    
+    
+    glBegin(GL_TRIANGLE_FAN);
+    glColor4ub(redByte,greenByte,blueByte,alphaByte);
+    glVertex2f(center.x, center.y); // center of circle
+    for (float angle = 0; angle <= CircleEdges; angle += 1)
+    {
+        
+        CGPoint newCoordinate = CGPointMake(center.x + [beacon.IRFieldRadius floatValue] * cosf((angle*2*PI)/CircleEdges), center.y + [beacon.IRFieldRadius floatValue] * sinf((angle*2*PI)/CircleEdges));
+        glVertex2f(newCoordinate.x, newCoordinate.y);
+        
+    }
+    
+    
+    glEnd();
+    
+    
+    
+    
+    
+    
+    
+    ///beacon body
+    glBegin(GL_QUADS);
+    glColor4ub(0.0,0.0,0.0,255.0);
+    glVertex2f(beacon.frame.origin.x, beacon.frame.origin.y);
+    glVertex2f(beacon.frame.origin.x+beacon.frame.size.width, beacon.frame.origin.y);
+    glVertex2f(beacon.frame.origin.x+beacon.frame.size.width, beacon.frame.origin.y+beacon.frame.size.height);
+    glVertex2f(beacon.frame.origin.x, beacon.frame.origin.y+beacon.frame.size.height);
+    glEnd();
+    glLineWidth(1.5f);
+    
+}
+
+
 void Draw_Sonar_Field(SonarField *sonarField)
 {
     
@@ -134,7 +216,6 @@ void Draw_Sonar_Field(SonarField *sonarField)
 
     
 }
-
 
 
 

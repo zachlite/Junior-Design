@@ -10,24 +10,26 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
+
 #include "SDL/SDL_opengl.h"
 #include "SDL/SDL.h"
-#include <iostream>
-//#include <time.h>
 
 
 #include "GameBoard.h"
 #include "Drawing.h"
 #import "Obstacle.h"
-#import <AppKit/AppKit.h>
-//#define Width 768
-//#define Height 768
-#define MaximumObstacleSize 3 //feet
-#define MinObstacles 2
-#define MaxObstacles 3
 
+
+
+#include "includes.h"
+
+
+#include <iostream>
 using namespace std;
 
+
+
+//Function Prototypes
 void Initialize_Memory_Attributes();
 void Setup_Window_And_Rendering(int screenWidth, int screenHeight);
 
@@ -44,24 +46,22 @@ int main(int argc, char** argv)
     //initialize SDL hardware
 	SDL_Init(SDL_INIT_EVERYTHING);
     Initialize_Memory_Attributes();
-	Setup_Window_And_Rendering(Width, Height);
+	Setup_Window_And_Rendering(Width_Of_Viewport_In_Pixels, Height_Of_Viewport_In_Pixels);
     
 
     NSLog(@"Begin Simulation");
     
+
+    InitGameBoard();
     
-    CreateObstacles();//set up obstacles
-    
-    InitializeNavigationGrid();
-    
- 
+    //InitRobot();
     
     
     bool runProgram = true;
     SDL_Event event;
 
    
-    
+    bool mouse_is_clicked = false;
 	while (runProgram) //Begin main program loop
 	{
 		//Events are tied to key presses, mouse movements, etc
@@ -69,8 +69,15 @@ int main(int argc, char** argv)
 		{
             if (event.type == SDL_MOUSEBUTTONDOWN)
             {
-               // cout << "Mouse Pressed" <<endl;
+                cout << "Mouse Pressed" <<endl;
+                mouse_is_clicked = true;
             }
+            if (event.type == SDL_MOUSEBUTTONUP)
+            {
+                cout << "Mouse released" <<endl;
+                mouse_is_clicked = false;
+            }
+         
 		    if (event.type == SDL_QUIT)
 			{
                 runProgram = false;
@@ -86,20 +93,32 @@ int main(int argc, char** argv)
         
         //Logic Goes Here
   
+        if (mouse_is_clicked)
+        {   CGPoint mouseCoord = CGPointMake(event.motion.x, event.motion.y);
+            NSLog(@"mouse at %f %f", mouseCoord.x, mouseCoord.y);
+            CheckIfClickedAtCoordinate(mouseCoord);
+            PositionBeaconsClickedAtCoordinate(mouseCoord);
+        }
+        else
+        {
+            ResetBeaconManipulation();
+        }
+        
+        
+        
+        
         
         
         //Render to the screen
         glClear(GL_COLOR_BUFFER_BIT);
         glPushMatrix();//start phase
-        glOrtho(0,Width,Height,0,-1,1);//set the matrix
+        glOrtho(0,Width_Of_Viewport_In_Pixels,Height_Of_Viewport_In_Pixels,0,-1,1);//set the matrix
         /////////////////////////////////////////////
     
  
        
-        DrawGrid();//increment in inches
-        DrawArenaBoundary();
-        DrawObstacles();
-        DrawGridUnits();
+        DrawBoardComponents();
+       
         
      
        
@@ -109,7 +128,7 @@ int main(int argc, char** argv)
 		glPopMatrix();//end
 		SDL_GL_SwapBuffers();//re-draws
         
-        SDL_Delay(1000);//ms
+        SDL_Delay(100);//ms
     }//end while
     
     return 0;

@@ -11,7 +11,7 @@
 @interface Obstacle : NSView
 
 
-@property (nonatomic) CGPoint P1;
+@property (nonatomic) CGPoint P1;//for drawing
 @property (nonatomic) CGPoint P2;
 @property (nonatomic) CGPoint P3;
 @property (nonatomic) CGPoint P4;
