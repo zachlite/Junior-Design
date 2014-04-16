@@ -24,7 +24,7 @@ static const int twelveInchPixelValue = Inches_To_Pixels(12);
 
 NSMutableArray *ArrayThatHoldsObstacles = [NSMutableArray arrayWithCapacity:1];
 NSMutableArray *ArrayThatHoldsGridSpaces = [NSMutableArray arrayWithCapacity:5184];
-NSMutableArray *ArrayThatHoldsSonarField = [NSMutableArray arrayWithCapacity:1];
+//NSMutableArray *ArrayThatHoldsSonarField = [NSMutableArray arrayWithCapacity:1];
 
 
 
@@ -108,9 +108,7 @@ void DrawArenaBoundary()
 void InitializeNavigationGrid()
 {
     
-    
     //need a grid of 72/n by 72/n spaces, where n is the grid spacing in inches
-    
     
     for (float x = Inches_To_Pixels(12); x < Inches_To_Pixels(72+12)/GridSpacing; x += Inches_To_Pixels(GridSpacing))
     {
@@ -136,7 +134,6 @@ void InitializeNavigationGrid()
     
     
     
-    
 
 }
 
@@ -149,28 +146,28 @@ void RegisterGridSpace(GridSpace *gridSpace)
 
 
 
-void SetSonarField(float angle)
-{
-    SonarField *sonarField = [[SonarField alloc] init];
-    [sonarField SetSonarFieldAt:CGPointMake(Inches_To_Pixels(4), Inches_To_Pixels(6.5)) WithAngle:angle];
-    
-    RegisterSonarField(sonarField);
-    
-        //NSLog(@"P1: %f %f", (sonarField.P1.x),(sonarField.P1.y));
-        //NSLog(@"P2 : %f %f", (sonarField.P2.x), (sonarField.P2.y));
-        //NSLog(@"P3 : %f %f", (sonarField.P3.x), (sonarField.P3.y));
-    
-    
-}
+//void SetSonarField(float angle)
+//{
+//    SonarField *sonarField = [[SonarField alloc] init];
+//    [sonarField SetSonarFieldAt:CGPointMake(Inches_To_Pixels(4), Inches_To_Pixels(6.5)) WithAngle:angle];
+//    
+//    RegisterSonarField(sonarField);
+//    
+//        //NSLog(@"P1: %f %f", (sonarField.P1.x),(sonarField.P1.y));
+//        //NSLog(@"P2 : %f %f", (sonarField.P2.x), (sonarField.P2.y));
+//        //NSLog(@"P3 : %f %f", (sonarField.P3.x), (sonarField.P3.y));
+//    
+//    
+//}
 
-
-void RegisterSonarField(SonarField *sonarField)
-{
-    [ArrayThatHoldsSonarField removeAllObjects];
-    [ArrayThatHoldsSonarField addObject:sonarField];
-    
-}
-
+//
+//void RegisterSonarField(SonarField *sonarField)
+//{
+//    [ArrayThatHoldsSonarField removeAllObjects];
+//    [ArrayThatHoldsSonarField addObject:sonarField];
+//    
+//}
+//
 
 
 
@@ -293,17 +290,19 @@ void DrawGridUnits()
     
 }
 
-void DrawSonarField()
-{
-    Draw_Sonar_Field([ArrayThatHoldsSonarField firstObject]);
-    
-}
+
+
+//void DrawSonarField()
+//{
+//    Draw_Sonar_Field([ArrayThatHoldsSonarField firstObject]);
+//    
+//}
 
 
 
 
 
-
+/*
 BOOL SonarFieldIntersectsObstacle ()
 {
     
@@ -397,6 +396,11 @@ BOOL SonarFieldIntersectsObstacle ()
     
     
 }
+ 
+ 
+*/
+
+
 
 float distanceBetween(CGPoint p1, CGPoint p2)
 {

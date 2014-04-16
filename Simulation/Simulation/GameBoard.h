@@ -20,7 +20,7 @@
 
 #import "Obstacle.h"
 #import "GridSpace.h"
-#import "SonarField.h"
+//#import "SonarField.h"
 //using namespace std;
 
 #endif /* defined(__Simulation__GameBoard__) */
@@ -37,9 +37,9 @@ void RegisterGridSpace(GridSpace *gridSpace);
 void DrawGridUnits();
 
 
-void SetSonarField(float angle);
-void RegisterSonarField(SonarField *sonarField);
-void DrawSonarField();
+//void SetSonarField(float angle);
+//void RegisterSonarField(SonarField *sonarField);
+//void DrawSonarField();
 
 
 void CreateObstacles();
@@ -48,7 +48,7 @@ void RegisterObstacle(Obstacle *obstacle);
 void DrawObstacles();
 
 
-BOOL SonarFieldIntersectsObstacle();
+//BOOL SonarFieldIntersectsObstacle();
 
 float distanceBetween(CGPoint p1, CGPoint p2);
 float AreaOfTriangle(CGPoint p1, CGPoint p2, CGPoint p3);

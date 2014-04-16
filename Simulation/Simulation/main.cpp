@@ -54,15 +54,13 @@ int main(int argc, char** argv)
     
     InitializeNavigationGrid();
     
-    //SetSonarField(0.0*(M_PI/180.0));//1.0*.01745);//in degrees;
-
+ 
     
     
     bool runProgram = true;
     SDL_Event event;
 
-    float angle = .5; //remove this
-    float tempangle = 0.0;
+   
     
 	while (runProgram) //Begin main program loop
 	{
@@ -87,22 +85,7 @@ int main(int argc, char** argv)
         
         
         //Logic Goes Here
-       SetSonarField(tempangle*(M_PI/180.0));//1.0*.01745);//in degrees;
-        
-        if (tempangle > 50) {
-            angle = -angle;
-        }
-        else if (tempangle < -50)
-        {
-            angle = -angle;
-        }
-       
-            tempangle += angle;
-    
-        if(!SonarFieldIntersectsObstacle())
-        {
-            NSLog(@"No obstacle detected");
-        }
+  
         
         
         //Render to the screen
@@ -119,7 +102,7 @@ int main(int argc, char** argv)
         DrawGridUnits();
         
      
-        DrawSonarField();
+       
         
         ///////////////////////////////////////////
         //end rendering

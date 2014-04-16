@@ -10,7 +10,6 @@
 		9213615018B2C37100D9A7EF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9213614F18B2C37100D9A7EF /* CoreGraphics.framework */; };
 		924CFC0918AB1C4500EFD8D8 /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 924CFC0718AB1C4500EFD8D8 /* Drawing.cpp */; };
 		924CFC1518AB411200EFD8D8 /* Obstacle.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CFC1418AB411200EFD8D8 /* Obstacle.m */; };
-		926F070618B08ABB00010459 /* SonarField.m in Sources */ = {isa = PBXBuildFile; fileRef = 926F070518B08ABB00010459 /* SonarField.m */; };
 		92C068C118AA0614008A8D6C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C068C018AA0614008A8D6C /* main.cpp */; };
 		92C068C318AA0614008A8D6C /* Simulation.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 92C068C218AA0614008A8D6C /* Simulation.1 */; };
 		92DAC21318FDAA13005DB966 /* GameBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92DAC21118FDAA13005DB966 /* GameBoard.cpp */; };
@@ -41,8 +40,6 @@
 		924CFC0818AB1C4500EFD8D8 /* Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawing.h; sourceTree = "<group>"; };
 		924CFC1318AB411200EFD8D8 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
 		924CFC1418AB411200EFD8D8 /* Obstacle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Obstacle.m; sourceTree = "<group>"; };
-		926F070418B08ABB00010459 /* SonarField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SonarField.h; sourceTree = "<group>"; };
-		926F070518B08ABB00010459 /* SonarField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SonarField.m; sourceTree = "<group>"; };
 		928C208818B2745E00107621 /* includes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = includes.h; sourceTree = "<group>"; };
 		92C068BD18AA0614008A8D6C /* Simulation */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulation; sourceTree = BUILT_PRODUCTS_DIR; };
 		92C068C018AA0614008A8D6C /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = main.cpp; sourceTree = "<group>"; };
@@ -120,8 +117,6 @@
 				92E9937418ADF30E005C03CE /* GridSpace.h */,
 				924CFC1418AB411200EFD8D8 /* Obstacle.m */,
 				924CFC1318AB411200EFD8D8 /* Obstacle.h */,
-				926F070518B08ABB00010459 /* SonarField.m */,
-				926F070418B08ABB00010459 /* SonarField.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -182,7 +177,6 @@
 				92DD1CD218AA06C000DE921D /* SDLMain.m in Sources */,
 				92E9937618ADF30E005C03CE /* GridSpace.m in Sources */,
 				924CFC1518AB411200EFD8D8 /* Obstacle.m in Sources */,
-				926F070618B08ABB00010459 /* SonarField.m in Sources */,
 				92C068C118AA0614008A8D6C /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
