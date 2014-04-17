@@ -10,7 +10,7 @@
 #include "carrier_wave.h"
 #include "motors.h"
 #include "inputoutput.h"
-#include "binary.h"
+//#include "binary.h"
 
 #include "ir_comm.h"
 #include "ADC.h"
@@ -28,12 +28,9 @@ int main(void)
 
 
     initialize_io();
-  
+    set_up_IR_communications();
+    init_ADC();
 
-    
-
-  
-    // set_up_IR_communications();
 
     // unsigned char data_received, data_received_inverted;
 
@@ -85,12 +82,6 @@ int main(void)
 
 
 
-
-  
-  
-  	
-
- 
 
   return 0;
 }

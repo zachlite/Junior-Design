@@ -10,15 +10,115 @@
 #define duty_cycle_small 150
 #define duty_cycle_large 255
 #define slip_distance 1000
+#define WheelCircumference 8.875
 
+#define UnitOfMovement 1
 
 //private API
 
+void set_motor_directions_for_movement(unsigned char type_of_movement);
+void set_left_motor_direction(unsigned char direction);
+void set_right_motor_direction(unsigned char direction);
 
 
 
-//high level functions
-//Public API
+void enable_motors();
+void enable_left_motor();
+void enable_right_motor();
+void stop_motors();
+void stop_left_motor();
+void stop_right_motor();
+void move_distance(unsigned int distance_in_quad_ticks);
+unsigned char motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks);
+void get_duty_cycle(unsigned int distance, unsigned int quad_ticks, unsigned char *duty_cycle);
+
+int convert_degrees_to_quad_ticks(unsigned short degrees);
+int convert_inches_to_quad_ticks(unsigned short inches);
+
+
+
+/*
+
+             _     _ _          _     _       _           _                _ 
+ _ __  _   _| |__ | (_) ___ _  | |__ (_) __ _| |__       | | _____   _____| |
+| '_ \| | | | '_ \| | |/ __(_) | '_ \| |/ _` | '_ \ _____| |/ _ \ \ / / _ \ |
+| |_) | |_| | |_) | | | (__ _  | | | | | (_| | | | |_____| |  __/\ V /  __/ |
+| .__/ \__,_|_.__/|_|_|\___(_) |_| |_|_|\__, |_| |_|     |_|\___| \_/ \___|_|
+|_|                                     |___/                                
+		
+simulation-portable
+
+*/
+
+
+unsigned char move_until_interrupted()
+{
+	while(1)
+	{
+		move_forward_by_distance(UnitOfMovement);//inches
+		if (light_detected())//from LightSensors
+		{
+			return 1;
+		}
+		if (obstacle_detected())//from ADC.c
+		{
+			return 2;
+		}
+
+	}
+
+}
+
+unsigned char move_towards_and_capture_beacon()//will we know distance?
+{
+	while(!beacon_captured())//its easier to determine a change in color of light than track distance to beacon approach
+	{//from IRComm.c ^
+
+
+		turn_towards_direction_of_beacon();
+		move_forward_by_distance(UnitOfMovement)
+
+		if (obstacle_detected())//from ADC.c
+		{
+			avoid_obstacle();
+		}
+
+
+		capture_beacon();//from IRComm.c
+
+	}
+
+
+}
+
+void turn_towards_direction_of_beacon()
+{
+	//for now do nothing
+
+
+}
+
+void avoid_obstacle()//eventually navigate around obstacle?
+{
+	move_backward_by_distance(3);
+	turn_right_by_angle(15);
+
+}
+
+
+/*
+                    _ _                       _                _ 
+ _ __ ___   ___  __| (_)_   _ _ __ ___       | | _____   _____| |
+| '_ ` _ \ / _ \/ _` | | | | | '_ ` _ \ _____| |/ _ \ \ / / _ \ |
+| | | | | |  __/ (_| | | |_| | | | | | |_____| |  __/\ V /  __/ |
+|_| |_| |_|\___|\__,_|_|\__,_|_| |_| |_|     |_|\___| \_/ \___|_|
+                                                                 
+
+
+*/
+//need simulation replacements for these functions
+
+
 void turn_left()
 {
 	turn_left_by_angle(90);	
@@ -72,10 +172,19 @@ void stop()
 {
 	stop_motors();
 }
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
+
+/*
+
+            _            _           _                    _                _ 
+ _ __  _ __(_)_   ____ _| |_ ___ _  | | _____      __    | | _____   _____| |
+| '_ \| '__| \ \ / / _` | __/ _ (_) | |/ _ \ \ /\ / /____| |/ _ \ \ / / _ \ |
+| |_) | |  | |\ V / (_| | ||  __/_  | | (_) \ V  V /_____| |  __/\ V /  __/ |
+| .__/|_|  |_| \_/ \__,_|\__\___(_) |_|\___/ \_/\_/      |_|\___| \_/ \___|_|
+|_|                                                                          
+		
+
+
+*/
 
 
 
@@ -111,7 +220,7 @@ void set_motor_directions_for_movement(unsigned char type_of_movement)
 
 
 
-//low level
+
 void set_left_motor_direction(unsigned char direction)
 {
 	if (direction == Forward)
@@ -201,6 +310,10 @@ void move_distance(unsigned int distance_in_quad_ticks)
     enable_motors();
 	while (quad_ticks < distance_in_quad_ticks)
 	{
+
+		
+
+
 	 	unsigned char last_signal_left, last_signal_right;
         last_signal_left = quad_encoder_signal_left;
         last_signal_right = quad_encoder_signal_right;

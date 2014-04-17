@@ -10,6 +10,7 @@
 		9213615018B2C37100D9A7EF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9213614F18B2C37100D9A7EF /* CoreGraphics.framework */; };
 		924CFC0918AB1C4500EFD8D8 /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 924CFC0718AB1C4500EFD8D8 /* Drawing.cpp */; };
 		924CFC1518AB411200EFD8D8 /* Obstacle.m in Sources */ = {isa = PBXBuildFile; fileRef = 924CFC1418AB411200EFD8D8 /* Obstacle.m */; };
+		924DE31818FF801400D54424 /* gameplay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 924DE31718FF801400D54424 /* gameplay.mm */; };
 		9293232418FE3AFB004556EE /* Beacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 9293232318FE3AFB004556EE /* Beacon.m */; };
 		92C068C118AA0614008A8D6C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92C068C018AA0614008A8D6C /* main.cpp */; };
 		92C068C318AA0614008A8D6C /* Simulation.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 92C068C218AA0614008A8D6C /* Simulation.1 */; };
@@ -42,6 +43,8 @@
 		924CFC0818AB1C4500EFD8D8 /* Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawing.h; sourceTree = "<group>"; };
 		924CFC1318AB411200EFD8D8 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
 		924CFC1418AB411200EFD8D8 /* Obstacle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Obstacle.m; sourceTree = "<group>"; };
+		924DE31718FF801400D54424 /* gameplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = gameplay.mm; sourceTree = "<group>"; };
+		924DE31918FF802300D54424 /* gameplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gameplay.h; sourceTree = "<group>"; };
 		928C208818B2745E00107621 /* includes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = includes.h; sourceTree = "<group>"; };
 		9293232218FE3AFB004556EE /* Beacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Beacon.h; path = ../Beacon.h; sourceTree = "<group>"; };
 		9293232318FE3AFB004556EE /* Beacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Beacon.m; path = ../Beacon.m; sourceTree = "<group>"; };
@@ -105,6 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				92C068C018AA0614008A8D6C /* main.cpp */,
+				924DE31718FF801400D54424 /* gameplay.mm */,
+				924DE31918FF802300D54424 /* gameplay.h */,
 				928C208818B2745E00107621 /* includes.h */,
 				92E9937718ADF318005C03CE /* Classes */,
 				92C068C218AA0614008A8D6C /* Simulation.1 */,
@@ -188,6 +193,7 @@
 				92DD1CD218AA06C000DE921D /* SDLMain.m in Sources */,
 				92E9937618ADF30E005C03CE /* GridSpace.m in Sources */,
 				9293232418FE3AFB004556EE /* Beacon.m in Sources */,
+				924DE31818FF801400D54424 /* gameplay.mm in Sources */,
 				924CFC1518AB411200EFD8D8 /* Obstacle.m in Sources */,
 				92C068C118AA0614008A8D6C /* main.cpp in Sources */,
 			);

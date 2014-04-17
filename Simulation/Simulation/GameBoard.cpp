@@ -10,9 +10,11 @@
 
 #include "GameBoard.h"
 
+#define radiansperdegree 0.0174532925
 
 
 //Private Init Functions
+void InitGameBoardBoundary();
 void InitializeNavigationGrid();
 void RegisterGridSpace(GridSpace *gridSpace);
 
@@ -28,12 +30,13 @@ void InitRobot();
 //Private Drawing Functions
 void DrawGrid();
 void DrawObstacles();
-void DrawArenaBoundary();
+void DrawArena();
 void DrawGridUnits();
 void DrawBeacons();
 void DrawRobot();
 
 //Private Math Functions
+bool CircleContainsPoint(CGPoint p, CGPoint c, float radius);
 float distanceBetween(CGPoint p1, CGPoint p2);
 float AreaOfTriangle(CGPoint p1, CGPoint p2, CGPoint p3);
 float slope(float y2, float y1, float x2, float x1);
@@ -50,9 +53,10 @@ NSMutableArray *ArrayThatHoldsObstacles = [NSMutableArray arrayWithCapacity:1];
 NSMutableArray *ArrayThatHoldsGridSpaces = [NSMutableArray arrayWithCapacity:5184];
 //NSMutableArray *ArrayThatHoldsSonarField = [NSMutableArray arrayWithCapacity:1];
 NSMutableArray *ArrayThatHoldsBeacons = [NSMutableArray arrayWithCapacity:3];
+NSArray *BoardBoundaries;
 
 NSArray *RobotHolder;
-
+CGRect Arena;
 
 
 /*
@@ -81,14 +85,24 @@ void InitGameBoard()
      
      */
     
+  
+    InitGameBoardBoundary();
+    
     CreateObstacles();
     
-    InitializeNavigationGrid();
+    //InitializeNavigationGrid();
 
     InitBeacons();
     
     InitRobot();
     
+    
+}
+
+void InitGameBoardBoundary()
+{
+    
+    Arena = CGRectMake(Inches_To_Pixels(12), Inches_To_Pixels(12), Inches_To_Pixels(6*12), Inches_To_Pixels(6*12));//if the robot intersects this we're good.
     
 }
 
@@ -258,8 +272,8 @@ void InitRobot()
 {
     NSLog(@"Robot Initialized");
     
-    Robot *robot = [[Robot alloc] initWithFrame:CGRectMake(300, 300, Inches_To_Pixels(6), Inches_To_Pixels(6))];
-    //[robot initObstacleWithAngle:0.0];
+    Robot *robot = [[Robot alloc] initWithFrame:CGRectMake(300, 300, Inches_To_Pixels(7.5), Inches_To_Pixels(7.5))];
+    //[robot initObstacleWithAngle:5.0*radiansperdegree + (90* radiansperdegree)];
     
     RobotHolder = [NSArray arrayWithObject:robot];
     
@@ -269,6 +283,158 @@ void InitRobot()
         NSLog(@"P4 : %f %f", (robot.P4.x), (robot.P4.y));
     
 }
+
+
+
+/*
+ 
+ 
+  _                 _                           _        _   _
+ (_)_ __ ___  _ __ | | ___ _ __ ___   ___ _ __ | |_ __ _| |_(_) ___  _ __
+ | | '_ ` _ \| '_ \| |/ _ \ '_ ` _ \ / _ \ '_ \| __/ _` | __| |/ _ \| '_ \
+ | | | | | | | |_) | |  __/ | | | | |  __/ | | | || (_| | |_| | (_) | | | |
+ |_|_| |_| |_| .__/|_|\___|_| |_| |_|\___|_| |_|\__\__,_|\__|_|\___/|_| |_|
+             |_|
+ 
+ 
+ 
+ 
+ */
+
+
+//medium-low level motor simulation implementation
+
+void move_forward_by_distance(unsigned short distance)//inches
+{
+    Robot *robot = [RobotHolder firstObject];
+    
+    NSLog(@"robot angle: %f", robot.Angle);
+    
+    CGFloat xVector,yVector;
+    
+    xVector = cosf(robot.Angle+(90*0.0174532925));
+    yVector = sinf(robot.Angle+(90*0.0174532925));
+    
+    NSLog(@"xvector %f", xVector);
+    NSLog(@"yvector %f", yVector);
+
+    
+    [robot updateFrameOrigin:CGPointMake(robot.P1.x - (Inches_To_Pixels(distance)*xVector), robot.P1.y-(Inches_To_Pixels(distance)*yVector))];
+    
+    //[robot updateSensorFrameOrigin:CGPointMake(robot.sensors.P1.x - (Inches_To_Pixels(distance)*xVector), robot.sensors.P1.y-(Inches_To_Pixels(distance)*yVector))];
+    
+    
+}
+void move_backward_by_distance(unsigned short distance)
+{
+    
+    Robot *robot = [RobotHolder firstObject];
+    
+    NSLog(@"robot angle: %f", robot.Angle);
+    
+    CGFloat xVector,yVector;
+    
+    xVector = cosf(robot.Angle+(90*0.0174532925));
+    yVector = sinf(robot.Angle+(90*0.0174532925));
+    
+    NSLog(@"xvector %f", xVector);
+    NSLog(@"yvector %f", yVector);
+    
+    
+    [robot updateFrameOrigin:CGPointMake(robot.P1.x + (Inches_To_Pixels(distance)*xVector), robot.P1.y+(Inches_To_Pixels(distance)*yVector))];
+    
+    //[robot updateSensorFrameOrigin:CGPointMake(robot.sensors.P1.x + (Inches_To_Pixels(distance)*xVector), robot.sensors.P1.y+(Inches_To_Pixels(distance)*yVector))];
+    
+}
+void turn_right_by_angle(unsigned short angle_to_turn)
+{
+    Robot *robot = [RobotHolder firstObject];
+    
+    float rad = angle_to_turn*0.0174532925;
+    
+    [robot initObstacleWithAngle:robot.Angle-rad];
+    //[robot.sensors initObstacleWithAngle:robot.sensors.Angle-rad];
+    
+//    [robot setFrameCenterRotation:robot.Angle-rad];
+//    [robot.sensors setFrameCenterRotation:robot.sensors.Angle-rad];
+//    
+}
+void turn_left_by_angle(unsigned short angle_to_turn)
+{
+    Robot *robot = [RobotHolder firstObject];
+    
+    float rad = angle_to_turn*0.0174532925;
+    
+    [robot initObstacleWithAngle:robot.Angle+rad];
+    //[robot.sensors initObstacleWithAngle:robot.sensors.Angle+rad];
+    
+//    [robot setFrameCenterRotation:robot.Angle+rad];
+//    [robot.sensors setFrameCenterRotation:robot.sensors.Angle+rad];
+}
+
+
+//light sensor simulation implementation
+bool light_detected()
+{
+    Robot *robot = [RobotHolder firstObject];
+
+    for (Beacon *beacons in ArrayThatHoldsBeacons)
+    {
+        if (CircleContainsPoint(robot.Center, beacons.Center, [beacons.LightFieldRadius floatValue]))
+        {
+            
+            return true;
+        }
+    
+    }
+    
+    return false;
+}
+
+
+bool beacon_captured()
+{
+    return false;
+}
+
+
+//IR simulation implementation
+void capture_beacon()
+{
+    //nothing now
+    
+}
+
+
+//Obstacle ADC simulation implementation
+bool obstacle_detected()
+{
+    Robot *robot = [RobotHolder firstObject];
+    for (Obstacle *obstacle in ArrayThatHoldsObstacles)
+    {
+        if (CGRectContainsRect(obstacle.frame, robot.frame)) {
+            return true;
+        }
+        
+       
+        
+    }
+    //or
+    if (CGRectContainsRect(Arena, robot.frame))//need custom function
+    {
+       
+    }
+    else
+    {
+         return true;
+        NSLog(@"obstacle detected");
+    }
+    
+    return false;
+    
+}
+
+
 
 
 
@@ -369,10 +535,10 @@ void DrawBoardComponents()
 {
     
     DrawGrid();//increment in inches
-    DrawArenaBoundary();
+    DrawArena();
     
     DrawObstacles();
-    DrawGridUnits();
+    //DrawGridUnits();
     DrawBeacons();
     DrawRobot();
 }
@@ -435,18 +601,21 @@ void DrawGrid()
     
 }
 
-void DrawArenaBoundary()
+void DrawArena()
 {
-    CGPoint p1, p2, p3, p4;
+//    CGPoint p1, p2, p3, p4;
+//    
+//    p1 = CGPointMake(Inches_To_Pixels(12), Inches_To_Pixels(12));
+//    p2 = CGPointMake(Inches_To_Pixels(12*7), Inches_To_Pixels(12));
+//    p3 = CGPointMake(Inches_To_Pixels(12*7), Inches_To_Pixels(12*7));
+//    p4 = CGPointMake(Inches_To_Pixels(12), Inches_To_Pixels(12*7));
+//    
+//    
+//    //Draw_Boundary(p1.x,p1.y,p2.x,p2.y,p3.x,p3.y,p4.x,p4.y);
+//    Draw_Boundary(p1, p2, p3, p4);
     
-    p1 = CGPointMake(Inches_To_Pixels(12), Inches_To_Pixels(12));
-    p2 = CGPointMake(Inches_To_Pixels(12*7), Inches_To_Pixels(12));
-    p3 = CGPointMake(Inches_To_Pixels(12*7), Inches_To_Pixels(12*7));
-    p4 = CGPointMake(Inches_To_Pixels(12), Inches_To_Pixels(12*7));
-    
-    
-    //Draw_Boundary(p1.x,p1.y,p2.x,p2.y,p3.x,p3.y,p4.x,p4.y);
-    Draw_Boundary(p1, p2, p3, p4);
+
+    Draw_Boundary(Arena);
     
 }
 
@@ -496,8 +665,22 @@ void DrawRobot()
  
  */
 
+bool SquareIntesectsSquare(id square1, id square2)
+{
+    return true;
+}
 
-
+bool CircleContainsPoint(CGPoint p, CGPoint c, float radius)
+{
+    if (distanceBetween(p, c) <= radius)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 
 float distanceBetween(CGPoint p1, CGPoint p2)

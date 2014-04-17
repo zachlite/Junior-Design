@@ -19,6 +19,7 @@
 #include "Drawing.h"
 #import "Obstacle.h"
 
+#include "gameplay.h"
 
 
 #include "includes.h"
@@ -106,9 +107,10 @@ int main(int argc, char** argv)
         
         //MoveRobot();
         
-        RotateRobot();
+        //RotateRobot();
         
-
+        PlayGame();
+ 
         
         
         
@@ -137,8 +139,6 @@ int main(int argc, char** argv)
     
     return 0;
 }//end main
-
-
 
 
 

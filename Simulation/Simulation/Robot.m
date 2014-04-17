@@ -28,14 +28,14 @@
        
         if (!self.sensors)
         {
-            self.sensors = [[Obstacle alloc] init];
-            [self.sensors setFrame:CGRectMake(self.frame.origin.x-8.0, self.frame.origin.y-8.0, 8*8, 8*8)];
+            //self.sensors = [[Obstacle alloc] init];
+            //[self.sensors setFrame:CGRectMake(self.frame.origin.x-8.0, self.frame.origin.y-8.0, 8*8, 8*8)];
         
             
             
             
             [self updateFrameOrigin:frame.origin];
-            [self updateSensorFrameOrigin:sensors.frame.origin];
+            //[self updateSensorFrameOrigin:sensors.frame.origin];
         
             //[self addSubview:self.sensors];
        
@@ -54,7 +54,9 @@
     self.P2 = CGPointMake(self.P1.x + self.frame.size.width, self.P1.y);
     self.P3 = CGPointMake(self.P1.x + self.frame.size.width, self.P1.y + self.frame.size.height);
     self.P4 = CGPointMake(self.P1.x, self.P1.y + self.frame.size.height);
+    self.Center = CGPointMake(NSMidX(self.frame), NSMidY(self.frame));
     
+    //[self setFrame:CGRectMake(point.x, point.y, self.frame.size.width, self.frame.size.height)];
     
 }
 
@@ -66,6 +68,8 @@
     self.sensors.P3 = CGPointMake(self.sensors.P1.x + self.sensors.frame.size.width, self.sensors.P1.y + self.sensors.frame.size.height);
     self.sensors.P4 = CGPointMake(self.sensors.P1.x, self.sensors.P1.y + self.sensors.frame.size.height);
     
+    [self.sensors setFrame:CGRectMake(point.x, point.y, self.sensors.frame.size.width, self.sensors.frame.size.height)];
+
     
 }
 

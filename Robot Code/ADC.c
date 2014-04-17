@@ -4,27 +4,28 @@
 #include <avr/io.h>
 #include "ADC.h"
 
-// void init_test_pins(void);
-// void init_analog();
-// int analog_read(unsigned char channel);
 
-void run_ADC(void)
-{
-	while(1)
-	{
-		int value = analog_read(0);
+//Private API
+void init_test_pins(void);
+void init_analog_hardware();
+int analog_read(unsigned char channel);
 
-		if (value > 100)
-		{
-			set_bit(&PORTB, 1);
-		}
-		else
-		{
-			clear_bit(&PORTB, 1);
-		}
-	}
 
-}
+
+
+/*
+
+
+ ___       _ _   
+|_ _|_ __ (_) |_ 
+ | || '_ \| | __|
+ | || | | | | |_ 
+|___|_| |_|_|\__|
+                 
+		
+
+
+*/
 
 
 void init_ADC(void)
@@ -32,27 +33,19 @@ void init_ADC(void)
 
 	init_test_pins();
 
-	
-
-
-
-	//Configure ADC Hardware
-	//clear_bit(&DDRC, 0); //Set up ADC0 as input
-
 	init_analog_hardware();
-
-
-	//Enable ADC
-
-
-	//Start A to D conversions
-
-
 
 }
 
 
 
+
+void init_test_pins(void)
+{
+
+	set_bit(&DDRB, 1); //set up PB1 as outout
+	
+}
 
 
 
@@ -70,6 +63,45 @@ void init_analog_hardware()
     
 }
 
+
+/*
+
+ ____                   _    ____   ____ 
+|  _ \ _   _ _ __      / \  |  _ \ / ___|
+| |_) | | | | '_ \    / _ \ | | | | |    
+|  _ <| |_| | | | |  / ___ \| |_| | |___ 
+|_| \_\\__,_|_| |_| /_/   \_\____/ \____|
+                                         
+		
+
+
+*/
+
+unsigned char run_ADC_to_detect_obstacle(void)
+{
+	while(1)//try n times
+	{
+		int value = analog_read(0);
+
+		if (value > 100)
+		{
+			set_bit(&PORTB, 1);
+			return 1;
+		}
+		else
+		{
+			clear_bit(&PORTB, 1);
+
+		}
+	}
+
+	return 0;
+
+}
+
+
+
+
 int analog_read(unsigned char channel)
 {
     ADMUX &= 0xF0;  //clear previous channel
@@ -84,9 +116,5 @@ int analog_read(unsigned char channel)
 
 
 
-void init_test_pins(void)
-{
 
-	set_bit(&DDRB, 1); //set up PB1 as outout
-	
-}
+

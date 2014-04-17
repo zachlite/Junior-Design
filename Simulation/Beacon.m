@@ -54,6 +54,8 @@
         self.LightColor = [NSColor greenColor];
         self.IRLightColor = [NSColor purpleColor];
         
+        self.Center = CGPointMake(NSMidX(self.frame), NSMidY(self.frame));
+        
     }
     return self;
 }
