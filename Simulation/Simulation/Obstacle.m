@@ -26,7 +26,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-      
+        [self initPoints];
     }
     return self;
 }
@@ -38,13 +38,8 @@
     // Drawing code here.
 }
 
--(void)initObstacleWithAngle:(CGFloat)angle
+-(void)initPoints
 {
-    //the heigh and width do not change
-    
-    //calculate 4 points with angle.
-    self.Angle = angle;
-    
     P1 = self.frame.origin;
     
     P2.x = self.frame.origin.x + self.frame.size.width;
@@ -55,6 +50,29 @@
     
     P4.x = P1.x;
     P4.y = P3.y;
+}
+
+-(void)giveShapeAngle:(CGFloat)angle
+{
+    //the heigh and width do not change
+    
+    //calculate 4 points with angle.
+    
+    
+//    NSLog(@"shape coordinate before rotation:");
+//    NSLog(@"P1: %f %f", self.P1.x, self.P1.y);
+//    NSLog(@"P2: %f %f", self.P2.x, self.P2.y);
+//    NSLog(@"P3: %f %f", self.P3.x, self.P3.y);
+//    NSLog(@"P4: %f %f", self.P4.x, self.P4.y);
+//    NSLog(@"****************************");
+
+    
+    
+    self.Angle = angle;
+    
+    [self initPoints];
+    [self setFrameOrigin:self.P1];
+
     
     CGPoint center = CGPointMake(NSMidX([self frame]), NSMidY([self frame]));
     CGFloat radius =  sqrtf( powf((self.frame.size.width/2.0), 2) + powf((self.frame.size.height/2.0), 2));
@@ -136,9 +154,21 @@
       
     }
       
-        
-        
-       
+    
+//    NSLog(@"shape coordinate after rotation:");
+//    NSLog(@"P1: %f %f", self.P1.x, self.P1.y);
+//    NSLog(@"P2: %f %f", self.P2.x, self.P2.y);
+//    NSLog(@"P3: %f %f", self.P3.x, self.P3.y);
+//    NSLog(@"P4: %f %f", self.P4.x, self.P4.y);
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
+//    NSLog(@"****************************");
     
 }
 

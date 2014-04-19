@@ -56,7 +56,7 @@
     self.P4 = CGPointMake(self.P1.x, self.P1.y + self.frame.size.height);
     self.Center = CGPointMake(NSMidX(self.frame), NSMidY(self.frame));
     
-    //[self setFrame:CGRectMake(point.x, point.y, self.frame.size.width, self.frame.size.height)];
+    [self setFrame:CGRectMake(point.x, point.y, self.frame.size.width, self.frame.size.height)];
     
 }
 

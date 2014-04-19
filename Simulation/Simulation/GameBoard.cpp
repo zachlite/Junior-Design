@@ -10,7 +10,7 @@
 
 #include "GameBoard.h"
 
-#define radiansperdegree 0.0174532925
+#define RADIANSPERDEGREE 0.0174532925
 
 
 //Private Init Functions
@@ -36,6 +36,8 @@ void DrawBeacons();
 void DrawRobot();
 
 //Private Math Functions
+float AreaOfSquare(id square, CGPoint point);
+bool SquareIntersectsSquare(id square1, id square2);//that is a subclass
 bool CircleContainsPoint(CGPoint p, CGPoint c, float radius);
 float distanceBetween(CGPoint p1, CGPoint p2);
 float AreaOfTriangle(CGPoint p1, CGPoint p2, CGPoint p3);
@@ -56,7 +58,7 @@ NSMutableArray *ArrayThatHoldsBeacons = [NSMutableArray arrayWithCapacity:3];
 NSArray *BoardBoundaries;
 
 NSArray *RobotHolder;
-CGRect Arena;
+NSArray *ArenaHolder;
 
 
 /*
@@ -88,11 +90,11 @@ void InitGameBoard()
   
     InitGameBoardBoundary();
     
-    CreateObstacles();
+    //CreateObstacles();
     
     //InitializeNavigationGrid();
 
-    InitBeacons();
+    //InitBeacons();
     
     InitRobot();
     
@@ -101,8 +103,45 @@ void InitGameBoard()
 
 void InitGameBoardBoundary()
 {
+    Obstacle *Arena_Piece_1 = [[Obstacle alloc] initWithFrame:CGRectMake(Inches_To_Pixels(0), Inches_To_Pixels(0), Inches_To_Pixels(8*12), Inches_To_Pixels(1*12))];
+    Obstacle *Arena_Piece_2 = [[Obstacle alloc] initWithFrame:CGRectMake(Inches_To_Pixels(7*12), Inches_To_Pixels(1*12), Inches_To_Pixels(1*12), Inches_To_Pixels(6*12))];
+    Obstacle *Arena_Piece_3 = [[Obstacle alloc] initWithFrame:CGRectMake(Inches_To_Pixels(0), Inches_To_Pixels(7*12), Inches_To_Pixels(8*12), Inches_To_Pixels(1*12))];
+    Obstacle *Arena_Piece_4 = [[Obstacle alloc] initWithFrame:CGRectMake(Inches_To_Pixels(0), Inches_To_Pixels(1*12), Inches_To_Pixels(1*12), Inches_To_Pixels(6*12))];
+
+        NSLog(@"arena1 shape coordinates:");
+        NSLog(@"P1: %f %f",  Arena_Piece_1.P1.x, Arena_Piece_1.P1.y);
+        NSLog(@"P2: %f %f", Arena_Piece_1.P2.x, Arena_Piece_1.P2.y);
+        NSLog(@"P3: %f %f", Arena_Piece_1.P3.x, Arena_Piece_1.P3.y);
+        NSLog(@"P4: %f %f", Arena_Piece_1.P4.x, Arena_Piece_1.P4.y);
+        NSLog(@"****************************");
+
+    NSLog(@"arena2 shape coordinates:");
+    NSLog(@"P1: %f %f", Arena_Piece_2.P1.x, Arena_Piece_2.P1.y);
+    NSLog(@"P2: %f %f", Arena_Piece_2.P2.x, Arena_Piece_2.P2.y);
+    NSLog(@"P3: %f %f", Arena_Piece_2.P3.x, Arena_Piece_2.P3.y);
+    NSLog(@"P4: %f %f", Arena_Piece_2.P4.x, Arena_Piece_2.P4.y);
+    NSLog(@"****************************");
     
-    Arena = CGRectMake(Inches_To_Pixels(12), Inches_To_Pixels(12), Inches_To_Pixels(6*12), Inches_To_Pixels(6*12));//if the robot intersects this we're good.
+    NSLog(@"arena3 shape coordinates:");
+    NSLog(@"P1: %f %f", Arena_Piece_3.P1.x, Arena_Piece_3.P1.y);
+    NSLog(@"P2: %f %f", Arena_Piece_3.P2.x, Arena_Piece_3.P2.y);
+    NSLog(@"P3: %f %f", Arena_Piece_3.P3.x, Arena_Piece_3.P3.y);
+    NSLog(@"P4: %f %f", Arena_Piece_3.P4.x, Arena_Piece_3.P4.y);
+    NSLog(@"****************************");
+    
+    NSLog(@"arena4 shape coordinates:");
+    NSLog(@"P1: %f %f", Arena_Piece_4.P1.x, Arena_Piece_4.P1.y);
+    NSLog(@"P2: %f %f", Arena_Piece_4.P2.x, Arena_Piece_4.P2.y);
+    NSLog(@"P3: %f %f", Arena_Piece_4.P3.x, Arena_Piece_4.P3.y);
+    NSLog(@"P4: %f %f", Arena_Piece_4.P4.x, Arena_Piece_4.P4.y);
+    NSLog(@"****************************");
+    
+    
+    //[Arena giveShapeAngle:0.0];
+    ArenaHolder  = [NSArray arrayWithObjects:Arena_Piece_1,Arena_Piece_2,Arena_Piece_3,Arena_Piece_4, nil];
+    //Arena = CGRectMake(Inches_To_Pixels(12), Inches_To_Pixels(12), Inches_To_Pixels(6*12), Inches_To_Pixels(6*12));//if the robot intersects this we're good.
+ 
+    
     
 }
 
@@ -173,8 +212,8 @@ void CreateObstacle(CGPoint origin, CGSize size, CGFloat angle)
     
     //accepts typical obstacle information: origin, size, angle
     
-    Obstacle *obstacle = [[Obstacle alloc] init];
-    [obstacle setFrame:CGRectMake(origin.x, origin.y, size.width, size.height)];//this information is only to calculate the center.
+    Obstacle *obstacle = [[Obstacle alloc] initWithFrame:CGRectMake(origin.x, origin.y, size.width, size.height)];
+    //[obstacle setFrame:CGRectMake(origin.x, origin.y, size.width, size.height)];//this information is only to calculate the center.
     
     //[obstacle setCenter:CGPointMake(origin.x, origin.y)];
     //actual frame info will come from custom obstacle properties. P1, P2.. etc.
@@ -182,7 +221,7 @@ void CreateObstacle(CGPoint origin, CGSize size, CGFloat angle)
     
     //calculate the four points based on the origin, size, and angle
     
-    [obstacle initObstacleWithAngle:angle];
+    [obstacle giveShapeAngle:angle];
     
     
     
@@ -256,7 +295,7 @@ void InitBeacons()
         Beacon *beacon = [[Beacon alloc] initWithFrame:CGRectMake(0, 0, Inches_To_Pixels(2.75),Inches_To_Pixels(2.75))];
         
         [beacon setFrameOrigin:coordArray[i]];
-        [beacon initObstacleWithAngle:0.0];
+        [beacon giveShapeAngle:0.0];
         
         [ArrayThatHoldsBeacons addObject:beacon];
        
@@ -273,7 +312,7 @@ void InitRobot()
     NSLog(@"Robot Initialized");
     
     Robot *robot = [[Robot alloc] initWithFrame:CGRectMake(300, 300, Inches_To_Pixels(7.5), Inches_To_Pixels(7.5))];
-    //[robot initObstacleWithAngle:5.0*radiansperdegree + (90* radiansperdegree)];
+    //[robot giveShapeAngle:5.0*RADIANSPERDEGREE + (90* RADIANSPERDEGREE)];
     
     RobotHolder = [NSArray arrayWithObject:robot];
     
@@ -308,18 +347,25 @@ void move_forward_by_distance(unsigned short distance)//inches
 {
     Robot *robot = [RobotHolder firstObject];
     
-    NSLog(@"robot angle: %f", robot.Angle);
+    NSLog(@"robot angle: %f", robot.Angle /RADIANSPERDEGREE);
+
     
     CGFloat xVector,yVector;
     
-    xVector = cosf(robot.Angle+(90*0.0174532925));
-    yVector = sinf(robot.Angle+(90*0.0174532925));
+    xVector = cosf(robot.Angle+(90*RADIANSPERDEGREE));
+    yVector = sinf(robot.Angle+(90*RADIANSPERDEGREE));
     
-    NSLog(@"xvector %f", xVector);
-    NSLog(@"yvector %f", yVector);
+    //NSLog(@"xvector %f", xVector);
+    //NSLog(@"yvector %f", yVector);
 
     
-    [robot updateFrameOrigin:CGPointMake(robot.P1.x - (Inches_To_Pixels(distance)*xVector), robot.P1.y-(Inches_To_Pixels(distance)*yVector))];
+    //[robot updateFrameOrigin:CGPointMake(robot.P1.x - ((distance)*xVector), robot.P1.y-((distance)*yVector))];
+    robot.P1 = CGPointMake(robot.P1.x - (distance*xVector), robot.P1.y - (distance*yVector));
+    robot.P2 = CGPointMake(robot.P2.x - (distance*xVector), robot.P2.y - (distance*yVector));
+    robot.P3 = CGPointMake(robot.P3.x - (distance*xVector), robot.P3.y - (distance*yVector));
+    robot.P4 = CGPointMake(robot.P4.x - (distance*xVector), robot.P4.y - (distance*yVector));
+    [robot setFrame:CGRectMake(robot.P1.x, robot.P1.y, robot.frame.size.width, robot.frame.size.height)];
+
     
     //[robot updateSensorFrameOrigin:CGPointMake(robot.sensors.P1.x - (Inches_To_Pixels(distance)*xVector), robot.sensors.P1.y-(Inches_To_Pixels(distance)*yVector))];
     
@@ -334,14 +380,14 @@ void move_backward_by_distance(unsigned short distance)
     
     CGFloat xVector,yVector;
     
-    xVector = cosf(robot.Angle+(90*0.0174532925));
-    yVector = sinf(robot.Angle+(90*0.0174532925));
+    xVector = cosf(robot.Angle+(90*RADIANSPERDEGREE));
+    yVector = sinf(robot.Angle+(90*RADIANSPERDEGREE));
     
-    NSLog(@"xvector %f", xVector);
-    NSLog(@"yvector %f", yVector);
+    //NSLog(@"xvector %f", xVector);
+    //NSLog(@"yvector %f", yVector);
     
     
-    [robot updateFrameOrigin:CGPointMake(robot.P1.x + (Inches_To_Pixels(distance)*xVector), robot.P1.y+(Inches_To_Pixels(distance)*yVector))];
+    [robot updateFrameOrigin:CGPointMake(robot.P1.x + ((distance)*xVector), robot.P1.y+((distance)*yVector))];
     
     //[robot updateSensorFrameOrigin:CGPointMake(robot.sensors.P1.x + (Inches_To_Pixels(distance)*xVector), robot.sensors.P1.y+(Inches_To_Pixels(distance)*yVector))];
     
@@ -352,9 +398,10 @@ void turn_right_by_angle(unsigned short angle_to_turn)
     
     float rad = angle_to_turn*0.0174532925;
     
-    [robot initObstacleWithAngle:robot.Angle-rad];
-    //[robot.sensors initObstacleWithAngle:robot.sensors.Angle-rad];
-    
+    [robot giveShapeAngle:robot.Angle-rad];
+    //[robot.sensors giveShapeAngle:robot.sensors.Angle-rad];
+    NSLog(@"robot angle: %f", robot.Angle /.0174532925);
+
 //    [robot setFrameCenterRotation:robot.Angle-rad];
 //    [robot.sensors setFrameCenterRotation:robot.sensors.Angle-rad];
 //    
@@ -365,8 +412,10 @@ void turn_left_by_angle(unsigned short angle_to_turn)
     
     float rad = angle_to_turn*0.0174532925;
     
-    [robot initObstacleWithAngle:robot.Angle+rad];
-    //[robot.sensors initObstacleWithAngle:robot.sensors.Angle+rad];
+    [robot giveShapeAngle:robot.Angle+rad];
+    
+    NSLog(@"robot angle: %f", robot.Angle /.0174532925);
+    //[robot.sensors giveShapeAngle:robot.sensors.Angle+rad];
     
 //    [robot setFrameCenterRotation:robot.Angle+rad];
 //    [robot.sensors setFrameCenterRotation:robot.sensors.Angle+rad];
@@ -409,10 +458,16 @@ void capture_beacon()
 //Obstacle ADC simulation implementation
 bool obstacle_detected()
 {
+
+    
     Robot *robot = [RobotHolder firstObject];
+
+  
     for (Obstacle *obstacle in ArrayThatHoldsObstacles)
     {
-        if (CGRectContainsRect(obstacle.frame, robot.frame)) {
+        if (SquareIntersectsSquare(obstacle, robot)) {
+            NSLog(@"obstacle detected");
+
             return true;
         }
         
@@ -420,15 +475,18 @@ bool obstacle_detected()
         
     }
     //or
-    if (CGRectContainsRect(Arena, robot.frame))//need custom function
+  
+    for (Obstacle *arena_piece in ArenaHolder)
     {
-       
+        NSLog(@"testing robot with arena_piece %lu", [ArenaHolder indexOfObject:arena_piece] + 1);
+        if (SquareIntersectsSquare(arena_piece, robot))
+        {
+            NSLog(@"collision detected with arena piece %lu", [ArenaHolder indexOfObject:arena_piece] + 1);
+            NSLog(@"obstacle detected");
+            return true;
+        }
     }
-    else
-    {
-         return true;
-        NSLog(@"obstacle detected");
-    }
+  
     
     return false;
     
@@ -467,8 +525,8 @@ void RotateRobot()
 {
     Robot *robot = [RobotHolder firstObject];
     
-    [robot initObstacleWithAngle:robot.Angle+.1];
-    [robot.sensors initObstacleWithAngle:robot.sensors.Angle+.1];
+    [robot giveShapeAngle:robot.Angle+.1];
+    [robot.sensors giveShapeAngle:robot.sensors.Angle+.1];
 
 }
 
@@ -537,9 +595,9 @@ void DrawBoardComponents()
     DrawGrid();//increment in inches
     DrawArena();
     
-    DrawObstacles();
+    //DrawObstacles();
     //DrawGridUnits();
-    DrawBeacons();
+    //DrawBeacons();
     DrawRobot();
 }
 
@@ -614,8 +672,12 @@ void DrawArena()
 //    //Draw_Boundary(p1.x,p1.y,p2.x,p2.y,p3.x,p3.y,p4.x,p4.y);
 //    Draw_Boundary(p1, p2, p3, p4);
     
+    for (Obstacle *arena_piece in ArenaHolder)
+    {
+        Draw_Boundary(arena_piece);
 
-    Draw_Boundary(Arena);
+    }
+
     
 }
 
@@ -665,9 +727,74 @@ void DrawRobot()
  
  */
 
-bool SquareIntesectsSquare(id square1, id square2)
+float AreaOfSquare(id square, CGPoint point)
 {
-    return true;
+    if ([square isKindOfClass:[Obstacle class]])
+    {
+        ///square has point properties
+        //need to typecast
+        
+        Obstacle *s = square;
+        
+        float area_of_square = 0;
+        area_of_square += AreaOfTriangle(s.P1, s.P2, point);
+        area_of_square += AreaOfTriangle(s.P2, s.P3, point);
+        area_of_square += AreaOfTriangle(s.P3, s.P4, point);
+        area_of_square += AreaOfTriangle(s.P4, s.P1, point);
+        
+        return area_of_square;
+
+    }
+    else
+    {
+        NSLog(@"worse");
+        exit(EXIT_FAILURE);
+    }
+}
+
+bool SquareIntersectsSquare(id square1, id square2)//that is a subclass of Obstacle
+{
+    if ([square1 isKindOfClass:[Obstacle class]] && [square2 isKindOfClass:[Obstacle class]])
+    {
+        //both squares have p1..p4 parameters
+         Obstacle *s = square1;
+         Obstacle *s2 = square2;
+        //first need area of square 1
+        float square_1_area = AreaOfSquare(square1, s.Center);
+        
+ 
+        //calculate the area of square 1 with each of square 2's points
+  
+        if ( fabs( AreaOfSquare(square1, s2.P1) - square_1_area ) <= 1 )
+        {
+            //square overlaps
+            return true;
+        }
+        else if ( fabs( AreaOfSquare(square1, s2.P2) - square_1_area ) <= 1 )
+        {
+                        //square overlaps
+            return true;
+        }
+        else if ( fabs( AreaOfSquare(square1, s2.P3) - square_1_area ) <= 1 )
+        {
+            //square overlaps
+            return true;
+        }
+        else if ( fabs( AreaOfSquare(square1, s2.P4) - square_1_area ) <= 1 )
+        {
+            //square overlaps
+            return true;
+        }
+        else return false;
+        
+        
+    }
+    else
+    {
+        NSLog(@"bad");
+        exit(EXIT_FAILURE);
+    }
+    
 }
 
 bool CircleContainsPoint(CGPoint p, CGPoint c, float radius)

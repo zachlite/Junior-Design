@@ -60,15 +60,15 @@ void Draw_Line(CGPoint start, CGPoint end, bool INCR_of_twelve)
     glLineWidth(.5f);
 }
 
-void Draw_Boundary(CGRect rect)
+void Draw_Boundary(Obstacle *rect)
 {
     glBegin(GL_QUADS);
 
     glColor4ub(70,135,237,55);
-    glVertex2f(rect.origin.x,rect.origin.y);
-    glVertex2f(rect.origin.x + rect.size.width , rect.origin.y);
-    glVertex2f(rect.origin.x + rect.size.width , rect.origin.y + rect.size.height);
-    glVertex2f(rect.origin.x,rect.origin.y + rect.size.height);
+    glVertex2f(rect.P1.x,rect.P1.y);
+    glVertex2f(rect.P2.x , rect.P2.y);
+    glVertex2f(rect.P3.x ,rect.P3.y);
+    glVertex2f(rect.P4.x,rect.P4.y);
 
     
     glEnd();
@@ -234,7 +234,7 @@ void Draw_Robot(Robot *robot)
 
 
     glBegin(GL_LINES);
-    glLineWidth(5.0);
+    glLineWidth(10.0);
     glColor4ub(0.0,0.0,255.0,255.0);
     glVertex2f(robot.P1.x, robot.P1.y);
     glVertex2f(robot.P2.x, robot.P2.y);

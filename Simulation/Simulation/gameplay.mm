@@ -22,6 +22,7 @@ void avoid_obstacle();//eventually navigate around obstacle?
 
 void PlayGame()
 {
+    
     unsigned char situation;
     
     situation = move_until_interrupted();
@@ -36,30 +37,36 @@ void PlayGame()
         avoid_obstacle();
     }
 	
-    //turn_right_by_angle(18);
-    
-    
+    //turn_right_by_angle(1);
+    //turn_left_by_angle(15);
+    //RotateRobot();
 }
 
 
 
 
 
-#define UnitOfMovement 1
+#define UnitOfMovement 5//pixels
 
 
 
 
 unsigned char move_until_interrupted()
 {
-	
-		move_forward_by_distance(UnitOfMovement);//inches
+        //move_backward_by_distance(UnitOfMovement);
+		
+   
+        move_forward_by_distance(UnitOfMovement);//inches
+
+    
+    //SDL_Delay(1000);
 //		if (light_detected())//from LightSensors
 //		{
 //			return 1;
 //		}
 		if (obstacle_detected())//from ADC.c
 		{
+            
             NSLog(@"obstacle detected!");
 			return 2;
 		}
@@ -100,8 +107,14 @@ void turn_towards_direction_of_beacon()
 
 void avoid_obstacle()//eventually navigate around obstacle?
 {
-	move_backward_by_distance(5);
-	turn_right_by_angle(10);
+	move_backward_by_distance(UnitOfMovement);
+    //SDL_Delay(500);
+    for (int i = 0; i < 90 ; i++)
+    {
+        turn_right_by_angle(1);
+
+    }
+    //SDL_Delay(500);
     
 }
 

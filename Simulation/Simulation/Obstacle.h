@@ -21,7 +21,7 @@
 @property (nonatomic) BOOL detected;
 @property (nonatomic) CGFloat DistanceFromRobot;
 
--(void)initObstacleWithAngle:(CGFloat)angle;
-
+-(void)giveShapeAngle:(CGFloat)angle;
+-(void)initPoints;
 
 @end

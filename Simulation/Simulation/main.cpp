@@ -35,7 +35,7 @@ void Initialize_Memory_Attributes();
 void Setup_Window_And_Rendering(int screenWidth, int screenHeight);
 
 
-
+void render();
 
 
 
@@ -43,6 +43,15 @@ void Setup_Window_And_Rendering(int screenWidth, int screenHeight);
 int main(int argc, char** argv)
 {
     
+    /*
+     ___       _ _        _ _          _   _
+    |_ _|_ __ (_) |_ __ _| (_)______ _| |_(_) ___  _ __
+     | || '_ \| | __/ _` | | |_  / _` | __| |/ _ \| '_ \
+     | || | | | | || (_| | | |/ / (_| | |_| | (_) | | | |
+    |___|_| |_|_|\__\__,_|_|_/___\__,_|\__|_|\___/|_| |_|
+     
+     
+     */
     
     //initialize SDL hardware
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -55,6 +64,21 @@ int main(int argc, char** argv)
 
     InitGameBoard();
     
+    
+    
+    /*
+     
+      _____                 _        _   _                 _ _ _
+     | ____|_   _____ _ __ | |_     | | | | __ _ _ __   __| | (_)_ __   __ _
+     |  _| \ \ / / _ \ '_ \| __|____| |_| |/ _` | '_ \ / _` | | | '_ \ / _` |
+     | |___ \ V /  __/ | | | ||_____|  _  | (_| | | | | (_| | | | | | | (_| |
+     |_____| \_/ \___|_| |_|\__|    |_| |_|\__,_|_| |_|\__,_|_|_|_| |_|\__, |
+                                                                       |___/
+     
+
+     
+     
+     */
     
     
     bool runProgram = true;
@@ -91,7 +115,17 @@ int main(int argc, char** argv)
         
         
         
-        //Logic Goes Here
+        /*
+         
+          _                _
+         | |    ___   __ _(_) ___
+         | |   / _ \ / _` | |/ __|
+         | |__| (_) | (_| | | (__
+         |_____\___/ \__, |_|\___|
+                     |___/
+         
+         
+         */
   
         if (mouse_is_clicked)
         {   CGPoint mouseCoord = CGPointMake(event.motion.x, event.motion.y);
@@ -109,30 +143,24 @@ int main(int argc, char** argv)
         
         //RotateRobot();
         
-        PlayGame();
- 
+        //PlayGame();
+        
+        for (int i = 0; i < 100; i++)
+        {
+            move_forward_by_distance(1);
+            render();
+        }
+        
+        for (int i = 0; i < 90; i++)
+        {
+           turn_left_by_angle(1);
+            render();
+        }
         
         
         
         
-        //Render to the screen
-        glClear(GL_COLOR_BUFFER_BIT);
-        glPushMatrix();//start phase
-        glOrtho(0,Width_Of_Viewport_In_Pixels,Height_Of_Viewport_In_Pixels,0,-1,1);//set the matrix
-        /////////////////////////////////////////////
-    
-   
        
-        DrawBoardComponents();
-       
-        
-     
-       
-        
-        ///////////////////////////////////////////
-        //end rendering
-		glPopMatrix();//end
-		SDL_GL_SwapBuffers();//re-draws
         
         SDL_Delay(100);//ms
     }//end while
@@ -148,7 +176,21 @@ int main(int argc, char** argv)
 
 
 
+void render()
+{
+    //Render to the screen
+    glClear(GL_COLOR_BUFFER_BIT);
+    glPushMatrix();//start phase
+    glOrtho(0,Width_Of_Viewport_In_Pixels,Height_Of_Viewport_In_Pixels,0,-1,1);//set the matrix
+    /////////////////////////////////////////////
+    
+    DrawBoardComponents();
 
+    ///////////////////////////////////////////
+    //end rendering
+    glPopMatrix();//end
+    SDL_GL_SwapBuffers();//re-draws
+}
 
 
 

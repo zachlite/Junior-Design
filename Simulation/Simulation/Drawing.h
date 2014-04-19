@@ -32,7 +32,7 @@ using namespace std;
 void Draw_Rectangle (unsigned char R, unsigned char G, unsigned char B, unsigned char Alpha, float X1, float X2, float Y1, float Y2);
 
 
-void Draw_Boundary(CGRect rect);
+void Draw_Boundary(Obstacle *rect);
 //void Draw_Boundary(CGPoint p1, CGPoint p2, CGPoint p3, CGPoint p4);
 //void Draw_Boundary(int p1_x, int p1_y, int p2_x, int p2_y, int p3_x, int p3_y, int p4_x, int p4_y);
 
