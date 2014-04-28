@@ -141,7 +141,7 @@ int main(int argc, char** argv)
         
         //MoveRobot();
         
-        //RotateRobot();
+//        RotateRobot();
         
         //PlayGame();
         
@@ -153,10 +153,16 @@ int main(int argc, char** argv)
         
         for (int i = 0; i < 90; i++)
         {
+        
            turn_left_by_angle(1);
+        
             render();
         }
         
+        
+        
+       render();
+
         
         
         

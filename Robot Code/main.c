@@ -1,24 +1,47 @@
+#include "main.h"
 
 
 
-#define F_CPU 8000000UL
-#include <avr/io.h>
-#include <util/delay.h>
+//test light sensors
+    //deterimine which light sensor is receiving a larger value
 
 
-//#include "uart_communications.h"
-#include "carrier_wave.h"
-#include "motors.h"
-#include "inputoutput.h"
-//#include "binary.h"
+void IR_test()
+{
+    unsigned char data_received, data_received_inverted;
 
-#include "ir_comm.h"
-#include "ADC.h"
+    while(1)
+    {
+        data_received = uart_receive();
+
+        data_received_inverted = ~data_received; 
+        
+        uart_transmit(data_received_inverted);
+
+    }
+}
 
 
-#define input 0
-#define output 1
+void test_obstacle_sensor()
+{
+      run_ADC();
+}
 
+
+
+void motor_test()
+{
+    while(1)
+
+    {
+         move_forward_by_distance(5);
+        _delay_ms(1000);
+        move_backward_by_distance(5);
+        _delay_ms(1000); 
+    }
+
+
+}
 
 
 
@@ -32,26 +55,9 @@ int main(void)
     init_ADC();
 
 
-    // unsigned char data_received, data_received_inverted;
-
-    
 
 
-
-    // while(1)
-    // {
-    //     data_received = uart_receive();
-
-    //     data_received_inverted = ~data_received; 
-        
-    //     uart_transmit(data_received_inverted);
-
-    // }
-
-    
-
-     //init_ADC();
-     //run_ADC();
+   
 
 
 
@@ -76,7 +82,7 @@ int main(void)
 
     // _delay_ms(20);
     // set_motor_directions_for_movement(Backward);
-     enable_motors();
+     //enable_motors();
     // _delay_ms(2000);
     // stop_motors();
 

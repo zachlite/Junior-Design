@@ -22,7 +22,7 @@ corresponding to the obstacle sensor that detected an obstacle
 
 //Public ADC API
 void init_ADC(void);
-void run_ADC_to_detect_obstacle(void);
+unsigned char run_ADC_to_detect_obstacle(void);
 
 
 

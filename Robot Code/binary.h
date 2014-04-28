@@ -1,8 +1,6 @@
 #include <stdio.h>
 
 
-
-
  void set_bit(volatile uint8_t *Byte, const unsigned char BitToSet);
  void clear_bit(volatile uint8_t *Byte, const unsigned char BitToClear);
  unsigned char read_bit(unsigned char Byte, const unsigned char BitToRead);

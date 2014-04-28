@@ -22,6 +22,6 @@
 @property (nonatomic) CGFloat DistanceFromRobot;
 
 -(void)giveShapeAngle:(CGFloat)angle;
--(void)initPoints;
+-(void)initPointsFromReference:(CGPoint)refPoint;
 
 @end

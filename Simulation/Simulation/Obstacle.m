@@ -11,6 +11,14 @@
 //obstacle objects are not what gets drawn to the screen.  they simply exist to store information.  let objective c do the heavy lifting!
 //object information is what is rendered... not the actual object!
 
+@interface Obstacle()
+{
+    CGPoint lastRefPoint;
+}
+
+@end
+
+
 @implementation Obstacle
 @synthesize P1;
 @synthesize P2;
@@ -22,11 +30,14 @@
 @synthesize DistanceFromRobot;
 
 
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initPoints];
+        lastRefPoint = self.frame.origin;
+        [self initPointsFromReference:self.frame.origin];
+        NSLog(@"is this working???");
     }
     return self;
 }
@@ -38,21 +49,26 @@
     // Drawing code here.
 }
 
--(void)initPoints
+-(void)initPointsFromReference:(CGPoint)refPoint
 {
-    P1 = self.frame.origin;
+    P1 = refPoint;
     
-    P2.x = self.frame.origin.x + self.frame.size.width;
+    //need to calculate subsequent points based off of sin and cos of angle
+
+    P2.x = refPoint.x + (self.frame.size.width);
     P2.y = P1.y;
     
     P3.x = P2.x;
-    P3.y = P1.y + self.frame.size.height;
+    P3.y = P1.y + (self.frame.size.height);
     
     P4.x = P1.x;
     P4.y = P3.y;
+    NSLog(@"adjusting obstacle points");
+    
+    
 }
 
--(void)giveShapeAngle:(CGFloat)angle
+-(void)giveShapeAngle:(CGFloat)angle//in radians
 {
     //the heigh and width do not change
     
@@ -68,10 +84,11 @@
 
     
     
-    self.Angle = angle;
+    self.Angle += angle;
+
     
-    [self initPoints];
-    [self setFrameOrigin:self.P1];
+    [self initPointsFromReference:self.frame.origin];
+    //[self setFrameOrigin:self.P1];
 
     
     CGPoint center = CGPointMake(NSMidX([self frame]), NSMidY([self frame]));
@@ -153,7 +170,8 @@
         
       
     }
-      
+    
+    lastRefPoint = self.P1;
     
 //    NSLog(@"shape coordinate after rotation:");
 //    NSLog(@"P1: %f %f", self.P1.x, self.P1.y);

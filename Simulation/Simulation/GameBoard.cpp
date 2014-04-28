@@ -90,11 +90,11 @@ void InitGameBoard()
   
     InitGameBoardBoundary();
     
-    //CreateObstacles();
+    CreateObstacles();
     
     //InitializeNavigationGrid();
 
-    //InitBeacons();
+    InitBeacons();
     
     InitRobot();
     
@@ -364,7 +364,7 @@ void move_forward_by_distance(unsigned short distance)//inches
     robot.P2 = CGPointMake(robot.P2.x - (distance*xVector), robot.P2.y - (distance*yVector));
     robot.P3 = CGPointMake(robot.P3.x - (distance*xVector), robot.P3.y - (distance*yVector));
     robot.P4 = CGPointMake(robot.P4.x - (distance*xVector), robot.P4.y - (distance*yVector));
-    [robot setFrame:CGRectMake(robot.P1.x, robot.P1.y, robot.frame.size.width, robot.frame.size.height)];
+    //[robot setFrame:CGRectMake(robot.P1.x, robot.P1.y, robot.frame.size.width, robot.frame.size.height)];
 
     
     //[robot updateSensorFrameOrigin:CGPointMake(robot.sensors.P1.x - (Inches_To_Pixels(distance)*xVector), robot.sensors.P1.y-(Inches_To_Pixels(distance)*yVector))];
@@ -595,9 +595,9 @@ void DrawBoardComponents()
     DrawGrid();//increment in inches
     DrawArena();
     
-    //DrawObstacles();
+    DrawObstacles();
     //DrawGridUnits();
-    //DrawBeacons();
+    DrawBeacons();
     DrawRobot();
 }
 

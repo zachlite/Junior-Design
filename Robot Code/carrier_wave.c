@@ -1,7 +1,4 @@
-#define F_CPU 8000000UL
 
-
-#include <avr/io.h>
 
 #include "carrier_wave.h"
 #include "inputoutput.h"

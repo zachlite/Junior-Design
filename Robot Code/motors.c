@@ -51,59 +51,59 @@ simulation-portable
 */
 
 
-unsigned char move_until_interrupted()
-{
-	while(1)
-	{
-		move_forward_by_distance(UnitOfMovement);//inches
-		if (light_detected())//from LightSensors
-		{
-			return 1;
-		}
-		if (obstacle_detected())//from ADC.c
-		{
-			return 2;
-		}
+// unsigned char move_until_interrupted()
+// {
+// 	while(1)
+// 	{
+// 		move_forward_by_distance(UnitOfMovement);//inches
+// 		if (light_detected())//from LightSensors
+// 		{
+// 			return 1;
+// 		}
+// 		if (obstacle_detected())//from ADC.c
+// 		{
+// 			return 2;
+// 		}
 
-	}
+// 	}
 
-}
+// }
 
-unsigned char move_towards_and_capture_beacon()//will we know distance?
-{
-	while(!beacon_captured())//its easier to determine a change in color of light than track distance to beacon approach
-	{//from IRComm.c ^
-
-
-		turn_towards_direction_of_beacon();
-		move_forward_by_distance(UnitOfMovement)
-
-		if (obstacle_detected())//from ADC.c
-		{
-			avoid_obstacle();
-		}
+// unsigned char move_towards_and_capture_beacon()//will we know distance?
+// {
+// 	while(!beacon_captured())//its easier to determine a change in color of light than track distance to beacon approach
+// 	{//from IRComm.c ^
 
 
-		capture_beacon();//from IRComm.c
+// 		turn_towards_direction_of_beacon();
+// 		move_forward_by_distance(UnitOfMovement)
 
-	}
-
-
-}
-
-void turn_towards_direction_of_beacon()
-{
-	//for now do nothing
+// 		if (obstacle_detected())//from ADC.c
+// 		{
+// 			avoid_obstacle();
+// 		}
 
 
-}
+// 		capture_beacon();//from IRComm.c
 
-void avoid_obstacle()//eventually navigate around obstacle?
-{
-	move_backward_by_distance(3);
-	turn_right_by_angle(15);
+// 	}
 
-}
+
+// }
+
+// void turn_towards_direction_of_beacon()
+// {
+// 	//for now do nothing
+
+
+// }
+
+// void avoid_obstacle()//eventually navigate around obstacle?
+// {
+// 	move_backward_by_distance(3);
+// 	turn_right_by_angle(15);
+
+// }
 
 
 /*
