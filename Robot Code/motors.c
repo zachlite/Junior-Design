@@ -1,18 +1,23 @@
 
-#define F_CPU 8000000UL
+/*
 
-#include <avr/io.h>
+motors.c
+Motor initialization and operation
+
+Written by Isaac Patka and Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
+
+
 #include "motors.h"
-#include "binary.h"
-#include "inputoutput.h"
-#include <util/delay.h>
 
-#define duty_cycle_small 150
-#define duty_cycle_large 255
-#define slip_distance 1000
-#define WheelCircumference 8.875
 
-#define UnitOfMovement 1
+
 
 //private API
 
@@ -297,14 +302,15 @@ void stop_right_motor()
 
 void move_distance(unsigned int distance_in_quad_ticks)
 {
-	unsigned char quad_encoder_signal_left, quad_encoder_signal_right;
+	unsigned char quad_encoder_signal_left = 0;
+	unsigned char quad_encoder_signal_right = 0;
     unsigned int left_ticks = 0; unsigned int right_ticks = 0;
     unsigned int quad_ticks = 0;
 
 
     //set pwm cycle at .5 for the first and last 5% of the distance to travel
 
-    unsigned char duty_cycle = 0;
+    //unsigned char duty_cycle = 0;
     unsigned char cycle_counter = 0;
 
     enable_motors();
@@ -318,8 +324,8 @@ void move_distance(unsigned int distance_in_quad_ticks)
         last_signal_left = quad_encoder_signal_left;
         last_signal_right = quad_encoder_signal_right;
         
-        quad_encoder_signal_left = get_quad_encoder_signal(Left_Motor_Pin, Right_Motor_Pin, 7, 0);
-        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Pin,2, 1);
+        quad_encoder_signal_left = get_quad_encoder_signal(Left_Motor_Pin, Left_Motor_Quad_A, Left_Motor_Quad_B);
+        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Quad_A, Right_Motor_Quad_A);
 	 
         if (quad_encoder_signal_left != last_signal_left)
         {
@@ -421,6 +427,44 @@ void get_duty_cycle(unsigned int distance, unsigned int quad_ticks, unsigned cha
 	}
 }
 
+
+/*
+//                  _                        _                 
+//  _ __ ___   ___ | |_ ___  _ __   ___  ___| |_   _   _ _ __  
+// | '_ ` _ \ / _ \| __/ _ \| '__| / __|/ _ \ __| | | | | '_ \ 
+// | | | | | | (_) | || (_) | |    \__ \  __/ |_  | |_| | |_) |
+// |_| |_| |_|\___/ \__\___/|_|    |___/\___|\__|  \__,_| .__/ 
+//                                                      |_|    
+*/
+//set bit initializes pin as output
+//clearbit initializes pin as input
+void set_up_left_motor()
+{
+	set_bit(Data_Direction_Register_B, Left_Motor_Enable);
+    set_bit(Data_Direction_Register_B, Left_Motor_Direction);
+  
+
+    clear_bit(Data_Direction_Register_B, Left_Motor_Quad_A);
+    clear_bit(Data_Direction_Register_B, Left_Motor_Quad_B);
+
+}
+void set_up_right_motor()
+{
+	set_bit(Data_Direction_Register_D, Right_Motor_Enable);
+    set_bit(Data_Direction_Register_D, Right_Motor_Direction);
+  
+
+    clear_bit(Data_Direction_Register_D, Right_Motor_Quad_A);
+    clear_bit(Data_Direction_Register_D, Right_Motor_Quad_B);
+}
+
+
+void set_up_motors()
+{
+	set_up_right_motor();
+	set_up_left_motor();
+
+}
 
 
 

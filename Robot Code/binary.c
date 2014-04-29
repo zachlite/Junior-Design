@@ -1,5 +1,19 @@
+/*
 
-#include <avr/io.h>
+binary.c
+low level bitwise manipulation
+
+Written by Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
+
+
+
 #include "binary.h"
 
 
@@ -35,11 +49,11 @@
 
 
 
-unsigned char get_quad_encoder_signal(volatile uint8_t *motor_port_1, volatile uint8_t *motor_port_2, const unsigned char BitA, const unsigned char BitB)
+unsigned char get_quad_encoder_signal(volatile uint8_t *motor_port, const unsigned char BitA, const unsigned char BitB)
 {
     unsigned char signal_A, signal_B;
-    signal_A = read_bit(*motor_port_1, BitA);
-    signal_B = read_bit(*motor_port_2, BitB);
+    signal_A = read_bit(*motor_port, BitA);
+    signal_B = read_bit(*motor_port, BitB);
     signal_A = signal_A << 1;
  
       return signal_A + signal_B;

@@ -2,12 +2,10 @@
 #Written by Zach Lite (and Jen) ((and Kyle)) 
 #April 7, 2014
 
-
-
 CC=avr-gcc
 CFLAGS= -std=c99 -g -Wall -mmcu=atmega328 -O1 
 #check /dev to find your buspirate's device signature.  cu.usbserial-A601EXKG is mine.
-DEVICE=/dev/cu.usbserial-A601EXKG
+DEVICE=/dev/cu.usbserial-PirateV3
 AVR=atmega328
 OUTPUT=main
 
@@ -28,26 +26,29 @@ all: main.elf hexfile run
   
 
 
-main.elf: binary.o inputoutput.o motors.o carrier_wave.o ir_comm.o ADC.o main.o
-	$(CC) $(CFLAGS) binary.o inputoutput.o motors.o carrier_wave.o ir_comm.o ADC.o main.o -o $@
+# main.elf: binary.o inputoutput.o motors.o carrier_wave.o ir_comm.o ADC.o main.o
+# 	$(CC) $(CFLAGS) binary.o inputoutput.o motors.o carrier_wave.o ir_comm.o ADC.o main.o -o $@
+
+main.elf: binary.o carrier_wave.o ir_comm.o main.o 
+	$(CC) $(CFLAGS) binary.o carrier_wave.o ir_comm.o main.o -o $@
 
 binary.o: binary.c binary.h
 	avr-gcc $(CFLAGS) -c $< -o $@
 
-inputoutput.o: inputoutput.c inputoutput.h binary.h
-	avr-gcc $(CFLAGS) -c  $< -o $@
+# inputoutput.o: inputoutput.c inputoutput.h binary.h
+# 	avr-gcc $(CFLAGS) -c  $< -o $@
 
-motors.o: motors.c motors.h binary.h inputoutput.h
+# motors.o: motors.c motors.h binary.h hardware_interface.h
+# 	$(CC) $(CFLAGS) -c $< -o $@
+
+carrier_wave.o: carrier_wave.c carrier_wave.h hardware_interface.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-carrier_wave.o: carrier_wave.c carrier_wave.h inputoutput.h
+ir_comm.o: ir_comm.c ir_comm.h carrier_wave.h binary.h hardware_interface.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-ir_comm.o: ir_comm.c ir_comm.h carrier_wave.h binary.h
-	$(CC) $(CFLAGS) -c $< -o $@
-
-ADC.o: ADC.c ADC.h binary.h
-	$(CC) $(CFLAGS) -c $< -o $@
+# obstacle_detection.o: obstacle_detection.c obstacle_detection.h binary.h
+# 	$(CC) $(CFLAGS) -c $< -o $@
 
 #add new files here
 
@@ -69,10 +70,11 @@ clean:
 	rm -f $(OUTPUT).o
 	rm -f $(OUTPUT).hex
 	rm -f binary.o
-	rm -f inputoutput.o
+	# rm -f inputoutput.o
 	rm -f motors.o
 	rm -f carrier_wave.o
 	rm -f ir_comm.o
+	rm -f obstacle_detection.o
 	clear
 	
 #"make eightMHZ"

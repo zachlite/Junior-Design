@@ -1,4 +1,25 @@
-#include "main.h"
+/*
+
+main.c
+top-level robot control
+
+Written by Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
+
+
+
+#include "hardware_interface.h"
+#include "ir_comm.h"
+#include <stdbool.h>
+//#include "obstacle_detection.h"
+
+
 
 
 
@@ -6,42 +27,42 @@
     //deterimine which light sensor is receiving a larger value
 
 
-void IR_test()
-{
-    unsigned char data_received, data_received_inverted;
+// void IR_test()
+// {
+//     unsigned char data_received, data_received_inverted;
 
-    while(1)
-    {
-        data_received = uart_receive();
+//     while(1)
+//     {
+//         data_received = uart_receive();
 
-        data_received_inverted = ~data_received; 
+//         data_received_inverted = ~data_received; 
         
-        uart_transmit(data_received_inverted);
+//         uart_transmit(data_received_inverted);
 
-    }
-}
-
-
-void test_obstacle_sensor()
-{
-      run_ADC();
-}
+//     }
+// }
 
 
-
-void motor_test()
-{
-    while(1)
-
-    {
-         move_forward_by_distance(5);
-        _delay_ms(1000);
-        move_backward_by_distance(5);
-        _delay_ms(1000); 
-    }
+// void test_obstacle_sensor()
+// {
+//       run_ADC();
+// }
 
 
-}
+
+// void motor_test()
+// {
+//     while(1)
+
+//     {
+//          move_forward_by_distance(5);
+//         _delay_ms(1000);
+//         move_backward_by_distance(5);
+//         _delay_ms(1000); 
+//     }
+
+
+// }
 
 
 
@@ -50,19 +71,24 @@ int main(void)
 
 
 
-    initialize_io();
+    //initialize_io();
+    //set_up_IR_communications();
+    //init_ADC();
+
+
+
+
+    //run_ADC_to_detect_obstacle();
+
+
+    // set_up_motors();
+    // move_forward_by_distance(20);
+
     set_up_IR_communications();
-    init_ADC();
 
 
-
-
-   
-
-
-
-
-
+    bool value;
+    value = attempt_to_communicate_with_beacon();
  
 
 

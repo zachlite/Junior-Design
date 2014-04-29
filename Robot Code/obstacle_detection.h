@@ -1,3 +1,20 @@
+
+/*
+
+obstacle_detection.h
+measure Piezo sensor activity via ADCs
+
+Written by Isaac Patka
+Modified by Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
+
+
 #include "binary.h"
 
 /*Description*/

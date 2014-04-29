@@ -1,8 +1,25 @@
+/*
+
+hardware_interface.h
+hardware interfacing constants and dependencies
+
+Written by Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
+
+
+
 #define F_CPU 8000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdio.h>
 #include <stdlib.h>
+//#include "time.h"
 // #include "binary.h"
 
 
@@ -26,49 +43,44 @@
  *                                                   */
 
 
-
-
 //define Data direction register
-
-//MOTOR INTERFACE
-
-//Right motor
 #define Data_Direction_Register_D &DDRD
 #define Data_Direction_Register_B &DDRB
+#define Data_Direction_Register_C &DDRC
+//MOTOR INTERFACE
 
+//Right motor - D
+#define Right_Motor_Port &PORTD
+#define Right_Motor_Pin &PIND
+#define Right_Motor_Enable 2 
+#define Right_Motor_Direction 3
+#define Right_Motor_Quad_A 5
+#define Right_Motor_Quad_B 6
+
+//Left Motor - B
+#define Left_Motor_Port &PORTB
+#define Left_Motor_Pin &PINB
+#define Left_Motor_Enable 5 
+#define Left_Motor_Direction 4
+#define Left_Motor_Quad_A 3
+#define Left_Motor_Quad_B 2
 
 //obstacle detection interface
-
+#define Obstacle_Detection_Channel_0 0 //this is the channel number
+#define Obstacle_Detection_Channel_1 1 
+#define Obstacle_Detection_Channel_2 2 
+#define Obstacle_Detection_Channel_3 3 
+#define Obstacle_Detection_Channel_4 4
+#define Obstacle_Detection_Channel_5 5 
 
 //light sensor interface
 
 
 
 //IR comm interface
+//square wave
+#define Square_Wave_Pin PB1
+
+
  
 
-
-
-
-
-
-#define Left_Motor_Enable 6
-#define Left_Motor_Direction 5
-#define Right_Motor_Enable 3
-#define Right_Motor_Direction 4
-
-#define Left_Motor_Port &PORTD
-#define Right_Motor_Port &PORTB
-
-#define Left_Motor_Pin &PIND
-#define Right_Motor_Pin &PINB
-
-
-
-
-void initialize_io(void);
-
-void set_up_left_motor(void);
-void set_up_right_motor(void);
-
-void init_timer_pin(void);

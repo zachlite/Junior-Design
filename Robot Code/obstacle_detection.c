@@ -1,4 +1,19 @@
 
+/*
+
+obstacle_detection.c
+measure Piezo sensor activity via ADCs
+
+Written by Isaac Patka
+Modified by Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
+
 
 //ADC0
 #include <avr/io.h>
@@ -79,14 +94,17 @@ void init_analog_hardware()
 
 unsigned char run_ADC_to_detect_obstacle(void)
 {
+
+	//To Do: set up global interrupt so adc checking runs in the background
 	while(1)//try n times
 	{
 		int value = analog_read(0);
 
 		if (value > 100)
 		{
+			//clear_bit(&PORTB, 1);
 			set_bit(&PORTB, 1);
-			return 1;
+			//return 1;
 		}
 		else
 		{

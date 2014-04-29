@@ -1,13 +1,27 @@
-/*
- *  Isaac Patka & JD Team 9
- *  CLUE Summer 2013 JK Spring 2014
- *  Radiator Labs
- */
 
-#define F_CPU 8000000UL
-#include "avr/io.h"
-#include <avr/interrupt.h>
+/*
+
+ir_comm.c
+read and transmit IR data over UART
+
+Written by Isaac Patka & JD Team 9
+Modified by Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
+
 #include "ir_comm.h"
+
+
+
+
+void set_up_uart(void);
+void uart_transmit(unsigned char data);
+ir_status uart_attempt_receive_for_seconds(int seconds);
 
 
 
@@ -29,8 +43,38 @@
  *   PB0 -                |14  15| PB1 - Room Temp   *
  *                         ------                    *
  *                                                   */
-    
-#define UBRR_300 1667//300 baud in UBBR
+ 
+
+/*
+Do we guarantee that when we successfully 
+communicate with beacon the beacon will be captured?
+what happens if we successfully recieve, invert, and transmit a signal
+but the beacon is not captured?
+That is dealt with in a higher level.
+
+*/
+
+bool attempt_to_communicate_with_beacon()
+{
+    //try to read IR signal for n seconds
+    ir_status ir_packet_received;
+    ir_packet_received = uart_attempt_receive_for_seconds(RECEIVE_TIMEOUT);
+
+    if (ir_packet_received.successful)
+    {
+        //invert data and send
+        ir_packet_received.data = ~ir_packet_received.data;
+        uart_transmit(ir_packet_received.data); 
+        return SUCCESSFUL_COMMUNICATION;
+    }
+
+    else
+    {
+        return UNSUCCESSFUL_COMMUNICATION;
+    }
+
+
+}
 
 
 
@@ -76,32 +120,58 @@ void uart_transmit(unsigned char data)
     
 }
 
-unsigned char uart_receive()
+ir_status uart_attempt_receive_for_seconds(int seconds)
 {
+
+    
+ 
+    int total_time = 0;
+
+    ir_status packet;
+
+
     //Pause until RXC is nonzero
-    while (!(UCSR0A & (1 << RXC0)));
-    
-    //Get data
-    return UDR0;
-    
-}
-
-void reverse_endianness_of_byte(unsigned char *byte)
-{
-    unsigned char temporary_byte = 0;
-
-    for (int i = 0; i < 8; i++)
+   
+    while (!(UCSR0A & (1 << RXC0)))
     {
-        temporary_byte |= *byte & (1 << i);
+        //and break after waiting 1 for one second
+
+        
+        if (total_time > seconds)
+        {
+            packet.data = 0;
+            packet.successful = false;
+            return packet;
+        }
+        total_time++;
     }
+    
+    packet.data= UDR0;
+    packet.successful = true;
+    return packet;
 
-    *byte = 0b11111111;
-
-    //and a byte with another byte and the only 1 is the bit you want to keep
-    //shift to appropriate posiition
-
-
+    
 }
+
+
+//void reverse_endianness_of_byte(unsigned char *byte);
+
+// void reverse_endianness_of_byte(unsigned char *byte)
+// {
+//     unsigned char temporary_byte = 0;
+
+//     for (int i = 0; i < 8; i++)
+//     {
+//         temporary_byte |= *byte & (1 << i);
+//     }
+
+//     *byte = 0b11111111;
+
+//     //and a byte with another byte and the only 1 is the bit you want to keep
+//     //shift to appropriate posiition
+
+
+// }
 
 
 

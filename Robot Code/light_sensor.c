@@ -1,11 +1,11 @@
 //
-//  I2C_AVR.c
+//  light_sensor.c
 //  
 //
 //  Created by Isaac Patka on 3/29/14.
 //
 //
-
+#include "light_sensor.h"
 
 /*                                                   *
  *                         ------                    *
@@ -25,15 +25,6 @@
  *   PB0                  |14  15| PB1               *
  *                         ------                    *
  *                                                   */
-
-#define F_CPU 8000000UL
-#include "avr/io.h"
-#include "util/delay.h"
-
-#define SWITCH_PORT PORTD
-
-#define LED_SWITCH 5
-
 
 
 
@@ -172,69 +163,69 @@ void run_light_sensor(void)
 
         while(1)
         {
-    //  Read
+        //  Read
 
-        /*  CPL = (ATIME_MS * AGAINX) / (GA * 53)
-            LUX1 = (C0DATA - 2*C1DATA)/CPL
-            LUX2 = (0.6 * C0DATA - C1DATA) / CPL
-            LUX = MAX(LUX1,LUX2,0)
-            */
-        
-       
+            /*  CPL = (ATIME_MS * AGAINX) / (GA * 53)
+                LUX1 = (C0DATA - 2*C1DATA)/CPL
+                LUX2 = (0.6 * C0DATA - C1DATA) / CPL
+                LUX = MAX(LUX1,LUX2,0)
+                */
+            
+           
 
-        TWIStart();
-        TWIWrite( 0x72);
-        TWIWrite( 0xB4);
-        TWIStart();
-        TWIWrite( 0x73);
-        C0DATA = TWIReadNACK();
+            TWIStart();
+            TWIWrite( 0x72);
+            TWIWrite( 0xB4);
+            TWIStart();
+            TWIWrite( 0x73);
+            C0DATA = TWIReadNACK();
 
-        
-        TWIStart();
-        TWIWrite( 0x72);
-        TWIWrite( 0xB5);
-        TWIStart();
-        TWIWrite( 0x73);
-        C0DATAH = TWIReadNACK();
+            
+            TWIStart();
+            TWIWrite( 0x72);
+            TWIWrite( 0xB5);
+            TWIStart();
+            TWIWrite( 0x73);
+            C0DATAH = TWIReadNACK();
 
-        //C0DATA |= (C0DATAH << 8);
-        
+            //C0DATA |= (C0DATAH << 8);
+            
 
-        uint16_t C1DATA = 0;
-        uint16_t C1DATAH = 0;
+            uint16_t C1DATA = 0;
+            uint16_t C1DATAH = 0;
 
-        TWIStart();
-        TWIWrite( 0x72);
-        TWIWrite( 0xB6);
-        TWIStart();
-        TWIWrite( 0x73);
-        C1DATA = TWIReadNACK();
+            TWIStart();
+            TWIWrite( 0x72);
+            TWIWrite( 0xB6);
+            TWIStart();
+            TWIWrite( 0x73);
+            C1DATA = TWIReadNACK();
 
-        
-        TWIStart();
-        TWIWrite( 0x72);
-        TWIWrite( 0xB7);
-        TWIStart();
-        TWIWrite( 0x73);
-        C1DATAH = TWIReadNACK();
+            
+            TWIStart();
+            TWIWrite( 0x72);
+            TWIWrite( 0xB7);
+            TWIStart();
+            TWIWrite( 0x73);
+            C1DATAH = TWIReadNACK();
 
-        C1DATA |= (C1DATAH << 8);
-
-
-        //  Calculate Lux
-        CPL = (ATIME_MS * AGAINX) / (GA * 53);
-        LUX1 = (C0DATA - 2*C1DATA)/CPL;
-        LUX2 = (0.6 * C0DATA - C1DATA) / CPL;
-        LUX = MAX3(LUX1,LUX2,0);
-
-        //if (LUX > 1000)
-          //  blink_led();
-
-        if (C0DATA > 0x10)  // Lux isn't being used right now to set off the indicator, just this threshold which I found through trial and error
-            blink_led();
+            C1DATA |= (C1DATAH << 8);
 
 
-    }
+            //  Calculate Lux
+            CPL = (ATIME_MS * AGAINX) / (GA * 53);
+            LUX1 = (C0DATA - 2*C1DATA)/CPL;
+            LUX2 = (0.6 * C0DATA - C1DATA) / CPL;
+            LUX = MAX3(LUX1,LUX2,0);
+
+            //if (LUX > 1000)
+              //  blink_led();
+
+            if (C0DATA > 0x10)  // Lux isn't being used right now to set off the indicator, just this threshold which I found through trial and error
+                blink_led();
+
+
+        }
 
         
 

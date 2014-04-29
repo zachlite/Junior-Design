@@ -1,8 +1,20 @@
+/*
+
+carrier_wave.c
+carrier wave for IR modulation
+
+Written by Zach Lite
+Spring 2014
+
+Junior Design Project
+Binghamton University
+
+
+*/
 
 
 #include "carrier_wave.h"
-#include "inputoutput.h"
-#include <avr/interrupt.h>
+
 
 
 static const unsigned long carrier_frequency = 38000UL;
