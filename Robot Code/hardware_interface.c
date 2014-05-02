@@ -3,6 +3,16 @@
 
 
 
+void blink_led(unsigned char SWITCH)
+{
+  set_bit(SWITCH_PORT,SWITCH);
+  _delay_ms(125);
+  clear_bit(SWITCH_PORT,SWITCH);
+  _delay_ms(125);
+
+
+}
+
 
 
 // void initialize_io(void)

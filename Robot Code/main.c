@@ -15,11 +15,14 @@ Binghamton University
 
 
 #include "hardware_interface.h"
-
+#include "main.h"
 #include "ir_comm.h"
 #include "motors.h"
 #include "obstacle_detection.h"
 #include "gameplay.h"
+#include "light_sensor.h"
+
+
 
 
 
@@ -64,6 +67,8 @@ int main(void)
 
     set_up_IR_communications(); //from ir_comm.h
 
+    setup_light_sensor_i2c_soft();
+    setup_light_sensor_i2c_hw();
     //init light sensors
 
     init_game_timer(); //from gameplay.h
@@ -72,7 +77,8 @@ int main(void)
 
 
 
-    play_game();
+
+    //play_game();
 
 
     //initialize_io();
@@ -118,8 +124,24 @@ int main(void)
     // }
  
 
+    set_bit(Data_Direction_Register_C,LED_SWITCH_1);
+    set_bit(Data_Direction_Register_C,LED_SWITCH_2);
+    uint8_t sensor_1_data = 0;
+    uint8_t sensor_2_data = 0;
 
+    while(1)
+    {
+        sensor_2_data = read_light_sensor_i2c_soft();
 
+        if (sensor_2_data > 0x05)
+            blink_led(LED_SWITCH_1);
+
+        sensor_1_data = read_light_sensor_i2c_hw();
+
+        if (sensor_1_data > 0x05)
+            blink_led(LED_SWITCH_2);
+
+    }
 
 
 
@@ -149,7 +171,7 @@ int main(void)
 
     // set_bit(&PORTC, 5);
 
-    motor_demo();
+    //motor_demo();
     //set_bit(&DDRD, 2);
 
     // while(1)
@@ -168,6 +190,7 @@ int main(void)
 
   return 0;
 }
+
 
 
 

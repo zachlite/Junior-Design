@@ -1,5 +1,7 @@
 #include "hardware_interface.h"
 #include "stdbool.h"
+#include "TWI_master.h"
+#include "i2csoft.h"
 
 
 
@@ -10,19 +12,22 @@
 
 
 
-#define LIGHT_SENSOR_DIFF_THRESHOLD 100
-#define AMBIENT 1000
+#define LIGHT_SENSOR_DIFF_THRESHOLD 0x02	//needs to be tested DEBUG
+#define AMBIENT 0x10	//without reading lux this is the raw threshold of C0
 
 
-typedef struct light_sensor_reading
-{
-	short LS_1_Lux;
-	short LS_2_Lux;
-	bool is_valid;
 
-} light_sensor_reading;
 
 
 unsigned char get_heading_from_light_sensors();
 
+uint16_t MAX3(uint16_t VAR1, uint16_t VAR2, uint16_t VAR3);
+
+void setup_light_sensor_i2c_soft(void);
+
+uint8_t read_light_sensor_i2c_hw(void);
+
+void setup_light_sensor_i2c_hw(void);
+
+uint8_t read_light_sensor_i2c_soft(void);
 

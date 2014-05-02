@@ -6,6 +6,7 @@
 //
 //
 #include "light_sensor.h"
+#include "i2csoft.h"
 
 /*                                                   *
  *                         ------                    *
@@ -28,33 +29,72 @@
 
 
 
-void TWIInit(void);
 
-void TWIStart(void);
 
-void TWIStop(void);
+void setup_light_sensor_i2c_soft(void)
+{
 
-void TWIStop(void);
+    return 0;
+}
 
-void TWIWrite(uint8_t u8data);
-
-uint8_t TWIReadACK(void);
-
-uint8_t TWIReadNACK(void);
-
-uint8_t TWIGetStatus(void);
-
-void Init_Ports(void);
-
-void blink_led(void);
-
-void set_bit_value(volatile uint8_t * byte, unsigned char bit, unsigned char value);
-
-uint16_t MAX3(uint16_t VAR1, uint16_t VAR2, uint16_t VAR3);
+void setup_light_sensor_i2c_hw(void)
+{
 
 
 
-void run_light_sensor(void)
+         TWIInit(); //initialize hardware I2C
+         
+
+      //  Disable Device
+        
+        TWIStart();
+        TWIWrite( 0x72 );
+        TWIWrite( 0xA0 );
+        TWIWrite( 0x0);
+        TWIStop();
+        
+
+    //  Set ATime to 2.72ms
+        
+        TWIStart();
+        TWIWrite( 0x72 );
+        TWIWrite( 0xA1 );
+        TWIWrite( 0xff);
+        TWIStop();
+        
+    //  Set Wtime to 2.72ms
+        
+        TWIStart();
+        TWIWrite( 0x72 );
+        TWIWrite( 0xA3 );
+        TWIWrite( 0xff);
+        TWIStop();
+        
+    //  Set gain
+        
+        TWIStart();
+        TWIWrite( 0x72 );
+        TWIWrite( 0xAF );
+        TWIWrite( 0x0);
+        TWIStop();
+        
+    //  Enable Device
+        
+        TWIStart();
+        TWIWrite( 0x72 );
+        TWIWrite( 0xA0 );
+        TWIWrite( 0xB );
+        TWIStop();
+        
+
+        uint16_t C0DATA = 0;
+        uint16_t C0DATAH = 0;
+
+    return 0;
+
+}
+
+uint8_t read_light_sensor_i2c_hw(void)  //Read light sensors with hardware I2C pins
 {
     uint16_t ATIME_MS = 2.72;
     uint16_t GA = 1;             //  Nothing obstructing the light sensor
@@ -69,11 +109,9 @@ void run_light_sensor(void)
     //blink_led();
     //blink_led();
 
-    TWIInit();
+ 
 
-    
-    while(1)
-    {
+
     
     /*  TWIStart is the equivalent of [ symbol in Kyle's example
      *  It sends a start signal
@@ -162,8 +200,7 @@ void run_light_sensor(void)
         uint16_t C0DATA = 0;
         uint16_t C0DATAH = 0;
 
-        while(1)
-        {
+       
         //  Read
 
             /*  CPL = (ATIME_MS * AGAINX) / (GA * 53)
@@ -222,11 +259,13 @@ void run_light_sensor(void)
             //if (LUX > 1000)
               //  blink_led();
 
-            if (C0DATA > 0x10)  // Lux isn't being used right now to set off the indicator, just this threshold which I found through trial and error
+            //if (C0DATA > 0x10)  // Lux isn't being used right now to set off the indicator, just this threshold which I found through trial and error
                 //blink_led();
                 //light detected;
 
-        }
+            return C0DATA;
+
+        
 
         
 
@@ -260,89 +299,16 @@ void run_light_sensor(void)
         TWIStop();
         */
     
-        
-    }//end while
-    
-    
-    return 0;
-}
-
-void Init_Ports(void)
-{
-    
-    DDRD |= (1 << PD4);
-    /*
-     *PD5 is LED_SWITCH
-     */
-}
-
-void blink_led(void)
-{
-    set_bit_value(&SWITCH_PORT,LED_SWITCH,1);
-    _delay_ms(125);
-    set_bit_value(&SWITCH_PORT,LED_SWITCH,0);
-    _delay_ms(125);
-}
-
-void set_bit_value(volatile uint8_t * byte, unsigned char bit, unsigned char value)
-{
-    
-    if (value == 1)
-        *byte |= 1 << bit;
-    
-    else if (value == 0)
-        *byte &= ~(1 << bit);
     
 }
 
-void TWIInit(void)
-{
-    //set SCL to 400kHz
-    TWSR = 0x00;
-    TWBR = 0x0C;
-    //enable TWI
-    TWCR = (1<<TWEN);
-}
 
-void TWIStart(void)
-{
-    TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
-    while ((TWCR & (1<<TWINT)) == 0);
-}
-//send stop signal
-void TWIStop(void)
-{
-    TWCR = (1<<TWINT)|(1<<TWSTO)|(1<<TWEN);
-}
 
-void TWIWrite(uint8_t u8data)
-{
-    TWDR = u8data;
-    TWCR = (1<<TWINT)|(1<<TWEN);
-    while ((TWCR & (1<<TWINT)) == 0);
-}
 
-uint8_t TWIReadACK(void)
-{
-    TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWEA);
-    while ((TWCR & (1<<TWINT)) == 0);
-    return TWDR;
-}
-//read byte with NACK
-uint8_t TWIReadNACK(void)
-{
-    TWCR = (1<<TWINT)|(1<<TWEN);
-    while ((TWCR & (1<<TWINT)) == 0);
-    return TWDR;
-}
 
-uint8_t TWIGetStatus(void)
-{
-    uint8_t status;
-    //mask status
-    status = TWSR & 0xF8;
-    return status;
-}
+
+
+
 
 uint16_t MAX3(uint16_t VAR1, uint16_t VAR2, uint16_t VAR3)
 {

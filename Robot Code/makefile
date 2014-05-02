@@ -6,7 +6,7 @@ CC=avr-gcc
 CFLAGS= -std=c99 -g -Wall -mmcu=atmega328 -O1 
 #check /dev to find your buspirate's device signature.  cu.usbserial-A601EXKG is mine.
 #cu.usbserial-PirateV3 is Isaac's
-DEVICE=/dev/cu.usbserial-A601EXKG
+DEVICE=/dev/tty.usbserial-PirateV3
 AVR=atmega328
 OUTPUT=main
 
@@ -27,11 +27,12 @@ all: main.elf hexfile run
   
 
 
-main.elf: binary.o obstacle_detection.o motors.o carrier_wave.o ir_comm.o light_sensors.o gameplay.o main.o
-	$(CC) $(CFLAGS) binary.o obstacle_detection.o motors.o carrier_wave.o ir_comm.o light_sensors.o gameplay.o main.o -o $@
+main.elf: binary.o hardware_interface.o obstacle_detection.o motors.o carrier_wave.o ir_comm.o i2csoft.o TWI_master.o light_sensors.o gameplay.o main.o
+	$(CC) $(CFLAGS) binary.o hardware_interface.o obstacle_detection.o motors.o carrier_wave.o ir_comm.o i2csoft.o TWI_master.o light_sensors.o gameplay.o main.o -o $@
 
 # main.elf: binary.o motors.o main.o 
 # 	$(CC) $(CFLAGS) binary.o motors.o main.o -o $@
+
 
 binary.o: binary.c binary.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -52,10 +53,20 @@ carrier_wave.o: carrier_wave.c carrier_wave.h hardware_interface.h
 ir_comm.o: ir_comm.c ir_comm.h carrier_wave.h binary.h hardware_interface.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-light_sensors.o: light_sensors.c light_sensors.h hardware_interface.h
+light_sensors.o: light_sensors.c light_sensors.h hardware_interface.h i2csoft.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 gameplay.o: gameplay.c gameplay.h motors.h ir_comm.h light_sensors.h hardware_interface.h	
+	$(CC) $(CFLAGS) -c $< -o $@
+
+i2csoft.o: i2csoft.c i2csoft.h 
+	$(CC) $(CFLAGS) -c $< -o $@
+
+TWI_master.o: TWI_master.c TWI_master.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+hardware_interface.o: hardware_interface.c hardware_interface.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 #add new files here
 
