@@ -53,6 +53,7 @@ void set_bit_value(volatile uint8_t * byte, unsigned char bit, unsigned char val
 uint16_t MAX3(uint16_t VAR1, uint16_t VAR2, uint16_t VAR3);
 
 
+
 void run_light_sensor(void)
 {
     uint16_t ATIME_MS = 2.72;
@@ -222,8 +223,8 @@ void run_light_sensor(void)
               //  blink_led();
 
             if (C0DATA > 0x10)  // Lux isn't being used right now to set off the indicator, just this threshold which I found through trial and error
-                blink_led();
-
+                //blink_led();
+                //light detected;
 
         }
 
@@ -260,7 +261,7 @@ void run_light_sensor(void)
         */
     
         
-    }
+    }//end while
     
     
     return 0;

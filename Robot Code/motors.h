@@ -16,6 +16,8 @@ Binghamton University
 
 #include "hardware_interface.h"
 #include "binary.h"
+#include "obstacle_detection.h"
+#include "stdbool.h"
 
 //movement enumerations
 #define Backward 0
@@ -24,12 +26,25 @@ Binghamton University
 #define Right 3
 
 
+
+
 #define duty_cycle_small 150
 #define duty_cycle_large 255
 #define slip_distance 1000
 #define WheelCircumference 8.875
 
 #define UnitOfMovement 1
+
+
+#define EVADE_BACKUP_DISTANCE 2
+#define EVADE_TURN_ANGLE 15
+#define EVADE_MOVE_FORWARD_DISTANCE 3
+
+#define COURSE_ADJUSTMENT_ANGLE 5
+#define COURSE_ADJUSTMENT_DISTANCE 2
+#define SCOUT_AREA_ANGLE 45
+#define SCOUT_AREA_DISTANCE 12
+
 
 
 //high level - Public API
@@ -41,6 +56,7 @@ void turn_around();
 void move_forward_by_distance(unsigned short distance_in_inches);
 void move_backward_by_distance(unsigned short distance_in_inches); 
 void stop();
+void enable_motors();
 
 
 

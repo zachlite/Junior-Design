@@ -19,6 +19,7 @@ Binghamton University
 
 
 
+
 //private API
 
 void set_motor_directions_for_movement(unsigned char type_of_movement);
@@ -27,7 +28,6 @@ void set_right_motor_direction(unsigned char direction);
 
 
 
-void enable_motors();
 void enable_left_motor();
 void enable_right_motor();
 void stop_motors();
@@ -40,6 +40,7 @@ void get_duty_cycle(unsigned int distance, unsigned int quad_ticks, unsigned cha
 int convert_degrees_to_quad_ticks(unsigned short degrees);
 int convert_inches_to_quad_ticks(unsigned short inches);
 
+void evade_obstacle(unsigned char obsacle_sensor_number_triggered);
 
 
 /*
@@ -137,11 +138,18 @@ void turn_right()
 void turn_left_by_angle(unsigned short angle_to_turn)
 {
 	set_motor_directions_for_movement(Left);
+
+	int angle_in_quad_ticks = convert_degrees_to_quad_ticks(angle_to_turn);
+
+	move_distance(angle_in_quad_ticks);
 }
 
 void turn_right_by_angle(unsigned short angle_to_turn)
 {
 	set_motor_directions_for_movement(Right);
+	int angle_in_quad_ticks = convert_degrees_to_quad_ticks(angle_to_turn);
+
+	move_distance(angle_in_quad_ticks);
 }
 
 void turn_around()
@@ -178,6 +186,66 @@ void stop()
 	stop_motors();
 }
 
+
+/*
+       _         _             _                         _     _                      
+  ___ | |__  ___| |_ __ _  ___| | ___    __ ___   _____ (_) __| | __ _ _ __   ___ ___ 
+ / _ \| '_ \/ __| __/ _` |/ __| |/ _ \  / _` \ \ / / _ \| |/ _` |/ _` | '_ \ / __/ _ \
+| (_) | |_) \__ \ || (_| | (__| |  __/ | (_| |\ V / (_) | | (_| | (_| | | | | (_|  __/
+ \___/|_.__/|___/\__\__,_|\___|_|\___|  \__,_| \_/ \___/|_|\__,_|\__,_|_| |_|\___\___|
+                                                                                      
+		
+*/
+
+
+
+void evade_obstacle(unsigned char obsacle_sensor_number_triggered)
+{
+	//need to know direction to turn based on obstacle sensor triggered
+	//based on clock rate, only one sensor will be triggered at a time 
+
+	move_backward_by_distance(EVADE_BACKUP_DISTANCE);
+
+	if (obsacle_sensor_number_triggered == LEFT_SENSOR)
+	{
+		//assume obstacle to left
+		//bear right
+		turn_right_by_angle(EVADE_TURN_ANGLE);
+	}
+	else if (obsacle_sensor_number_triggered == LEFT_MID_SENSOR)
+	{
+		//assume obstacle to left
+		//bear right
+		turn_right_by_angle(EVADE_TURN_ANGLE);
+	}
+	else if (obsacle_sensor_number_triggered == RIGHT_MID_SENSOR)
+	{
+		
+		
+		//assume obstacle to right
+		//bear left
+		turn_left_by_angle(EVADE_TURN_ANGLE);
+		
+	
+	}
+	else //right sensor
+	{
+		//assume obstacle to right
+		// bear left
+		turn_left_by_angle(EVADE_TURN_ANGLE);
+
+	}
+
+	move_forward_by_distance(EVADE_MOVE_FORWARD_DISTANCE); //ensures you fully clear the obstacle
+}
+
+
+
+
+
+
+
+
 /*
 
             _            _           _                    _                _ 
@@ -199,7 +267,7 @@ void set_motor_directions_for_movement(unsigned char type_of_movement)
 {
 
 	stop_motors();
-	_delay_ms(5);
+	_delay_ms(50);
 
 	if (type_of_movement == Backward)
 	{
@@ -302,11 +370,17 @@ void stop_right_motor()
 
 void move_distance(unsigned int distance_in_quad_ticks)
 {
-	unsigned char quad_encoder_signal_left = 0;
-	unsigned char quad_encoder_signal_right = 0;
-    unsigned int left_ticks = 0; unsigned int right_ticks = 0;
+	// set_bit(&DDRC, 5);
+	// set_bit(&DDRC, 4); debug purposes
+
+
+	unsigned char quad_encoder_signal_left;
+	unsigned char quad_encoder_signal_right;
+    unsigned int left_ticks = 0; 
+    unsigned int right_ticks = 0;
     unsigned int quad_ticks = 0;
 
+    unsigned char last_signal_left, last_signal_right;
 
     //set pwm cycle at .5 for the first and last 5% of the distance to travel
 
@@ -314,18 +388,35 @@ void move_distance(unsigned int distance_in_quad_ticks)
     unsigned char cycle_counter = 0;
 
     enable_motors();
+
+
+    unsigned char obsacle_sensor_number_triggered;
 	while (quad_ticks < distance_in_quad_ticks)
 	{
 
-		
 
 
-	 	unsigned char last_signal_left, last_signal_right;
-        last_signal_left = quad_encoder_signal_left;
+		//obstacle avoidance check and recursion:
+		obsacle_sensor_number_triggered = check_for_obstacle();
+		if (obsacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
+		{
+			evade_obstacle(obsacle_sensor_number_triggered);
+		}
+		else
+		{
+			//no obstacle
+		}
+
+
+
+
+
+	 	last_signal_left = quad_encoder_signal_left;
         last_signal_right = quad_encoder_signal_right;
         
+        
         quad_encoder_signal_left = get_quad_encoder_signal(Left_Motor_Pin, Left_Motor_Quad_A, Left_Motor_Quad_B);
-        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Quad_A, Right_Motor_Quad_A);
+        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Quad_A, Right_Motor_Quad_B);
 	 
         if (quad_encoder_signal_left != last_signal_left)
         {
@@ -342,38 +433,26 @@ void move_distance(unsigned int distance_in_quad_ticks)
 
         //get_duty_cycle(distance_in_quad_ticks, quad_ticks, &duty_cycle);
 
-
+       
         motors_move_at_same_rate(&left_ticks, &right_ticks);
 
-        // if (cycle_counter <= 254)
-        // {
-
-        //     toggle_bit(Right_Motor_Port, 7);
-
-
-        // 	//if (motors_move_at_same_rate(&left_ticks, &right_ticks))
-       	// 	//{
-
-        // 	//}
-        // 	enable_motors();
-        // }
-
-        // else
-        // {
-        // 	stop_motors();
-        // }
+      
+       
+    
 
 
-
-        
 
         if (right_ticks >= quad_ticks && left_ticks >= quad_ticks)
         {
         	quad_ticks++;
+
         }
 	 	
 
         cycle_counter++;
+
+
+        
 	}
 
 
@@ -386,24 +465,23 @@ void move_distance(unsigned int distance_in_quad_ticks)
 unsigned char motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks)
 {
 
-	if (*left_ticks > *right_ticks)
+	if(*right_ticks > *left_ticks)
+	{
+		stop_right_motor();
+		enable_left_motor();
+		return 0;
+	}	
+	if (*left_ticks > *right_ticks)//this is happening A LOT.  the left motor is stopping a lot.
 	{
 		stop_left_motor();
 		enable_right_motor();
 
 		return 0;
 	}
-	else if (*right_ticks > *left_ticks)
-	{
-		stop_right_motor();
-		enable_left_motor();
-		return 0;
-	}
-	else
-	{
+	
 		enable_motors();
 		return 1;
-	}
+	
 }
 
 
@@ -411,6 +489,11 @@ unsigned char motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *r
 int convert_inches_to_quad_ticks(unsigned short inches)
 {
 	return inches*100;
+}
+
+int convert_degrees_to_quad_ticks(unsigned short degrees)
+{
+	return degrees*2;
 }
 
 
@@ -438,24 +521,24 @@ void get_duty_cycle(unsigned int distance, unsigned int quad_ticks, unsigned cha
 */
 //set bit initializes pin as output
 //clearbit initializes pin as input
-void set_up_left_motor()
-{
-	set_bit(Data_Direction_Register_B, Left_Motor_Enable);
-    set_bit(Data_Direction_Register_B, Left_Motor_Direction);
-  
-
-    clear_bit(Data_Direction_Register_B, Left_Motor_Quad_A);
-    clear_bit(Data_Direction_Register_B, Left_Motor_Quad_B);
-
-}
 void set_up_right_motor()
 {
-	set_bit(Data_Direction_Register_D, Right_Motor_Enable);
-    set_bit(Data_Direction_Register_D, Right_Motor_Direction);
-  
+	set_bit(Data_Direction_Register_B, Right_Motor_Enable);
+    set_bit(Data_Direction_Register_B, Right_Motor_Direction);
+ 
 
-    clear_bit(Data_Direction_Register_D, Right_Motor_Quad_A);
-    clear_bit(Data_Direction_Register_D, Right_Motor_Quad_B);
+    clear_bit(Data_Direction_Register_B, Right_Motor_Quad_A);
+    clear_bit(Data_Direction_Register_B, Right_Motor_Quad_B);
+
+}
+void set_up_left_motor()
+{
+	set_bit(Data_Direction_Register_D, Left_Motor_Enable);
+    set_bit(Data_Direction_Register_D, Left_Motor_Direction);
+
+
+    clear_bit(Data_Direction_Register_D, Left_Motor_Quad_A);
+    clear_bit(Data_Direction_Register_D, Left_Motor_Quad_B);
 }
 
 
@@ -463,6 +546,7 @@ void set_up_motors()
 {
 	set_up_right_motor();
 	set_up_left_motor();
+
 
 }
 

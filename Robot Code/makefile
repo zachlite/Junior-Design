@@ -5,7 +5,8 @@
 CC=avr-gcc
 CFLAGS= -std=c99 -g -Wall -mmcu=atmega328 -O1 
 #check /dev to find your buspirate's device signature.  cu.usbserial-A601EXKG is mine.
-DEVICE=/dev/cu.usbserial-PirateV3
+#cu.usbserial-PirateV3 is Isaac's
+DEVICE=/dev/cu.usbserial-A601EXKG
 AVR=atmega328
 OUTPUT=main
 
@@ -26,20 +27,24 @@ all: main.elf hexfile run
   
 
 
-# main.elf: binary.o inputoutput.o motors.o carrier_wave.o ir_comm.o ADC.o main.o
-# 	$(CC) $(CFLAGS) binary.o inputoutput.o motors.o carrier_wave.o ir_comm.o ADC.o main.o -o $@
+main.elf: binary.o obstacle_detection.o motors.o carrier_wave.o ir_comm.o light_sensors.o gameplay.o main.o
+	$(CC) $(CFLAGS) binary.o obstacle_detection.o motors.o carrier_wave.o ir_comm.o light_sensors.o gameplay.o main.o -o $@
 
-main.elf: binary.o carrier_wave.o ir_comm.o main.o 
-	$(CC) $(CFLAGS) binary.o carrier_wave.o ir_comm.o main.o -o $@
+# main.elf: binary.o motors.o main.o 
+# 	$(CC) $(CFLAGS) binary.o motors.o main.o -o $@
 
 binary.o: binary.c binary.h
-	avr-gcc $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # inputoutput.o: inputoutput.c inputoutput.h binary.h
 # 	avr-gcc $(CFLAGS) -c  $< -o $@
 
-# motors.o: motors.c motors.h binary.h hardware_interface.h
-# 	$(CC) $(CFLAGS) -c $< -o $@
+obstacle_detection.o: obstacle_detection.c obstacle_detection.h binary.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+
+motors.o: motors.c motors.h binary.h obstacle_detection.h hardware_interface.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 carrier_wave.o: carrier_wave.c carrier_wave.h hardware_interface.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -47,8 +52,10 @@ carrier_wave.o: carrier_wave.c carrier_wave.h hardware_interface.h
 ir_comm.o: ir_comm.c ir_comm.h carrier_wave.h binary.h hardware_interface.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# obstacle_detection.o: obstacle_detection.c obstacle_detection.h binary.h
-# 	$(CC) $(CFLAGS) -c $< -o $@
+light_sensors.o: light_sensors.c light_sensors.h hardware_interface.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+gameplay.o: gameplay.c gameplay.h motors.h ir_comm.h light_sensors.h hardware_interface.h	
 
 #add new files here
 

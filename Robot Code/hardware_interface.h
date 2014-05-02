@@ -19,6 +19,7 @@ Binghamton University
 #include <util/delay.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <avr/interrupt.h>
 //#include "time.h"
 // #include "binary.h"
 
@@ -33,7 +34,7 @@ Binghamton University
  *   PD4                  |6   23| PC0               *
  *   VCC                  |7   22| GND               *
  *   GND                  |8   21| AREF              *
- *   PB6                  |9   20| AVCC              * 
+ *   PB6            e      |9   20| AVCC              * 
  *   PB7                  |10  19| PB5               *
  *   PD5 - LED            |11  18| PB4               *
  *   PD6                  |12  17| PB3               *
@@ -43,6 +44,8 @@ Binghamton University
  *                                                   */
 
 
+
+
 //define Data direction register
 #define Data_Direction_Register_D &DDRD
 #define Data_Direction_Register_B &DDRB
@@ -50,20 +53,23 @@ Binghamton University
 //MOTOR INTERFACE
 
 //Right motor - D
-#define Right_Motor_Port &PORTD
-#define Right_Motor_Pin &PIND
-#define Right_Motor_Enable 2 
-#define Right_Motor_Direction 3
-#define Right_Motor_Quad_A 5
-#define Right_Motor_Quad_B 6
+#define Right_Motor_Port &PORTB
+#define Right_Motor_Pin &PINB
+#define Right_Motor_Enable 5
+#define Right_Motor_Direction 4
+#define Right_Motor_Quad_A 3
+#define Right_Motor_Quad_B 2
 
 //Left Motor - B
-#define Left_Motor_Port &PORTB
-#define Left_Motor_Pin &PINB
-#define Left_Motor_Enable 5 
-#define Left_Motor_Direction 4
-#define Left_Motor_Quad_A 3
-#define Left_Motor_Quad_B 2
+#define Left_Motor_Port &PORTD
+#define Left_Motor_Pin &PIND
+#define Left_Motor_Enable 2 
+#define Left_Motor_Direction 3
+#define Left_Motor_Quad_A 5
+#define Left_Motor_Quad_B 6
+
+
+
 
 //obstacle detection interface
 #define Obstacle_Detection_Channel_0 0 //this is the channel number

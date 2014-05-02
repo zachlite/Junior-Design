@@ -43,10 +43,10 @@ int analog_read(unsigned char channel);
 */
 
 
-void init_ADC(void)
+void init_ADC_for_obstacle_detection(void)
 {
 
-	init_test_pins();
+	//init_test_pins();
 
 	init_analog_hardware();
 
@@ -92,28 +92,36 @@ void init_analog_hardware()
 
 */
 
-unsigned char run_ADC_to_detect_obstacle(void)
+unsigned char check_for_obstacle(void)
 {
 
-	//To Do: set up global interrupt so adc checking runs in the background
-	while(1)//try n times
+				//need to check each channel
+
+				//4 channels: 0, 1, 2, 3
+
+			/*LIGHT SENSOR CHANNEL ORIENTATION
+
+				    	forward
+
+			  left	 0   1   2    3   right   
+
+					   backward
+				
+			*/
+
+	for (unsigned char channel = 0; channel < 4; channel++)
 	{
-		int value = analog_read(0);
-
-		if (value > 100)
+		//check channel
+		if (analog_read(channel) > CHANNEL_SENSITIVITY)
 		{
-			//clear_bit(&PORTB, 1);
-			set_bit(&PORTB, 1);
-			//return 1;
-		}
-		else
-		{
-			clear_bit(&PORTB, 1);
-
+			//obstacle detected on channel channel
+			return channel; //channel refers to sensor number
 		}
 	}
 
-	return 0;
+
+	return NO_OBSTACLE_DETECTED;
+
 
 }
 
@@ -131,6 +139,31 @@ int analog_read(unsigned char channel)
     
 }
 
+
+
+
+
+/////////
+//old analog read
+	//To Do: set up global interrupt so adc checking runs in the background
+	// while(1)//try n times
+	// {
+	// 	int value = analog_read(0);
+
+	// 	if (value > 100)
+	// 	{
+	// 		//clear_bit(&PORTB, 1);
+	// 		set_bit(&PORTB, 1);
+	// 		//return OBSTACLE_DETECTED;
+	// 	}
+	// 	else
+	// 	{
+	// 		clear_bit(&PORTB, 1);
+
+	// 	}
+	// }
+
+	// return NO_OBSTACLE_DETECTED;
 
 
 

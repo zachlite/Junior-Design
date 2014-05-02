@@ -27,11 +27,7 @@ Binghamton University
 
 #define RECEIVE_TIMEOUT 100
 
-typedef struct ir_status
-{
-    unsigned char data;
-    bool successful;
-}ir_status;
+
 
 
 //public API

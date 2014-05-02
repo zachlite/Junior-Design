@@ -16,7 +16,11 @@ Binghamton University
 
 #include "ir_comm.h"
 
-
+typedef struct ir_status
+{
+    unsigned char data;
+    bool successful;
+}ir_status;
 
 
 void set_up_uart(void);
@@ -82,7 +86,7 @@ void set_up_IR_communications(void)
 {
     set_up_IR_carrier();
     set_up_uart();
-    sei();
+    //sei();
 }
 
 

@@ -11,11 +11,22 @@ Spring 2014
 Junior Design Project
 Binghamton University
 
-
 */
 
 
+
+
 #include "binary.h"
+
+//#define OBSTACLE_DETECTED 1
+#define NO_OBSTACLE_DETECTED 4
+
+#define LEFT_SENSOR 0
+#define LEFT_MID_SENSOR 1
+#define RIGHT_MID_SENSOR 2
+#define RIGHT_SENSOR 3
+
+#define CHANNEL_SENSITIVITY 100
 
 /*Description*/
 
@@ -37,9 +48,10 @@ corresponding to the obstacle sensor that detected an obstacle
 
 
 
-//Public ADC API
-void init_ADC(void);
-unsigned char run_ADC_to_detect_obstacle(void);
+//Public API
+void init_ADC_for_obstacle_detection(void);
+unsigned char check_for_obstacle(void); //returns channel number where obstacle was detected
+
 
 
 
