@@ -54,4 +54,8 @@ unsigned char check_for_obstacle(void); //returns channel number where obstacle 
 
 
 
+void test_check_for_obstacle(void);
+
+
+
 

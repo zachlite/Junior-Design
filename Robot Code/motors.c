@@ -415,16 +415,18 @@ void move_distance(unsigned int distance_in_quad_ticks)
 
 		set_bit(&PORTC, 5);
 
-		//obstacle avoidance check and recursion:
-		// obsacle_sensor_number_triggered = check_for_obstacle();
-		// if (obsacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
-		// {
-		// 	evade_obstacle(obsacle_sensor_number_triggered);
-		// }
-		// else
-		// {
-		// 	//no obstacle
-		// }
+
+	//when running wihtout sensor input, must ground ADC so not to collect floating input.		
+	//	obstacle avoidance check and recursion:
+		obsacle_sensor_number_triggered = check_for_obstacle();
+		if (obsacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
+		{
+			evade_obstacle(obsacle_sensor_number_triggered);
+		}
+		else
+		{
+			//no obstacle
+		}
 
 
 
