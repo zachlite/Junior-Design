@@ -125,7 +125,7 @@ int main(void)
  
 
     set_bit(Data_Direction_Register_C,LED_SWITCH_1);
-    set_bit(Data_Direction_Register_C,LED_SWITCH_2);
+    //set_bit(Data_Direction_Register_C,LED_SWITCH_2);
     //uint8_t sensor_1_data = 0;
     //uint8_t sensor_2_data = 0;
     unsigned char heading;
@@ -149,7 +149,7 @@ int main(void)
 
         heading = get_heading_from_light_sensors();
 
-        if (heading == FORWARD)
+        /*if (heading == FORWARD)
         {
             set_bit(SWITCH_PORT,LED_SWITCH_1);
             set_bit(SWITCH_PORT,LED_SWITCH_2);
@@ -175,8 +175,18 @@ int main(void)
             clear_bit(SWITCH_PORT,LED_SWITCH_1);
             clear_bit(SWITCH_PORT,LED_SWITCH_2);
         
-        }
+        }*/
 
+            if ((heading == FORWARD) || (heading == LEFT) || (heading == RIGHT))
+                set_bit(SWITCH_PORT,LED_SWITCH_1);
+
+
+            if (heading == NO_LIGHT)
+        {
+
+            clear_bit(SWITCH_PORT,LED_SWITCH_1);
+        
+        }
         /*else
         {
 

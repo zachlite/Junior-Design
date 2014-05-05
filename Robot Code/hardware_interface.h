@@ -69,9 +69,9 @@ Binghamton University
 #define Left_Motor_Quad_B 6
 
  //Debugging LED
-#define SWITCH_PORT &PORTC
+#define SWITCH_PORT &PORTB
 #define LED_SWITCH_1 0
-#define LED_SWITCH_2 1
+
 
 
 
