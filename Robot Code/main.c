@@ -14,9 +14,9 @@ Binghamton University
 
 
 
+
 //#include "hardware_interface.h"
 #include "main.h"
-
 
 
 
@@ -60,6 +60,8 @@ int main(void)
 
     set_up_IR_communications(); //from ir_comm.h
 
+    setup_light_sensor_i2c_soft();
+    setup_light_sensor_i2c_hw();
     //init light sensors
 
     init_game_timer(); //from gameplay.h
@@ -70,10 +72,16 @@ int main(void)
   
     motor_demo();
 
+<<<<<<< HEAD
     //game_timer_test();
     //enable_motors();
     //play_game();
     //move_forward_by_distance(10);
+=======
+
+
+    //play_game();
+>>>>>>> daf54bd420d0d6fa45aa7346a957a8fcdf6b685f
 
 
     //initialize_io();
@@ -119,8 +127,79 @@ int main(void)
     // }
  
 
+    set_bit(Data_Direction_Register_C,LED_SWITCH_1);
+    //set_bit(Data_Direction_Register_C,LED_SWITCH_2);
+    //uint8_t sensor_1_data = 0;
+    //uint8_t sensor_2_data = 0;
+    unsigned char heading;
+
+    while(1)
+    {
+        /*sensor_2_data = read_light_sensor_i2c_soft();
+
+        if (sensor_2_data > 0x05)
+            set_bit(SWITCH_PORT,LED_SWITCH_2);
+
+            else
+                clear_bit(SWITCH_PORT,LED_SWITCH_2);
+
+        sensor_1_data = read_light_sensor_i2c_hw();
+
+        if (sensor_1_data > 0x05)
+            set_bit(SWITCH_PORT,LED_SWITCH_1);
+        else
+                clear_bit(SWITCH_PORT,LED_SWITCH_1);*/
+
+        heading = get_heading_from_light_sensors();
+
+        /*if (heading == FORWARD)
+        {
+            set_bit(SWITCH_PORT,LED_SWITCH_1);
+            set_bit(SWITCH_PORT,LED_SWITCH_2);
+        }
+
+        if (heading == LEFT)
+        {
+            set_bit(SWITCH_PORT,LED_SWITCH_2);
+            clear_bit(SWITCH_PORT,LED_SWITCH_1);
+        }
+
+        if (heading == RIGHT)
+        {
+
+            clear_bit(SWITCH_PORT,LED_SWITCH_2);
+            set_bit(SWITCH_PORT,LED_SWITCH_1);
+        
+        }
+        
+        if (heading == NO_LIGHT)
+        {
+
+            clear_bit(SWITCH_PORT,LED_SWITCH_1);
+            clear_bit(SWITCH_PORT,LED_SWITCH_2);
+        
+        }*/
+
+            if ((heading == FORWARD) || (heading == LEFT) || (heading == RIGHT))
+                set_bit(SWITCH_PORT,LED_SWITCH_1);
 
 
+            if (heading == NO_LIGHT)
+        {
+
+            clear_bit(SWITCH_PORT,LED_SWITCH_1);
+        
+        }
+        /*else
+        {
+
+            blink_led(LED_SWITCH_1);
+            blink_led(LED_SWITCH_2);
+        }*/
+
+
+
+    }
 
 
 
@@ -169,6 +248,7 @@ int main(void)
 
   return 0;
 }
+
 
 
 

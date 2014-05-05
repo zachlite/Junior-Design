@@ -68,6 +68,12 @@ Binghamton University
 #define Left_Motor_Quad_A 5
 #define Left_Motor_Quad_B 6
 
+ //Debugging LED
+#define SWITCH_PORT &PORTB
+#define LED_SWITCH_1 0
+
+
+
 
 
 
@@ -87,6 +93,6 @@ Binghamton University
 //square wave
 #define Square_Wave_Pin PB1
 
-
+void blink_led(unsigned char SWITCH);
  
 

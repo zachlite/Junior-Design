@@ -1,16 +1,25 @@
-//
-//  light_sensor.h
-//  
-//
-//  Created by Isaac Patka on 3/29/14.
-//
-//
+
 
 #include "hardware_interface.h"
 
-#define SWITCH_PORT PORTD
-#define LED_SWITCH 5
 
 
 
-void run_light_sensor(void);
+
+
+
+
+
+
+void set_bit_value(volatile uint8_t * byte, unsigned char bit, unsigned char value);
+
+uint16_t MAX3(uint16_t VAR1, uint16_t VAR2, uint16_t VAR3);
+
+
+void setup_light_sensor_i2c_soft(void);
+
+uint8_t read_light_sensor_i2c_hw(void);
+
+void setup_light_sensor_i2c_hw(void);
+
+uint8_t read_light_sensor_i2c_soft(void);

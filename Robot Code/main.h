@@ -6,6 +6,9 @@
 
 #include "ir_comm.h"
 #include "obstacle_detection.h"
-#include "light_sensor.h"
+
+#include "light_sensors.h"
+
+void blink_led(unsigned char SWITCH);
 
 #include "gameplay.h"
