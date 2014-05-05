@@ -130,7 +130,7 @@ void setup_light_sensor_i2c_soft(void)
 
 
 
-    return 0;
+   
 }
 
 void setup_light_sensor_i2c_hw(void)
@@ -184,8 +184,7 @@ void setup_light_sensor_i2c_hw(void)
         
 
 
-    return 0;
-
+    
 }
 
 uint8_t read_light_sensor_i2c_hw(void)  //Read light sensors with hardware I2C pins
