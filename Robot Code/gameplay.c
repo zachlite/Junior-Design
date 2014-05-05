@@ -51,11 +51,14 @@ ISR(TIMER0_COMPA_vect)  //Execute this upon interrupt
    //should_check_light_sensors = 1;
 
    //assuming this interrupt happens once per second
-   if (seconds_remaining > 0)
-   {
-   		seconds_remaining -= 1;
-   }
+   // if (seconds_remaining > 0)
+   // {
+   // 		seconds_remaining -= 1;
+   // }
    
+   
+
+   toggle_bit(&PORTC, 5);
 }
 
 
@@ -169,6 +172,23 @@ void play_game()
 
 
 }
+
+void game_timer_test()
+{
+	seconds_remaining = 10;
+
+	set_bit(&DDRC, 5);
+
+	//while(seconds_remaining>0)
+	//{/
+		set_bit(&PORTC, 5);
+
+	//}
+
+	//clear_bit(&PORTC, 5);
+
+}
+
 
 		//check to make sure beacon was actually captured
 

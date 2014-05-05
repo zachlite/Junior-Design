@@ -19,7 +19,7 @@ Binghamton University
 #include "motors.h"
 #include "ir_comm.h"
 #include "light_sensors.h"
-
+#include "binary.h"
 
 
 
@@ -31,6 +31,9 @@ void play_game();
 //initialization
 void init_game_timer();
 
+
+//test
+void game_timer_test();
 
 
 

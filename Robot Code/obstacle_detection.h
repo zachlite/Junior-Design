@@ -14,7 +14,7 @@ Binghamton University
 */
 
 
-
+#include "hardware_interface.h"
 
 #include "binary.h"
 

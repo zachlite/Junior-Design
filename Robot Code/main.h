@@ -3,10 +3,9 @@
 
 #include "carrier_wave.h"
 #include "motors.h"
-#include "inputoutput.h"
 
 #include "ir_comm.h"
-#include "obsatcle_detection.h"
+#include "obstacle_detection.h"
 #include "light_sensor.h"
 
-
+#include "gameplay.h"

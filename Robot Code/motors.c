@@ -34,7 +34,11 @@ void stop_motors();
 void stop_left_motor();
 void stop_right_motor();
 void move_distance(unsigned int distance_in_quad_ticks);
-unsigned char motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks);
+// void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks, unsigned char duty_cycle);
+void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks);
+// void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks, unsigned char duty_cycle, unsigned char cycle_counter);
+
+
 void get_duty_cycle(unsigned int distance, unsigned int quad_ticks, unsigned char *duty_cycle);
 
 int convert_degrees_to_quad_ticks(unsigned short degrees);
@@ -384,28 +388,43 @@ void move_distance(unsigned int distance_in_quad_ticks)
 
     //set pwm cycle at .5 for the first and last 5% of the distance to travel
 
-    //unsigned char duty_cycle = 0;
+    unsigned char duty_cycle;
     unsigned char cycle_counter = 0;
 
-    enable_motors();
+
+    // unsigned int quad_ticks_10_percentile = distance_in_quad_ticks/ACCEL_THRESHOLD;
+    // unsigned int quad_ticks_90_percentile = distance_in_quad_ticks - quad_ticks_10_percentile;
+
 
 
     unsigned char obsacle_sensor_number_triggered;
+
+
+
+    enable_motors();
+
+    set_bit(&DDRC, 5);
+
+
 	while (quad_ticks < distance_in_quad_ticks)
 	{
 
 
+		//set pwm based on quad ticks moved so far
+		//for first and last 10 percent of distance in quad ticks;
+
+		set_bit(&PORTC, 5);
 
 		//obstacle avoidance check and recursion:
-		obsacle_sensor_number_triggered = check_for_obstacle();
-		if (obsacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
-		{
-			evade_obstacle(obsacle_sensor_number_triggered);
-		}
-		else
-		{
-			//no obstacle
-		}
+		// obsacle_sensor_number_triggered = check_for_obstacle();
+		// if (obsacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
+		// {
+		// 	evade_obstacle(obsacle_sensor_number_triggered);
+		// }
+		// else
+		// {
+		// 	//no obstacle
+		// }
 
 
 
@@ -431,14 +450,15 @@ void move_distance(unsigned int distance_in_quad_ticks)
            
         }
 
-        //get_duty_cycle(distance_in_quad_ticks, quad_ticks, &duty_cycle);
 
-       
-        motors_move_at_same_rate(&left_ticks, &right_ticks);
 
+
+        // get_duty_cycle(distance_in_quad_ticks, quad_ticks, &duty_cycle);
+        // //motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle);
+        // motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle, cycle_counter);
       
        
-    
+    	motors_move_at_same_rate(&left_ticks, &right_ticks);
 
 
 
@@ -458,32 +478,121 @@ void move_distance(unsigned int distance_in_quad_ticks)
 
 	stop_motors();
 
+	clear_bit(&PORTC, 5);
 
 
 }
 
-unsigned char motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks)
+
+void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks)
 {
 
-	if(*right_ticks > *left_ticks)
-	{
-		stop_right_motor();
-		enable_left_motor();
-		return 0;
-	}	
-	if (*left_ticks > *right_ticks)//this is happening A LOT.  the left motor is stopping a lot.
-	{
-		stop_left_motor();
-		enable_right_motor();
+		if(*right_ticks > *left_ticks)
+		{
+			stop_right_motor();
+			enable_left_motor();
+			//return 0;
+		}	
+		else if (*left_ticks > *right_ticks)//this is happening A LOT.  the left motor is stopping a lot.
+		{
+			stop_left_motor();
+			enable_right_motor();
 
-		return 0;
-	}
-	
-		enable_motors();
-		return 1;
-	
+			//return 0;
+		}
+
+		else{
+			enable_motors();
+			//return 1;
+		}
+		
+
 }
 
+
+
+
+// void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks, unsigned char duty_cycle, unsigned char cycle_counter)
+// {
+// 	if (cycle_counter < duty_cycle)
+// 	{
+// 		if(*right_ticks > *left_ticks)
+// 		{
+// 			stop_right_motor();
+// 			enable_left_motor();
+// 			//return 0;
+// 		}	
+// 		else if (*left_ticks > *right_ticks)//this is happening A LOT.  the left motor is stopping a lot.
+// 		{
+// 			stop_left_motor();
+// 			enable_right_motor();
+
+// 			//return 0;
+// 		}
+
+// 		else{
+// 			enable_motors();
+// 			//return 1;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		//stop_motors();
+// 	}
+
+
+
+		
+
+// }
+
+
+// void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks, unsigned char duty_cycle)
+// {
+// 	// for (unsigned char time = 0; time < 255; time++)
+// 	// {
+// 	// 	if (time < duty_cycle)
+// 	// 	{
+// 			if(*right_ticks > *left_ticks)
+// 			{
+// 				stop_right_motor();
+// 				enable_left_motor();
+// 				// return 0;
+// 			}	
+// 			else if (*left_ticks > *right_ticks)//this is happening A LOT.  the left motor is stopping a lot.
+// 			{
+// 				stop_left_motor();
+// 				enable_right_motor();
+
+// 				// return 0;
+// 			}
+// 		//}
+// 		else
+// 		{
+// 			stop_motors();
+// 		}
+	
+	
+// 		//enable_motors();
+// 		// return 1;
+// 	// }
+
+	
+	
+// }
+
+
+void get_duty_cycle(unsigned int distance_in_quad_ticks, unsigned int quad_ticks, unsigned char *duty_cycle)
+{
+	if (quad_ticks < SLIP_DISTANCE || quad_ticks > distance_in_quad_ticks - SLIP_DISTANCE)
+	{
+		*duty_cycle = DUTY_CYCLE_SMALL;
+	}
+	else
+	{
+		*duty_cycle = DUTY_CYCLE_LARGE;
+	}
+}
 
 
 int convert_inches_to_quad_ticks(unsigned short inches)
@@ -498,17 +607,7 @@ int convert_degrees_to_quad_ticks(unsigned short degrees)
 
 
 
-void get_duty_cycle(unsigned int distance, unsigned int quad_ticks, unsigned char *duty_cycle)
-{
-	if (quad_ticks < slip_distance || quad_ticks > distance - slip_distance)
-	{
-		*duty_cycle = duty_cycle_small;
-	}
-	else
-	{
-		*duty_cycle = duty_cycle_large;
-	}
-}
+
 
 
 /*

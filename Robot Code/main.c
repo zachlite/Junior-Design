@@ -14,12 +14,8 @@ Binghamton University
 
 
 
-#include "hardware_interface.h"
-
-#include "ir_comm.h"
-#include "motors.h"
-#include "obstacle_detection.h"
-#include "gameplay.h"
+//#include "hardware_interface.h"
+#include "main.h"
 
 
 
@@ -70,9 +66,14 @@ int main(void)
 
     sei(); //from avr/interrupt.h
 
+    //motor_demo();
+  
+    motor_demo();
 
-
-    play_game();
+    //game_timer_test();
+    //enable_motors();
+    //play_game();
+    //move_forward_by_distance(10);
 
 
     //initialize_io();
@@ -149,7 +150,7 @@ int main(void)
 
     // set_bit(&PORTC, 5);
 
-    motor_demo();
+    //motor_demo();
     //set_bit(&DDRD, 2);
 
     // while(1)

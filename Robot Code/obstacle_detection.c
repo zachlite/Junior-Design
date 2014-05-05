@@ -16,7 +16,6 @@ Binghamton University
 
 
 //ADC0
-#include <avr/io.h>
 #include "obstacle_detection.h"
 
 
