@@ -14,7 +14,7 @@ Binghamton University
 */
 
 
-
+#include "hardware_interface.h"
 
 #include "binary.h"
 
@@ -51,6 +51,10 @@ corresponding to the obstacle sensor that detected an obstacle
 //Public API
 void init_ADC_for_obstacle_detection(void);
 unsigned char check_for_obstacle(void); //returns channel number where obstacle was detected
+
+
+
+void test_check_for_obstacle(void);
 
 
 

@@ -16,7 +16,6 @@ Binghamton University
 
 
 //ADC0
-#include <avr/io.h>
 #include "obstacle_detection.h"
 
 
@@ -114,6 +113,8 @@ unsigned char check_for_obstacle(void)
 		//check channel
 		if (analog_read(channel) > CHANNEL_SENSITIVITY)
 		{
+
+
 			//obstacle detected on channel channel
 			return channel; //channel refers to sensor number
 		}
@@ -143,27 +144,46 @@ int analog_read(unsigned char channel)
 
 
 
-/////////
-//old analog read
-	//To Do: set up global interrupt so adc checking runs in the background
-	// while(1)//try n times
-	// {
-	// 	int value = analog_read(0);
 
-	// 	if (value > 100)
-	// 	{
-	// 		//clear_bit(&PORTB, 1);
-	// 		set_bit(&PORTB, 1);
-	// 		//return OBSTACLE_DETECTED;
-	// 	}
-	// 	else
-	// 	{
-	// 		clear_bit(&PORTB, 1);
+void test_check_for_obstacle(void)
+{
 
-	// 	}
-	// }
+				//need to check each channel
 
-	// return NO_OBSTACLE_DETECTED;
+				//4 channels: 0, 1, 2, 3
+
+			/*LIGHT SENSOR CHANNEL ORIENTATION
+
+				    	forward
+
+			  left	 0   1   2    3   right   
+
+					   backward
+				
+			*/
+
+
+
+
+	set_bit(&DDRB, LED_SWITCH_1);					   
+
+	for (unsigned char channel = 0; channel < 4; channel++)
+	{
+		//check channel
+		if (analog_read(channel) > CHANNEL_SENSITIVITY)
+		{
+
+				set_bit(SWITCH_PORT, LED_SWITCH_1);					   
+
+			
+		}
+	}
+
+
+	clear_bit(SWITCH_PORT, LED_SWITCH_1);
+
+
+}
 
 
 

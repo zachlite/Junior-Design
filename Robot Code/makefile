@@ -40,7 +40,7 @@ binary.o: binary.c binary.h
 # inputoutput.o: inputoutput.c inputoutput.h binary.h
 # 	avr-gcc $(CFLAGS) -c  $< -o $@
 
-obstacle_detection.o: obstacle_detection.c obstacle_detection.h binary.h
+obstacle_detection.o: obstacle_detection.c obstacle_detection.h binary.h hardware_interface.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
@@ -58,6 +58,7 @@ light_sensors.o: light_sensors.c light_sensors.h hardware_interface.h i2csoft.h
 
 gameplay.o: gameplay.c gameplay.h motors.h ir_comm.h light_sensors.h hardware_interface.h	
 	$(CC) $(CFLAGS) -c $< -o $@
+
 
 i2csoft.o: i2csoft.c i2csoft.h 
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -93,6 +94,7 @@ clean:
 	rm -f carrier_wave.o
 	rm -f ir_comm.o
 	rm -f obstacle_detection.o
+	rm -f gameplay.o
 	clear
 	
 #"make eightMHZ"
