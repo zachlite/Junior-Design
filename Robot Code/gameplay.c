@@ -65,18 +65,31 @@ ISR(TIMER0_COMPA_vect)  //Execute this upon interrupt
 
 
 
-void start_game()
-{	
-	while(check_for_obstacle() == NO_OBSTACLE_DETECTED)
-	{
-		move_forward_by_distance(1);
+// void start_game()
+// {	
+// 	while(1)
+// 	{
+// 		if (check_for_obstacle() != NO_OBSTACLE_DETECTED)
+// 			break;
 
-	}
-	stop_motors();
+// 		move_forward_by_distance_no_obstacle(20);
+// 			//blink_led(LED_SWITCH_1);
 
-	while(check_for_obstacle() == NO_OBSTACLE_DETECTED);
+// 		//set_bit(SWITCH_PORT,LED_SWITCH_1);
+
+// 	}
+// 	//stop();
+// 	while(1)
+// 	{
+// 		if (check_for_obstacle() != NO_OBSTACLE_DETECTED)
+// 			break;
+
+
+// 	}
+
+// 	//while(check_for_obstacle() == NO_OBSTACLE_DETECTED);
 	
-}
+// }
 
 
 void play_game()
@@ -84,6 +97,7 @@ void play_game()
 	seconds_remaining = 185;
 
 	unsigned char heading = 0;
+	unsigned char scout_random = 0;
 	while(1)
 	{
 
@@ -107,7 +121,7 @@ void play_game()
 		{
 			//turn left 5 degrees
 			set_bit(SWITCH_PORT,LED_SWITCH_1);
-			turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE);
+			turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
 			
 
 		}
@@ -115,7 +129,7 @@ void play_game()
 		{
 			//turn right 5 degrees
 			set_bit(SWITCH_PORT,LED_SWITCH_1);
-			turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE);
+			turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
 
 		}
 
@@ -123,17 +137,34 @@ void play_game()
 		{
 			//move foward 2 inches
 			blink_led(LED_SWITCH_1);
-			move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE);
+			move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE,true);
 
 
 		}
+
+		
 
 		if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
 		{
 			//no lights seen.  go find one
 			//blink_led(LED_SWITCH_1);
-			turn_right_by_angle(SCOUT_AREA_ANGLE);
-			move_forward_by_distance(SCOUT_AREA_DISTANCE);
+			if (scout_random == 0)
+			{
+				scout_random = 1;
+				turn_right_by_angle(SCOUT_AREA_ANGLE, true);
+			}
+			else if (scout_random == 1)
+			{
+				scout_random =0;
+
+			turn_left_by_angle(SCOUT_AREA_ANGLE, true);
+			}
+
+
+
+
+
+			move_forward_by_distance(SCOUT_AREA_DISTANCE, true);
 			clear_bit(SWITCH_PORT,LED_SWITCH_1);
 			
 		}

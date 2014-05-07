@@ -26,7 +26,7 @@ Binghamton University
 
 
 void play_game();
-
+void start_game();
 
 
 //initialization

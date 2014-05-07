@@ -28,10 +28,10 @@ void motor_demo()
     while(1)
     { 
 
-        move_forward_by_distance(10);
+        move_forward_by_distance(10, true);
         _delay_ms(1000);
 
-        move_backward_by_distance(10);
+        move_backward_by_distance(10, true);
         _delay_ms(1000);
 
         turn_left();
@@ -150,6 +150,11 @@ int main(void)
 
     sei(); //from avr/interrupt.h
 
+
+    //start_game();
+    
+   
+    //motor_demo();
     play_game();
     //motor_demo();
 
