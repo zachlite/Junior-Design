@@ -58,7 +58,7 @@ That is dealt with in a higher level.
 
 */
 
-bool attempt_to_communicate_with_beacon()
+unsigned char attempt_to_communicate_with_beacon()
 {
     //try to read IR signal for n seconds
     ir_status ir_packet_received;

@@ -13,15 +13,16 @@ Binghamton University
 
 */
 
-
+#ifndef IR_COMM_H
+#define IR_COMM_H
 #include "hardware_interface.h"
 #include "carrier_wave.h"
 #include "binary.h"
 #include <stdbool.h>
 //#include <avr/interrupt.h>
 
-#define SUCCESSFUL_COMMUNICATION 1;
-#define UNSUCCESSFUL_COMMUNICATION 0;
+static const unsigned char SUCCESSFUL_COMMUNICATION = 1;
+static const unsigned char UNSUCCESSFUL_COMMUNICATION = 0;
 
 #define UBRR_300 1667//300 baud in UBBR
 
@@ -38,6 +39,7 @@ void set_up_IR_communications(void);
 
 //public IR operation
 
-bool attempt_to_communicate_with_beacon();
+unsigned char attempt_to_communicate_with_beacon();
+#endif
 
 

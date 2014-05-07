@@ -85,7 +85,6 @@ light_sensor_reading read_light_sensors()
 void setup_light_sensor_i2c_soft(void)
 {
 	SoftI2CInit();
-
 	 //  Disable Device
         
         SoftI2CStart();

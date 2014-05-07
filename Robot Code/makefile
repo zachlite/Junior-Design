@@ -70,7 +70,7 @@ hardware_interface.o: hardware_interface.c hardware_interface.h
 
 #add new files here
 
-main.o: main.c
+main.o: main.c main.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 

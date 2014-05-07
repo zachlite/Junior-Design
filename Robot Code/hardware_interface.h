@@ -13,6 +13,9 @@ Binghamton University
 */
 
 
+#ifndef LIGHT_SENSOR_H_
+#define LIGHT_SENSOR_H_
+
 
 #define F_CPU 8000000UL
 #include <avr/io.h>
@@ -95,4 +98,4 @@ Binghamton University
 
 void blink_led(unsigned char SWITCH);
  
-
+#endif

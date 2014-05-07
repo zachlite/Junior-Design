@@ -1,6 +1,6 @@
 // printer.h file
-#ifndef LIGHT_SENSOR_H_
-#define LIGHT_SENSOR_H_
+#ifndef LIGHT_SENSORS_H_
+#define LIGHT_SENSORS_H_
 
  // printer.h code goes here
 
@@ -26,7 +26,7 @@ static const unsigned char FORWARD = 3;
 
 
 
-static const unsigned char LIGHT_SENSOR_DIFF_THRESHOLD = 0x03;	//needs to be tested DEBUG
+static const unsigned char LIGHT_SENSOR_DIFF_THRESHOLD = 0x02;	//needs to be tested DEBUG
 static const unsigned char AMBIENT = 0x10;	//without reading lux this is the raw threshold of C0
 
 

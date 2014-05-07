@@ -10,6 +10,7 @@ www.eXtremeElectronics.co.in
 
 #ifndef _I2CSOFT_H
 #define _I2CSOFT_H
+#include "hardware_interface.h"
 
 /* 
 I/O Configuration 
@@ -30,6 +31,7 @@ I/O Configuration
 
 #define SOFT_I2C_SDA_LOW	SDADDR|=((1<<SDA))
 #define SOFT_I2C_SDA_HIGH	SDADDR&=(~(1<<SDA))
+
 
 #define SOFT_I2C_SCL_LOW	SCLDDR|=((1<<SCL))
 #define SOFT_I2C_SCL_HIGH	SCLDDR&=(~(1<<SCL))

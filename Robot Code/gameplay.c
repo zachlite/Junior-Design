@@ -69,7 +69,8 @@ void play_game()
 {
 	seconds_remaining = 185;
 
-	while(seconds_remaining > 0)
+	unsigned char heading = 0;
+	while(1)
 	{
 
 
@@ -85,32 +86,40 @@ void play_game()
 
 
 
-		unsigned char heading;
+		
 		heading = get_heading_from_light_sensors();
 
 		if (heading == LEFT)
 		{
 			//turn left 5 degrees
-			turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE);
+			set_bit(SWITCH_PORT,LED_SWITCH_1);
+			turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE);
+			
+
 		}
-		else if (heading == RIGHT)
+		if (heading == RIGHT)
 		{
 			//turn right 5 degrees
-			turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE);
+			set_bit(SWITCH_PORT,LED_SWITCH_1);
+			turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE);
+
 		}
 
-		else if (heading == FORWARD)
+		if (heading == FORWARD)
 		{
 			//move foward 2 inches
+			blink_led(LED_SWITCH_1);
 			move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE);
+
 
 		}
 
-		else if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
+		if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
 		{
 			//no lights seen.  go find one
-			turn_right_by_angle(SCOUT_AREA_ANGLE);
-			move_forward_by_distance(SCOUT_AREA_DISTANCE);
+			clear_bit(SWITCH_PORT,LED_SWITCH_1);
+			//turn_right_by_angle(SCOUT_AREA_ANGLE);
+			//move_forward_by_distance(SCOUT_AREA_DISTANCE);
 			
 		}
 
@@ -132,7 +141,7 @@ void play_game()
 
 
 		//if light sensors lux values are high enough to detect, we might be in range of IR
-		if (heading != NO_LIGHT)
+		/*if (heading != NO_LIGHT)
 		{
 			bool comm_receive_and_send_successful = attempt_to_communicate_with_beacon();
 			
@@ -163,7 +172,7 @@ void play_game()
 			
 			//else out of range. try again next time.
 			
-		}
+		}*/
 
 	}
 

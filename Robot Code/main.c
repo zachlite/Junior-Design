@@ -14,13 +14,9 @@ Binghamton University
 
 
 
-#include "hardware_interface.h"
+
 #include "main.h"
-#include "ir_comm.h"
-#include "motors.h"
-#include "obstacle_detection.h"
-#include "gameplay.h"
-#include "light_sensor.h"
+
 
 
 
@@ -60,12 +56,13 @@ void motor_demo()
 
 int main(void) 
 {
-
+    
     set_up_motors(); //from motors.h
 
     init_ADC_for_obstacle_detection(); //from obstacle_detection.h
 
     set_up_IR_communications(); //from ir_comm.h
+    set_bit(Data_Direction_Register_B,LED_SWITCH_1);
 
     setup_light_sensor_i2c_soft();
     setup_light_sensor_i2c_hw();
@@ -73,10 +70,12 @@ int main(void)
 
     init_game_timer(); //from gameplay.h
 
-    sei(); //from avr/interrupt.h
+    sei(); //from avr/interrupt.h*/
+
+    play_game();
 
 
-
+//set_bit(Data_Direction_Register_B,LED_SWITCH_1);
 
     //play_game();
 
@@ -124,79 +123,53 @@ int main(void)
     // }
  
 
-    set_bit(Data_Direction_Register_C,LED_SWITCH_1);
+    set_bit(Data_Direction_Register_B,LED_SWITCH_1);
     //set_bit(Data_Direction_Register_C,LED_SWITCH_2);
     //uint8_t sensor_1_data = 0;
     //uint8_t sensor_2_data = 0;
     unsigned char heading;
 
-    while(1)
-    {
-        /*sensor_2_data = read_light_sensor_i2c_soft();
+    //unsigned char status;
 
-        if (sensor_2_data > 0x05)
-            set_bit(SWITCH_PORT,LED_SWITCH_2);
+    //while(1)
+    //{
 
-            else
-                clear_bit(SWITCH_PORT,LED_SWITCH_2);
+        /*status = attempt_to_communicate_with_beacon();
 
-        sensor_1_data = read_light_sensor_i2c_hw();
-
-        if (sensor_1_data > 0x05)
+        if (status == SUCCESSFUL_COMMUNICATION)
             set_bit(SWITCH_PORT,LED_SWITCH_1);
-        else
-                clear_bit(SWITCH_PORT,LED_SWITCH_1);*/
 
-        heading = get_heading_from_light_sensors();
+        else if (status == UNSUCCESSFUL_COMMUNICATION)
+            clear_bit(SWITCH_PORT,LED_SWITCH_1);*/
 
-        /*if (heading == FORWARD)
-        {
-            set_bit(SWITCH_PORT,LED_SWITCH_1);
-            set_bit(SWITCH_PORT,LED_SWITCH_2);
-        }
 
-        if (heading == LEFT)
-        {
-            set_bit(SWITCH_PORT,LED_SWITCH_2);
-            clear_bit(SWITCH_PORT,LED_SWITCH_1);
-        }
+       
 
-        if (heading == RIGHT)
-        {
+       /* heading = get_heading_from_light_sensors();
 
-            clear_bit(SWITCH_PORT,LED_SWITCH_2);
-            set_bit(SWITCH_PORT,LED_SWITCH_1);
         
-        }
-        
-        if (heading == NO_LIGHT)
-        {
 
-            clear_bit(SWITCH_PORT,LED_SWITCH_1);
-            clear_bit(SWITCH_PORT,LED_SWITCH_2);
-        
-        }*/
+            
 
-            if ((heading == FORWARD) || (heading == LEFT) || (heading == RIGHT))
+
+            if (heading == FORWARD)
+                blink_led(LED_SWITCH_1);
+
+            if (heading == RIGHT)
+                set_bit(SWITCH_PORT,LED_SWITCH_1);
+
+            if(heading == LEFT)
                 set_bit(SWITCH_PORT,LED_SWITCH_1);
 
 
             if (heading == NO_LIGHT)
-        {
-
-            clear_bit(SWITCH_PORT,LED_SWITCH_1);
+                clear_bit(SWITCH_PORT,LED_SWITCH_1);*/
         
-        }
-        /*else
-        {
-
-            blink_led(LED_SWITCH_1);
-            blink_led(LED_SWITCH_2);
-        }*/
+        
 
 
 
-    }
+    //}
 
 
 
