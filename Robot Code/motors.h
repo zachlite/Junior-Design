@@ -29,7 +29,7 @@ Binghamton University
 
 #define ACCEL_THRESHOLD 10
 
-#define DUTY_CYCLE_SMALL 80
+#define DUTY_CYCLE_SMALL 100
 #define DUTY_CYCLE_LARGE 255
 #define SLIP_DISTANCE 1000
 #define WheelCircumference 8.875

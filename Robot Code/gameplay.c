@@ -120,9 +120,9 @@ void play_game()
 		if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
 		{
 			//no lights seen.  go find one
-			clear_bit(SWITCH_PORT,LED_SWITCH_1);
+			//blink_led(LED_SWITCH_1);
 			//turn_right_by_angle(SCOUT_AREA_ANGLE);
-			//move_forward_by_distance(SCOUT_AREA_DISTANCE);
+			move_forward_by_distance(SCOUT_AREA_DISTANCE);
 			
 		}
 

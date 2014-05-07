@@ -26,7 +26,7 @@ Binghamton University
 #define RIGHT_MID_SENSOR 2
 #define RIGHT_SENSOR 3
 
-#define CHANNEL_SENSITIVITY 100
+#define CHANNEL_SENSITIVITY 30000
 
 /*Description*/
 

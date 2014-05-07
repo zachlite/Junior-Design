@@ -355,7 +355,7 @@ void stop_motors()
 {
 	clear_bit(Left_Motor_Port, Left_Motor_Enable);
 	clear_bit(Right_Motor_Port, Right_Motor_Enable);
-	//_delay_ms(150);
+	_delay_ms(150);
 }
 
 
@@ -388,8 +388,8 @@ void move_distance(unsigned int distance_in_quad_ticks)
 
     //set pwm cycle at .5 for the first and last 5% of the distance to travel
 
-    uint8_t duty_cycle;
-    uint8_t cycle_counter = 0;
+    unsigned char duty_cycle;
+    unsigned char cycle_counter = 0;
 
 
     // unsigned int quad_ticks_10_percentile = distance_in_quad_ticks/ACCEL_THRESHOLD;
@@ -413,85 +413,69 @@ void move_distance(unsigned int distance_in_quad_ticks)
 		//set pwm based on quad ticks moved so far
 		//for first and last 10 percent of distance in quad ticks;
 
+		set_bit(&PORTC, 5);
 
 
-			obstacle_sensor_number_triggered = check_for_obstacle();
-				if (obstacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
-				{
-					set_bit(SWITCH_PORT, LED_SWITCH_1);
+		//obstacle avoidance check and recursion:
+		//obstacle_sensor_number_triggered = check_for_obstacle();
 
-					evade_obstacle(obstacle_sensor_number_triggered);
-				}
-				else
-				{
-					//no obstacle
-					clear_bit(SWITCH_PORT, LED_SWITCH_1);
-				}
+	//when running wihtout sensor input, must ground ADC so not to collect floating input.		
+	//	obstacle avoidance check and recursion:
+		obstacle_sensor_number_triggered = check_for_obstacle();
 
-		for (uint8_t time = 0; time < 255; ++time)
+		if (obstacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
 		{
-
-
-
-			if (time < 50)
-			{
-
-				//when running wihtout sensor input, must ground ADC so not to collect floating input.		
-				//obstacle avoidance check and recursion:
-				
-
-
-
-				last_signal_left = quad_encoder_signal_left;
-		        last_signal_right = quad_encoder_signal_right;
-		        
-		        
-		        quad_encoder_signal_left = get_quad_encoder_signal(Left_Motor_Pin, Left_Motor_Quad_A, Left_Motor_Quad_B);
-		        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Quad_A, Right_Motor_Quad_B);
-			 
-		        if (quad_encoder_signal_left != last_signal_left)
-		        {
-		            left_ticks++;
-
-		        }
-		        
-		        if (quad_encoder_signal_right != last_signal_right)
-		        {
-		            right_ticks++;
-
-		           
-		        }
-
-
-
-
-		        // get_duty_cycle(distance_in_quad_ticks, quad_ticks, &duty_cycle);
-		        // //motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle);
-		        // motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle, cycle_counter);
-		      
-		       
-		    	motors_move_at_same_rate(&left_ticks, &right_ticks);
-
-
-
-		        if (right_ticks >= quad_ticks && left_ticks >= quad_ticks)
-		        {
-		        	quad_ticks++;
-
-		        }
-		    }
-			else
-			{
-				stop_motors();
-
-			}
-
-			_delay_us(3);
-
+			evade_obstacle(obstacle_sensor_number_triggered);
+		}
+		else
+		{
+			//no obstacle
 		}
 
-	
+
+
+
+
+	 	last_signal_left = quad_encoder_signal_left;
+        last_signal_right = quad_encoder_signal_right;
         
+        
+        quad_encoder_signal_left = get_quad_encoder_signal(Left_Motor_Pin, Left_Motor_Quad_A, Left_Motor_Quad_B);
+        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Quad_A, Right_Motor_Quad_B);
+	 
+        if (quad_encoder_signal_left != last_signal_left)
+        {
+            left_ticks++;
+
+        }
+        
+        if (quad_encoder_signal_right != last_signal_right)
+        {
+            right_ticks++;
+
+           
+        }
+
+
+
+
+        // get_duty_cycle(distance_in_quad_ticks, quad_ticks, &duty_cycle);
+        // //motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle);
+        // motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle, cycle_counter);
+      
+       
+    	motors_move_at_same_rate(&left_ticks, &right_ticks);
+
+
+
+        if (right_ticks >= quad_ticks && left_ticks >= quad_ticks)
+        {
+        	quad_ticks++;
+
+        }
+	 	
+
+        cycle_counter++;
 
 
         
@@ -500,6 +484,7 @@ void move_distance(unsigned int distance_in_quad_ticks)
 
 	stop_motors();
 
+	clear_bit(&PORTC, 5);
 
 
 }
@@ -526,8 +511,6 @@ void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_tick
 			enable_motors();
 			//return 1;
 		}
-
-		
 		
 
 }
@@ -625,7 +608,7 @@ int convert_inches_to_quad_ticks(unsigned short inches)
 
 int convert_degrees_to_quad_ticks(unsigned short degrees)
 {
-	return degrees*25;
+	return degrees*2;
 }
 
 
