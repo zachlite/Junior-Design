@@ -65,7 +65,18 @@ ISR(TIMER0_COMPA_vect)  //Execute this upon interrupt
 
 
 
+void start_game()
+{	
+	while(check_for_obstacle() == NO_OBSTACLE_DETECTED)
+	{
+		move_forward_by_distance(1);
 
+	}
+	stop_motors();
+
+	while(check_for_obstacle() == NO_OBSTACLE_DETECTED);
+	
+}
 
 
 void play_game()
@@ -121,14 +132,15 @@ void play_game()
 		{
 			//no lights seen.  go find one
 			//blink_led(LED_SWITCH_1);
-			//turn_right_by_angle(SCOUT_AREA_ANGLE);
+			turn_right_by_angle(SCOUT_AREA_ANGLE);
 			move_forward_by_distance(SCOUT_AREA_DISTANCE);
+			clear_bit(SWITCH_PORT,LED_SWITCH_1);
 			
 		}
 
 
 
-
+		//move_forward_by_distance(SCOUT_AREA_DISTANCE);
 
 
 
@@ -144,9 +156,9 @@ void play_game()
 
 
 		//if light sensors lux values are high enough to detect, we might be in range of IR
-		/*if (heading != NO_LIGHT)
+		if (heading != NO_LIGHT)
 		{
-			bool comm_receive_and_send_successful = attempt_to_communicate_with_beacon();
+			unsigned char comm_receive_and_send_successful = attempt_to_communicate_with_beacon();
 			
 			if (comm_receive_and_send_successful)
 			{
@@ -175,7 +187,7 @@ void play_game()
 			
 			//else out of range. try again next time.
 			
-		}*/
+		}
 
 	}
 

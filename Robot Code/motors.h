@@ -38,13 +38,13 @@ Binghamton University
 
 
 #define EVADE_BACKUP_DISTANCE 2
-#define EVADE_TURN_ANGLE 15
+#define EVADE_TURN_ANGLE 5 //was 15
 #define EVADE_MOVE_FORWARD_DISTANCE 3
 
-#define COURSE_ADJUSTMENT_ANGLE 5
-#define COURSE_ADJUSTMENT_DISTANCE 2
-#define SCOUT_AREA_ANGLE 45
-#define SCOUT_AREA_DISTANCE 12
+#define COURSE_ADJUSTMENT_ANGLE 1
+#define COURSE_ADJUSTMENT_DISTANCE 1
+#define SCOUT_AREA_ANGLE 3
+#define SCOUT_AREA_DISTANCE 3
 
 
 
@@ -58,6 +58,8 @@ void move_forward_by_distance(unsigned short distance_in_inches);
 void move_backward_by_distance(unsigned short distance_in_inches); 
 void stop();
 void enable_motors();
+void move_distance_no_obstacle(unsigned int distance_in_quad_ticks);
+void move_backward_by_distance_no_obstacle(unsigned short distance_in_inches);
 
 
 

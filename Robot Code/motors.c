@@ -185,6 +185,15 @@ void move_backward_by_distance(unsigned short distance_in_inches)
 	move_distance(distance_in_quad_ticks);
 }
 
+void move_backward_by_distance_no_obstacle(unsigned short distance_in_inches)
+{
+	set_motor_directions_for_movement(Backward);
+
+	unsigned int distance_in_quad_ticks = convert_inches_to_quad_ticks(distance_in_inches);
+
+	move_distance_no_obstacle(distance_in_quad_ticks);
+}
+
 void stop()
 {
 	stop_motors();
@@ -208,7 +217,13 @@ void evade_obstacle(unsigned char obstacle_sensor_number_triggered)
 	//need to know direction to turn based on obstacle sensor triggered
 	//based on clock rate, only one sensor will be triggered at a time 
 
-	move_backward_by_distance(EVADE_BACKUP_DISTANCE);
+	//move_backward_by_distance(EVADE_BACKUP_DISTANCE);
+	/*set_motor_directions_for_movement(Backward);
+	enable_motors();
+	_delay_ms(300);
+	stop_motors();*/
+	move_backward_by_distance_no_obstacle(EVADE_BACKUP_DISTANCE);
+
 
 	if (obstacle_sensor_number_triggered == LEFT_SENSOR)
 	{
@@ -425,8 +440,141 @@ void move_distance(unsigned int distance_in_quad_ticks)
 				else
 				{
 					//no obstacle
-					clear_bit(SWITCH_PORT, LED_SWITCH_1);
+				 	clear_bit(SWITCH_PORT, LED_SWITCH_1);
 				}
+
+		for (uint8_t time = 0; time < 255; ++time)
+		{
+
+
+
+			if (time < 50)
+			{
+
+				//when running wihtout sensor input, must ground ADC so not to collect floating input.		
+				//obstacle avoidance check and recursion:
+				
+
+
+
+				last_signal_left = quad_encoder_signal_left;
+		        last_signal_right = quad_encoder_signal_right;
+		        
+		        
+		        quad_encoder_signal_left = get_quad_encoder_signal(Left_Motor_Pin, Left_Motor_Quad_A, Left_Motor_Quad_B);
+		        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Quad_A, Right_Motor_Quad_B);
+			 
+		        if (quad_encoder_signal_left != last_signal_left)
+		        {
+		            left_ticks++;
+
+		        }
+		        
+		        if (quad_encoder_signal_right != last_signal_right)
+		        {
+		            right_ticks++;
+
+		           
+		        }
+
+
+
+
+		        // get_duty_cycle(distance_in_quad_ticks, quad_ticks, &duty_cycle);
+		        // //motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle);
+		        // motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle, cycle_counter);
+		      
+		       
+		    	motors_move_at_same_rate(&left_ticks, &right_ticks);
+
+
+
+		        if (right_ticks >= quad_ticks && left_ticks >= quad_ticks)
+		        {
+		        	quad_ticks++;
+
+		        }
+		    }
+			else
+			{
+				stop_motors();
+
+			}
+
+			_delay_us(3);
+
+		}
+
+	
+        
+
+
+        
+	}
+
+
+	stop_motors();
+
+
+
+}
+
+
+void move_distance_no_obstacle(unsigned int distance_in_quad_ticks)
+{
+	// set_bit(&DDRC, 5);
+	// set_bit(&DDRC, 4); debug purposes
+
+
+	unsigned char quad_encoder_signal_left;
+	unsigned char quad_encoder_signal_right;
+    unsigned int left_ticks = 0; 
+    unsigned int right_ticks = 0;
+    unsigned int quad_ticks = 0;
+
+    unsigned char last_signal_left, last_signal_right;
+
+    //set pwm cycle at .5 for the first and last 5% of the distance to travel
+
+    uint8_t duty_cycle;
+    uint8_t cycle_counter = 0;
+
+
+    // unsigned int quad_ticks_10_percentile = distance_in_quad_ticks/ACCEL_THRESHOLD;
+    // unsigned int quad_ticks_90_percentile = distance_in_quad_ticks - quad_ticks_10_percentile;
+
+
+
+    unsigned char obstacle_sensor_number_triggered;
+
+
+
+    enable_motors();
+
+    set_bit(&DDRC, 5);
+
+
+	while (quad_ticks < distance_in_quad_ticks)
+	{
+
+
+		//set pwm based on quad ticks moved so far
+		//for first and last 10 percent of distance in quad ticks;
+
+
+
+			/*obstacle_sensor_number_triggered = check_for_obstacle();
+				if (obstacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
+				{
+					set_bit(SWITCH_PORT, LED_SWITCH_1);
+
+					evade_obstacle(obstacle_sensor_number_triggered);
+				}
+				else
+				{
+					//no obstacle
+				 	clear_bit(SWITCH_PORT, LED_SWITCH_1);
+				}*/
 
 		for (uint8_t time = 0; time < 255; ++time)
 		{
@@ -620,12 +768,12 @@ void get_duty_cycle(unsigned int distance_in_quad_ticks, unsigned int quad_ticks
 
 int convert_inches_to_quad_ticks(unsigned short inches)
 {
-	return inches*100;
+	return inches*30;
 }
 
 int convert_degrees_to_quad_ticks(unsigned short degrees)
 {
-	return degrees*25;
+	return degrees*15;
 }
 
 
