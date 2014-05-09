@@ -58,7 +58,7 @@ ISR(TIMER0_COMPA_vect)  //Execute this upon interrupt
    
    
 
-   toggle_bit(&PORTC, 5);
+   //toggle_bit(&PORTC, 5);
 }
 
 

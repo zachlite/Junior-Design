@@ -388,8 +388,8 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 	// set_bit(&DDRC, 4); debug purposes
 
 
-	unsigned char quad_encoder_signal_left;
-	unsigned char quad_encoder_signal_right;
+	unsigned char quad_encoder_signal_left = 0;
+	unsigned char quad_encoder_signal_right = 0;
     unsigned int left_ticks = 0; 
     unsigned int right_ticks = 0;
     unsigned int quad_ticks = 0;
@@ -398,8 +398,8 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 
     //set pwm cycle at .5 for the first and last 5% of the distance to travel
 
-    uint8_t duty_cycle;
-    uint8_t cycle_counter = 0;
+    // uint8_t duty_cycle;
+    // uint8_t cycle_counter = 0;
 
 
     // unsigned int quad_ticks_10_percentile = distance_in_quad_ticks/ACCEL_THRESHOLD;

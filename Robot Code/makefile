@@ -3,7 +3,7 @@
 #April 7, 2014
 
 CC=avr-gcc
-CFLAGS= -std=c99 -g -Wall -mmcu=atmega328 -O1 
+CFLAGS= -std=c99 -g -Wall -mmcu=atmega328 -O1
 #check /dev to find your buspirate's device signature.  cu.usbserial-A601EXKG is mine.
 #cu.usbserial-PirateV3 is Isaac's
 DEVICE=/dev/tty.usbserial-PirateV3
@@ -66,7 +66,7 @@ i2csoft.o: i2csoft.c i2csoft.h
 TWI_master.o: TWI_master.c TWI_master.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-hardware_interface.o: hardware_interface.c hardware_interface.h
+hardware_interface.o: hardware_interface.c hardware_interface.h binary.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 #add new files here
@@ -89,12 +89,15 @@ clean:
 	rm -f $(OUTPUT).o
 	rm -f $(OUTPUT).hex
 	rm -f binary.o
-	# rm -f inputoutput.o
+	rm -f hardware_interface.o
 	rm -f motors.o
 	rm -f carrier_wave.o
 	rm -f ir_comm.o
 	rm -f obstacle_detection.o
 	rm -f gameplay.o
+	rm -f light_sensors.o
+	rm -f TWI_master.o
+	rm -f i2csoft.o
 	clear
 	
 #"make eightMHZ"

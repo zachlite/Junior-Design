@@ -38,7 +38,7 @@ Binghamton University
  *   PD4                  |6   23| PC0               *
  *   VCC                  |7   22| GND               *
  *   GND                  |8   21| AREF              *
- *   PB6            e      |9   20| AVCC              * 
+ *   PB6                  |9   20| AVCC              * 
  *   PB7                  |10  19| PB5               *
  *   PD5 - LED            |11  18| PB4               *
  *   PD6                  |12  17| PB3               *

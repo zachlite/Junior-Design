@@ -3,7 +3,7 @@
 carrier_wave.c
 carrier wave for IR modulation
 
-Written by Zach Lite
+Written by Isaac Patka and Zach Lite
 Spring 2014
 
 Junior Design Project

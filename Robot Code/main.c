@@ -85,7 +85,7 @@ void light_sensor_test()
     //set_bit(Data_Direction_Register_C,LED_SWITCH_2);
     //uint8_t sensor_1_data = 0;
     //uint8_t sensor_2_data = 0;
-    unsigned char heading;
+    //unsigned char heading;
 
     //unsigned char status;
 
@@ -172,56 +172,3 @@ int main(void)
 
   return 0;
 }
-
-
-
-
-
-
-
-//test light sensors
-    //deterimine which light sensor is receiving a larger value
-
-
-// void IR_test()
-// {
-//     unsigned char data_received, data_received_inverted;
-
-//     while(1)
-//     {
-//         data_received = uart_receive();
-
-//         data_received_inverted = ~data_received; 
-        
-//         uart_transmit(data_received_inverted);
-
-//     }
-// }
-
-
-// void test_obstacle_sensor()
-// {
-//       run_ADC();
-// }
-
-
-
-// void motor_test()
-// {
-//     while(1)
-
-//     {
-//          move_forward_by_distance(5);
-//         _delay_ms(1000);
-//         move_backward_by_distance(5);
-//         _delay_ms(1000); 
-//     }
-
-
-// }
-
-
-
-
-
-

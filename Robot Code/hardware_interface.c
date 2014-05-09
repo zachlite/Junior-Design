@@ -1,6 +1,6 @@
 
 #include "hardware_interface.h"
-
+#include "binary.h"
 
 
 void blink_led(unsigned char SWITCH)
