@@ -62,11 +62,13 @@ unsigned char attempt_to_communicate_with_beacon()
 {
     //try to read IR signal for n seconds
     ir_status ir_packet_received;
+    turn_carrier_off();
     ir_packet_received = uart_attempt_receive_for_seconds(RECEIVE_TIMEOUT);
 
     if (ir_packet_received.successful)
     {
         //invert data and send
+        turn_carrier_on();
         ir_packet_received.data = ~ir_packet_received.data;
         uart_transmit(ir_packet_received.data); 
         return SUCCESSFUL_COMMUNICATION;
@@ -116,6 +118,7 @@ void set_up_uart(void)
 
 void uart_transmit(unsigned char data)
 {
+
     //Pause until transmitter is ready
     while ( !(UCSR0A & (1 << UDRE0)) );
     
@@ -127,7 +130,6 @@ void uart_transmit(unsigned char data)
 ir_status uart_attempt_receive_for_seconds(int seconds)
 {
 
-    
  
     int total_time = 0;
 

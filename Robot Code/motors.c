@@ -429,14 +429,14 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 				obstacle_sensor_number_triggered = check_for_obstacle();
 				if (obstacle_sensor_number_triggered != NO_OBSTACLE_DETECTED)
 				{
-					set_bit(SWITCH_PORT, LED_SWITCH_1);
+					//set_bit(SWITCH_PORT, LED_SWITCH_1);
 
 					evade_obstacle(obstacle_sensor_number_triggered);
 				}
 				else
 				{
 					//no obstacle
-				 	clear_bit(SWITCH_PORT, LED_SWITCH_1);
+				 	//clear_bit(SWITCH_PORT, LED_SWITCH_1);
 				}
 
 		}

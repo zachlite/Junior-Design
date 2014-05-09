@@ -47,7 +47,7 @@ obstacle_detection.o: obstacle_detection.c obstacle_detection.h binary.h hardwar
 motors.o: motors.c motors.h binary.h obstacle_detection.h hardware_interface.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-carrier_wave.o: carrier_wave.c carrier_wave.h hardware_interface.h
+carrier_wave.o: carrier_wave.c carrier_wave.h hardware_interface.h binary.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 ir_comm.o: ir_comm.c ir_comm.h carrier_wave.h binary.h hardware_interface.h
