@@ -29,7 +29,7 @@ Binghamton University
 
 #define ACCEL_THRESHOLD 10
 
-#define DUTY_CYCLE_SMALL 65
+#define DUTY_CYCLE_SMALL 50
 #define DUTY_CYCLE_LARGE 255
 #define SLIP_DISTANCE 1000
 #define WheelCircumference 8.875
@@ -43,8 +43,8 @@ Binghamton University
 
 #define COURSE_ADJUSTMENT_ANGLE 1
 #define COURSE_ADJUSTMENT_DISTANCE 1
-#define SCOUT_AREA_ANGLE 3
-#define SCOUT_AREA_DISTANCE 10
+#define SCOUT_AREA_ANGLE 2
+#define SCOUT_AREA_DISTANCE 5
 
 
 

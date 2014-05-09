@@ -114,13 +114,17 @@ void play_game()
 
 
 
-		
-		heading = get_heading_from_light_sensors();
+		// attempt_to_communicate_with_beacon();
+		// blink_led(LED_SWITCH_1);
+		// _delay_ms(10);
+
+
+		 heading = get_heading_from_light_sensors();
 
 		if (heading == LEFT)
 		{
 			//turn left 5 degrees
-			set_bit(SWITCH_PORT,LED_SWITCH_1);
+			//set_bit(SWITCH_PORT,LED_SWITCH_1);
 			turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
 			
 
@@ -128,7 +132,7 @@ void play_game()
 		if (heading == RIGHT)
 		{
 			//turn right 5 degrees
-			set_bit(SWITCH_PORT,LED_SWITCH_1);
+			//set_bit(SWITCH_PORT,LED_SWITCH_1);
 			turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
 
 		}
@@ -136,7 +140,7 @@ void play_game()
 		if (heading == FORWARD)
 		{
 			//move foward 2 inches
-			blink_led(LED_SWITCH_1);
+			//blink_led(LED_SWITCH_1);
 			move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE,true);
 
 
@@ -148,6 +152,7 @@ void play_game()
 		{
 			//no lights seen.  go find one
 			//blink_led(LED_SWITCH_1);
+
 			if (scout_random == 0)
 			{
 				scout_random = 1;
@@ -155,7 +160,7 @@ void play_game()
 			}
 			else if (scout_random == 1)
 			{
-				scout_random =0;
+				scout_random = 0;
 
 			turn_left_by_angle(SCOUT_AREA_ANGLE, true);
 			}
@@ -165,7 +170,7 @@ void play_game()
 
 
 			move_forward_by_distance(SCOUT_AREA_DISTANCE, true);
-			clear_bit(SWITCH_PORT,LED_SWITCH_1);
+			//clear_bit(SWITCH_PORT,LED_SWITCH_1);
 			
 		}
 
@@ -205,6 +210,8 @@ void play_game()
 					for (int i = 0; i < 3; i++)
 					{
 						attempt_to_communicate_with_beacon();
+						_delay_ms(5);
+						blink_led(LED_SWITCH_1);
 						if (get_heading_from_light_sensors() == NO_LIGHT)
 						{
 							//beacon finally captured

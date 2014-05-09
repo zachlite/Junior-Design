@@ -67,7 +67,6 @@ void light_sensor_test()
     sei(); //from avr/interrupt.h*/
     set_bit(Data_Direction_Register_B,LED_SWITCH_1);    //enable LED
 
-    play_game();
 
 
 //set_bit(Data_Direction_Register_B,LED_SWITCH_1);
@@ -157,7 +156,7 @@ int main(void)
     //motor_demo();
     play_game();
     //motor_demo();
-
+    
 
     //test_check_for_obstacle();
 

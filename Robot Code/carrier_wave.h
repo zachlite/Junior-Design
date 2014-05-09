@@ -14,6 +14,10 @@ Binghamton University
 
 
 #include "hardware_interface.h"
+#include "binary.h"
 // #include <avr/interrupt.h>
 
 void set_up_IR_carrier();
+void turn_carrier_on();
+void turn_carrier_off();
+
