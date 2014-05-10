@@ -94,7 +94,6 @@ ISR(TIMER0_COMPA_vect)  //Execute this upon interrupt
 
 void play_game()
 {
-	seconds_remaining = 185;
 
 	unsigned char heading = 0;
 	unsigned char scout_random = 0;
@@ -113,70 +112,69 @@ void play_game()
 
 
 
+		  //turn_carrier_on();
+		attempt_to_communicate_with_beacon();
+		_delay_ms(10);
 
-		// attempt_to_communicate_with_beacon();
-		// blink_led(LED_SWITCH_1);
-		// _delay_ms(10);
 
+		 //heading = get_heading_from_light_sensors();
 
-		 heading = get_heading_from_light_sensors();
-
-		if (heading == LEFT)
-		{
-			//turn left 5 degrees
-			//set_bit(SWITCH_PORT,LED_SWITCH_1);
-			turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
+		// if (heading == LEFT)
+		// {
+		// 	//turn left 5 degrees
+		// 	//set_bit(SWITCH_PORT,LED_SWITCH_1);
+		// 	turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
 			
 
-		}
-		if (heading == RIGHT)
-		{
-			//turn right 5 degrees
-			//set_bit(SWITCH_PORT,LED_SWITCH_1);
-			turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
+		// }
+		// if (heading == RIGHT)
+		// {
+		// 	//turn right 5 degrees
+		// 	//set_bit(SWITCH_PORT,LED_SWITCH_1);
+		// 	turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
 
-		}
+		// }
 
-		if (heading == FORWARD)
-		{
-			//move foward 2 inches
-			//blink_led(LED_SWITCH_1);
-			move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE,true);
+		// if (heading == FORWARD)
+		// {
+		// 	//move foward 2 inches
+		// 	//blink_led(LED_SWITCH_1);
+		// 	move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE,true);
 
 
-		}
+		// }
 
 		
 
-		if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
-		{
-			//no lights seen.  go find one
-			//blink_led(LED_SWITCH_1);
+		// if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
+		// {
+		// 	//no lights seen.  go find one
+		// 	//blink_led(LED_SWITCH_1);
 
-			if (scout_random == 0)
-			{
-				scout_random = 1;
-				turn_right_by_angle(SCOUT_AREA_ANGLE, true);
-			}
-			else if (scout_random == 1)
-			{
-				scout_random = 0;
+		// 	if (scout_random == 0)
+		// 	{
+		// 		scout_random = 1;
+		// 		turn_right_by_angle(SCOUT_AREA_ANGLE, true);
+		// 	}
+		// 	else if (scout_random == 1)
+		// 	{
+		// 		scout_random = 0;
 
-			turn_left_by_angle(SCOUT_AREA_ANGLE, true);
-			}
-
-
+		// 	turn_left_by_angle(SCOUT_AREA_ANGLE, true);
+		// 	}
 
 
 
-			move_forward_by_distance(SCOUT_AREA_DISTANCE, true);
-			//clear_bit(SWITCH_PORT,LED_SWITCH_1);
+
+
+		// 	move_forward_by_distance(SCOUT_AREA_DISTANCE, true);
+		// 	//clear_bit(SWITCH_PORT,LED_SWITCH_1);
 			
-		}
+		// }
 
 
 
-		//move_forward_by_distance(SCOUT_AREA_DISTANCE);
+		//move_forward_by_distance(SCOUT_AREA_DISTANCE, t);
 
 
 
@@ -191,41 +189,44 @@ void play_game()
 		*/
 
 
-		//if light sensors lux values are high enough to detect, we might be in range of IR
-		if (heading != NO_LIGHT)
-		{
-			unsigned char comm_receive_and_send_successful = attempt_to_communicate_with_beacon();
-			
-			if (comm_receive_and_send_successful)
-			{
-				//in range.  double check capture was successful!
-				unsigned char beacon_double_check = get_heading_from_light_sensors();
-				if (beacon_double_check == NO_LIGHT)
-				{
-					//beacon captured! cool.
-				}
-				else
-				{
-					//try a few more times
-					for (int i = 0; i < 3; i++)
-					{
-						attempt_to_communicate_with_beacon();
-						_delay_ms(5);
-						blink_led(LED_SWITCH_1);
-						if (get_heading_from_light_sensors() == NO_LIGHT)
-						{
-							//beacon finally captured
-							break; // for
-						}
+		// //if light sensors lux values are high enough to detect, we might be in range of IR
+		// if (heading != NO_LIGHT)
+		// {
+		// 	unsigned char comm_receive_and_send_successful = attempt_to_communicate_with_beacon();
+		// 	_delay_ms(5);
 
-					}
-				}
+		// 	if (comm_receive_and_send_successful)
+		// 	{
+		// 		blink_led(LED_SWITCH_1);
 
-			}
+		// 		//in range.  double check capture was successful!
+		// 		unsigned char beacon_double_check = get_heading_from_light_sensors();
+		// 		if (beacon_double_check == NO_LIGHT)
+		// 		{
+		// 			//beacon captured! cool.
+		// 		}
+		// 		else
+		// 		{
+		// 			//try a few more times
+		// 			for (int i = 0; i < 3; i++)
+		// 			{
+		// 				attempt_to_communicate_with_beacon();
+		// 				_delay_ms(5);
+		// 				//blink_led(LED_SWITCH_1);
+		// 				if (get_heading_from_light_sensors() == NO_LIGHT)
+		// 				{
+		// 					//beacon finally captured
+		// 					break; // for
+		// 				}
+
+		// 			}
+		// 		}
+
+		// 	}
 			
-			//else out of range. try again next time.
+		// 	//else out of range. try again next time.
 			
-		}
+		// }
 
 	}
 

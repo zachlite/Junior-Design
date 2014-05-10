@@ -60,24 +60,54 @@ That is dealt with in a higher level.
 
 unsigned char attempt_to_communicate_with_beacon()
 {
-    //try to read IR signal for n seconds
-    ir_status ir_packet_received;
-    turn_carrier_off();
-    ir_packet_received = uart_attempt_receive_for_seconds(RECEIVE_TIMEOUT);
+    // try to read IR signal for n seconds
+    
+    unsigned char packet = 0;
+    //ir_status ir_packet_received;
+    
+    //turn_carrier_off();
+    
+    //ir_packet_received = uart_attempt_receive_for_seconds(RECEIVE_TIMEOUT);
 
-    if (ir_packet_received.successful)
-    {
+    //if (ir_packet_received.successful)
+    //{
+        //blink_led(LED_SWITCH_1);
         //invert data and send
-        turn_carrier_on();
-        ir_packet_received.data = ~ir_packet_received.data;
-        uart_transmit(ir_packet_received.data); 
-        return SUCCESSFUL_COMMUNICATION;
-    }
 
-    else
-    {
-        return UNSUCCESSFUL_COMMUNICATION;
-    }
+        //turn_carrier_on();
+        //ir_packet_received.data = ~ir_packet_received.data;
+        //uart_transmit(ir_packet_received.data); 
+        //blink_led(LED_SWITCH_1);
+        //turn_carrier_off();
+
+    //uart_transmit(0b10101010);
+
+        //ir_packet_received.successful = false;
+        //
+        //return SUCCESSFUL_COMMUNICATION;
+    //}
+   // else
+        //turn_carrier_off();
+
+
+    //else
+    //{
+      //  return UNSUCCESSFUL_COMMUNICATION;
+    //}
+
+    turn_carrier_off();
+    //UCSR0A = 0;
+    //_delay_ms(10);
+    while (!(UCSR0A & (1 << RXC0)));
+    packet = UDR0;
+    packet = ~(packet);
+
+    turn_carrier_on();
+    _delay_ms(30);
+    uart_transmit(packet);
+    _delay_ms(50);
+
+    turn_carrier_off();
 
 
 }
@@ -131,26 +161,26 @@ ir_status uart_attempt_receive_for_seconds(int seconds)
 {
 
  
-    int total_time = 0;
+    //int total_time = 0;
 
     ir_status packet;
 
 
     //Pause until RXC is nonzero
    
-    while (!(UCSR0A & (1 << RXC0)))
-    {
+    while (!(UCSR0A & (1 << RXC0)));
+    //{
         //and break after waiting 1 for one second
 
         
-        if (total_time > seconds)
-        {
-            packet.data = 0;
-            packet.successful = false;
-            return packet;
-        }
-        total_time++;
-    }
+    //     if (total_time > seconds)
+    //     {
+    //         packet.data = 0;
+    //         packet.successful = false;
+    //         return packet;
+    //     }
+    //     total_time++;
+    // }
     
     packet.data= UDR0;
     packet.successful = true;

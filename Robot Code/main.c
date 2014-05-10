@@ -47,114 +47,40 @@ void motor_demo()
 
 
 
-void light_sensor_test()
-{
-
-    
-    set_up_motors(); //from motors.h
-
-    init_ADC_for_obstacle_detection(); //from obstacle_detection.h
-
-    set_up_IR_communications(); //from ir_comm.h
-    set_bit(Data_Direction_Register_B,LED_SWITCH_1);
-
-    setup_light_sensor_i2c_soft();
-    setup_light_sensor_i2c_hw();
-    //init light sensors
-
-    init_game_timer(); //from gameplay.h
-
-    sei(); //from avr/interrupt.h*/
-    set_bit(Data_Direction_Register_B,LED_SWITCH_1);    //enable LED
-
-
-
-//set_bit(Data_Direction_Register_B,LED_SWITCH_1);
-
-    //play_game();
-
-
-
-
-
-
-
-
-    
-    //set_bit(Data_Direction_Register_C,LED_SWITCH_2);
-    //uint8_t sensor_1_data = 0;
-    //uint8_t sensor_2_data = 0;
-    //unsigned char heading;
-
-    //unsigned char status;
-
-    //while(1)
-    //{
-
-        /*status = attempt_to_communicate_with_beacon();
-
-        if (status == SUCCESSFUL_COMMUNICATION)
-            set_bit(SWITCH_PORT,LED_SWITCH_1);
-
-        else if (status == UNSUCCESSFUL_COMMUNICATION)
-            clear_bit(SWITCH_PORT,LED_SWITCH_1);*/
-
-
-       
-
-       /* heading = get_heading_from_light_sensors();
-
-        
-
-            
-
-
-            if (heading == FORWARD)
-                blink_led(LED_SWITCH_1);
-
-            if (heading == RIGHT)
-                set_bit(SWITCH_PORT,LED_SWITCH_1);
-
-            if(heading == LEFT)
-                set_bit(SWITCH_PORT,LED_SWITCH_1);
-
-
-            if (heading == NO_LIGHT)
-                clear_bit(SWITCH_PORT,LED_SWITCH_1);*/
-        
-        
-
-
-
-    //}
-
-}
-
 
 
 
 int main(void) 
 {
 
-    set_up_motors(); //from motors.h
+    //set_up_motors(); //from motors.h
 
-    init_ADC_for_obstacle_detection(); //from obstacle_detection.h
+    //init_ADC_for_obstacle_detection(); //from obstacle_detection.h
 
     set_up_IR_communications(); //from ir_comm.h
 
-    setup_light_sensor_i2c_soft();
-    setup_light_sensor_i2c_hw();
+    //setup_light_sensor_i2c_soft();
+    //setup_light_sensor_i2c_hw();
     
-    init_game_timer(); //from gameplay.h
+    //init_game_timer(); //from gameplay.h
 
     sei(); //from avr/interrupt.h
 
+    play_game();
+
+    // while(1)
+    // {
+    //     turn_carrier_on();
+    //     _delay_ms(2000);
+    //     turn_carrier_off();
+    //     _delay_ms(2000);
+
+    // }
 
     //start_game();
-    
-   
+
     //motor_demo();
-    play_game();
+    //play_game();
     //motor_demo();
     
 

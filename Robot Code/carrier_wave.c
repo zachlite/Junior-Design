@@ -21,8 +21,8 @@ static const unsigned long carrier_frequency = 38000UL;
 
 void turn_carrier_on()
 {
-set_bit(&TCCR1B,CS10);
-
+  //set_up_IR_carrier();
+  set_bit(&TCCR1B,CS10);
 }
 
 void turn_carrier_off()
@@ -43,7 +43,7 @@ void set_up_IR_carrier()
   //
   // This waveform is used as a carrier wave for IR
   // communciations.
-  TCCR1B |= (0 << CS11 | 0 << CS10);    // Fcpu/1 - no prescaler CLOCK OFF
+  TCCR1B |= (0 << CS11 | 1 << CS10);    // Fcpu/1 - no prescaler CLOCK OFF
 
 
   /**
