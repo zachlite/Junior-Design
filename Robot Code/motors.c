@@ -28,11 +28,16 @@ void set_right_motor_direction(unsigned char direction);
 
 
 
+
 void enable_left_motor();
 void enable_right_motor();
 void stop_motors();
 void stop_left_motor();
 void stop_right_motor();
+void toggle_motor_direction();
+
+
+
 void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_obstacles);
 // void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks, unsigned char duty_cycle);
 void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks);
@@ -47,73 +52,6 @@ int convert_inches_to_quad_ticks(unsigned short inches);
 void evade_obstacle(unsigned char obstacle_sensor_number_triggered);
 
 
-/*
-
-             _     _ _          _     _       _           _                _ 
- _ __  _   _| |__ | (_) ___ _  | |__ (_) __ _| |__       | | _____   _____| |
-| '_ \| | | | '_ \| | |/ __(_) | '_ \| |/ _` | '_ \ _____| |/ _ \ \ / / _ \ |
-| |_) | |_| | |_) | | | (__ _  | | | | | (_| | | | |_____| |  __/\ V /  __/ |
-| .__/ \__,_|_.__/|_|_|\___(_) |_| |_|_|\__, |_| |_|     |_|\___| \_/ \___|_|
-|_|                                     |___/                                
-		
-simulation-portable
-
-*/
-
-
-// unsigned char move_until_interrupted()
-// {
-// 	while(1)
-// 	{
-// 		move_forward_by_distance(UnitOfMovement);//inches
-// 		if (light_detected())//from LightSensors
-// 		{
-// 			return 1;
-// 		}
-// 		if (obstacle_detected())//from ADC.c
-// 		{
-// 			return 2;
-// 		}
-
-// 	}
-
-// }
-
-// unsigned char move_towards_and_capture_beacon()//will we know distance?
-// {
-// 	while(!beacon_captured())//its easier to determine a change in color of light than track distance to beacon approach
-// 	{//from IRComm.c ^
-
-
-// 		turn_towards_direction_of_beacon();
-// 		move_forward_by_distance(UnitOfMovement)
-
-// 		if (obstacle_detected())//from ADC.c
-// 		{
-// 			avoid_obstacle();
-// 		}
-
-
-// 		capture_beacon();//from IRComm.c
-
-// 	}
-
-
-// }
-
-// void turn_towards_direction_of_beacon()
-// {
-// 	//for now do nothing
-
-
-// }
-
-// void avoid_obstacle()//eventually navigate around obstacle?
-// {
-// 	move_backward_by_distance(3);
-// 	turn_right_by_angle(15);
-
-// }
 
 
 /*
@@ -131,12 +69,12 @@ simulation-portable
 
 void turn_left()
 {
-	turn_left_by_angle(90, true);	
+	turn_left_by_angle(90, false);	
 }
 
 void turn_right()
 {
-	turn_right_by_angle(90, true);
+	turn_right_by_angle(90, false);
 }
 
 void turn_left_by_angle(unsigned short angle_to_turn, bool should_check_for_obstacles)
@@ -226,22 +164,22 @@ void evade_obstacle(unsigned char obstacle_sensor_number_triggered)
 		//bear right
 		turn_right_by_angle(EVADE_TURN_ANGLE, false);
 	}
-	else if (obstacle_sensor_number_triggered == LEFT_MID_SENSOR)
-	{
-		//assume obstacle to left
-		//bear right
-		turn_right_by_angle(EVADE_TURN_ANGLE, false);
-	}
-	else if (obstacle_sensor_number_triggered == RIGHT_MID_SENSOR)
-	{
+	// else if (obstacle_sensor_number_triggered == LEFT_MID_SENSOR)
+	// {
+	// 	//assume obstacle to left
+	// 	//bear right
+	// 	turn_right_by_angle(EVADE_TURN_ANGLE, false);
+	// }
+	// else if (obstacle_sensor_number_triggered == RIGHT_MID_SENSOR)
+	// {
 		
 		
-		//assume obstacle to right
-		//bear left
-		turn_left_by_angle(EVADE_TURN_ANGLE,false);
+	// 	//assume obstacle to right
+	// 	//bear left
+	// 	turn_left_by_angle(EVADE_TURN_ANGLE,false);
 		
 	
-	}
+	// }
 	else //right sensor
 	{
 		//assume obstacle to right
@@ -380,7 +318,18 @@ void stop_right_motor()
 
 }
 
+void toggle_motor_direction()
+{
+	 stop_motors();
+	 _delay_ms(10);
 
+	toggle_bit(Right_Motor_Port, Right_Motor_Direction);
+	toggle_bit(Left_Motor_Port, Left_Motor_Direction);
+
+	_delay_ms(10);
+	enable_motors();
+
+}
 
 void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_obstacles)
 {
@@ -393,6 +342,8 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
     unsigned int left_ticks = 0; 
     unsigned int right_ticks = 0;
     unsigned int quad_ticks = 0;
+
+    unsigned int cycles_stuck = 0;
 
     unsigned char last_signal_left, last_signal_right;
 
@@ -413,7 +364,6 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 
     enable_motors();
 
-    set_bit(&DDRC, 5);
 
 
 	while (quad_ticks < distance_in_quad_ticks)
@@ -454,10 +404,8 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 				
 
 
-
-				last_signal_left = quad_encoder_signal_left;
+		        last_signal_left = quad_encoder_signal_left;
 		        last_signal_right = quad_encoder_signal_right;
-		        
 		        
 		        quad_encoder_signal_left = get_quad_encoder_signal(Left_Motor_Pin, Left_Motor_Quad_A, Left_Motor_Quad_B);
 		        quad_encoder_signal_right = get_quad_encoder_signal(Right_Motor_Pin, Right_Motor_Quad_A, Right_Motor_Quad_B);
@@ -465,14 +413,32 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 		        if (quad_encoder_signal_left != last_signal_left)
 		        {
 		            left_ticks++;
+		            cycles_stuck = 0;
 
 		        }
 		        
 		        if (quad_encoder_signal_right != last_signal_right)
 		        {
 		            right_ticks++;
+		            cycles_stuck = 0;
 
 		           
+		        }
+
+		        if (quad_encoder_signal_right == last_signal_right && quad_encoder_signal_left == last_signal_left)
+		        {
+		        	//motors are stuck!
+		        
+		        	cycles_stuck++;
+		        
+		        }
+
+		        if (cycles_stuck > 3000) //motors are stuck
+		        {
+		        	cycles_stuck = 0;
+		        	blink_led(0);
+		        	toggle_motor_direction();
+
 		        }
 
 
@@ -482,8 +448,9 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 		        // //motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle);
 		        // motors_move_at_same_rate(&left_ticks, &right_ticks, duty_cycle, cycle_counter);
 		      
+		      	motors_move_at_same_rate(&left_ticks, &right_ticks);
+
 		       
-		    	motors_move_at_same_rate(&left_ticks, &right_ticks);
 
 
 
@@ -501,6 +468,10 @@ void move_distance(unsigned int distance_in_quad_ticks, bool should_check_for_ob
 
 			_delay_us(3);
 
+
+
+
+			
 		}
 
 	
@@ -549,76 +520,6 @@ void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_tick
 }
 
 
-
-
-// void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks, unsigned char duty_cycle, unsigned char cycle_counter)
-// {
-// 	if (cycle_counter < duty_cycle)
-// 	{
-// 		if(*right_ticks > *left_ticks)
-// 		{
-// 			stop_right_motor();
-// 			enable_left_motor();
-// 			//return 0;
-// 		}	
-// 		else if (*left_ticks > *right_ticks)//this is happening A LOT.  the left motor is stopping a lot.
-// 		{
-// 			stop_left_motor();
-// 			enable_right_motor();
-
-// 			//return 0;
-// 		}
-
-// 		else{
-// 			enable_motors();
-// 			//return 1;
-// 		}
-// 	}
-// 	else
-// 	{
-// 		//stop_motors();
-// 	}
-
-
-
-		
-
-// }
-
-
-// void motors_move_at_same_rate(unsigned int *left_ticks, unsigned int *right_ticks, unsigned char duty_cycle)
-// {
-// 	// for (unsigned char time = 0; time < 255; time++)
-// 	// {
-// 	// 	if (time < duty_cycle)
-// 	// 	{
-// 			if(*right_ticks > *left_ticks)
-// 			{
-// 				stop_right_motor();
-// 				enable_left_motor();
-// 				// return 0;
-// 			}	
-// 			else if (*left_ticks > *right_ticks)//this is happening A LOT.  the left motor is stopping a lot.
-// 			{
-// 				stop_left_motor();
-// 				enable_right_motor();
-
-// 				// return 0;
-// 			}
-// 		//}
-// 		else
-// 		{
-// 			stop_motors();
-// 		}
-	
-	
-// 		//enable_motors();
-// 		// return 1;
-// 	// }
-
-	
-	
-// }
 
 
 void get_duty_cycle(unsigned int distance_in_quad_ticks, unsigned int quad_ticks, unsigned char *duty_cycle)

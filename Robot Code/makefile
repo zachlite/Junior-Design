@@ -6,7 +6,7 @@ CC=avr-gcc
 CFLAGS= -std=c99 -g -Wall -mmcu=atmega328 -O1
 #check /dev to find your buspirate's device signature.  cu.usbserial-A601EXKG is mine.
 #cu.usbserial-PirateV3 is Isaac's
-DEVICE=/dev/tty.usbserial-PirateV3
+DEVICE=/dev/cu.usbserial-A601EXKG
 AVR=atmega328
 OUTPUT=main
 

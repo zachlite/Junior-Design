@@ -27,7 +27,7 @@ static const unsigned char FORWARD = 3;
 
 
 static const unsigned char LIGHT_SENSOR_DIFF_THRESHOLD = 0x02;	//needs to be tested DEBUG
-static const unsigned char AMBIENT = 0x08;	//without reading lux this is the raw threshold of C0
+static const unsigned char AMBIENT = 0x05;	//without reading lux this is the raw threshold of C0
 
 
 

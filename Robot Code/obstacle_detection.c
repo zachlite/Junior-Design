@@ -87,9 +87,8 @@ void init_analog_hardware()
 |_| \_\\__,_|_| |_| /_/   \_\____/ \____|
                                          
 		
-
-
 */
+
 
 unsigned char check_for_obstacle(void)
 {
@@ -108,7 +107,7 @@ unsigned char check_for_obstacle(void)
 				
 			*/
 
-	for (unsigned char channel = 0; channel < 4; channel++)
+	for (unsigned char channel = 0; channel < 2; channel++)//was 4
 	{
 		//check channel
 		if (analog_read(channel) > CHANNEL_SENSITIVITY)

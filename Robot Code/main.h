@@ -10,6 +10,4 @@
 #include "light_sensors.h"
 #include "gameplay.h"
 
-void blink_led(unsigned char SWITCH);
-
 #include "gameplay.h"

@@ -43,7 +43,7 @@ void set_up_IR_carrier()
   //
   // This waveform is used as a carrier wave for IR
   // communciations.
-  TCCR1B |= (0 << CS11 | 1 << CS10);    // Fcpu/1 - no prescaler CLOCK OFF
+  TCCR1B |= (0 << CS11 | 0 << CS10);    // Fcpu/1 - no prescaler CLOCK OFF
 
 
   /**

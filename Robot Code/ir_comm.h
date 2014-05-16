@@ -26,7 +26,7 @@ static const unsigned char UNSUCCESSFUL_COMMUNICATION = 0;
 
 #define UBRR_300 1667//300 baud in UBBR
 
-#define RECEIVE_TIMEOUT 10000
+#define RECEIVE_TIMEOUT 100
 
 
 

@@ -98,5 +98,8 @@ Binghamton University
 #define Square_Wave_Pin PB1
 
 void blink_led(unsigned char SWITCH);
- 
+ void flash_led();
+
+void led_off();
+
 #endif

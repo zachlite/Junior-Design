@@ -64,34 +64,6 @@ ISR(TIMER0_COMPA_vect)  //Execute this upon interrupt
 
 
 
-
-// void start_game()
-// {	
-// 	while(1)
-// 	{
-// 		if (check_for_obstacle() != NO_OBSTACLE_DETECTED)
-// 			break;
-
-// 		move_forward_by_distance_no_obstacle(20);
-// 			//blink_led(LED_SWITCH_1);
-
-// 		//set_bit(SWITCH_PORT,LED_SWITCH_1);
-
-// 	}
-// 	//stop();
-// 	while(1)
-// 	{
-// 		if (check_for_obstacle() != NO_OBSTACLE_DETECTED)
-// 			break;
-
-
-// 	}
-
-// 	//while(check_for_obstacle() == NO_OBSTACLE_DETECTED);
-	
-// }
-
-
 void play_game()
 {
 
@@ -113,68 +85,67 @@ void play_game()
 
 
 		  //turn_carrier_on();
-		attempt_to_communicate_with_beacon();
-		_delay_ms(10);
+		// attempt_to_communicate_with_beacon();
+		// _delay_ms(10);
 
 
-		 //heading = get_heading_from_light_sensors();
+		 heading = get_heading_from_light_sensors();
 
-		// if (heading == LEFT)
-		// {
-		// 	//turn left 5 degrees
-		// 	//set_bit(SWITCH_PORT,LED_SWITCH_1);
-		// 	turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
+		if (heading == LEFT)
+		{
+			//turn left 5 degrees
+			//set_bit(SWITCH_PORT,LED_SWITCH_1);
+			turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE, false);
 			
 
-		// }
-		// if (heading == RIGHT)
-		// {
-		// 	//turn right 5 degrees
-		// 	//set_bit(SWITCH_PORT,LED_SWITCH_1);
-		// 	turn_left_by_angle(COURSE_ADJUSTMENT_ANGLE, true);
+		}
+		if (heading == RIGHT)
+		{
+			//turn right 5 degrees
+			//set_bit(SWITCH_PORT,LED_SWITCH_1);
+			turn_right_by_angle(COURSE_ADJUSTMENT_ANGLE, false);
 
-		// }
+		}
 
-		// if (heading == FORWARD)
-		// {
-		// 	//move foward 2 inches
-		// 	//blink_led(LED_SWITCH_1);
-		// 	move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE,true);
+		if (heading == FORWARD)
+		{
+			//move foward 2 inches
+			//blink_led(LED_SWITCH_1);
+			move_forward_by_distance(COURSE_ADJUSTMENT_DISTANCE,true);
 
 
-		// }
+		}
 
 		
 
-		// if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
-		// {
-		// 	//no lights seen.  go find one
-		// 	//blink_led(LED_SWITCH_1);
+		if (heading == NO_LIGHT) //will reaquire beacon if previously found but lost due to obstacle avoidance
+		{
+			//no lights seen.  go find one
+			//blink_led(LED_SWITCH_1);
 
-		// 	if (scout_random == 0)
-		// 	{
-		// 		scout_random = 1;
-		// 		turn_right_by_angle(SCOUT_AREA_ANGLE, true);
-		// 	}
-		// 	else if (scout_random == 1)
-		// 	{
-		// 		scout_random = 0;
+			if (scout_random % 2 == 1 || scout_random-1 % 2 == 1)
+			{
+				scout_random ++;
+				turn_right_by_angle(SCOUT_AREA_ANGLE, false);
+			}
+			else
+			{
+				scout_random ++;
 
-		// 	turn_left_by_angle(SCOUT_AREA_ANGLE, true);
-		// 	}
-
-
+			turn_left_by_angle(SCOUT_AREA_ANGLE, false);
+			}
 
 
 
-		// 	move_forward_by_distance(SCOUT_AREA_DISTANCE, true);
-		// 	//clear_bit(SWITCH_PORT,LED_SWITCH_1);
+
+
+			move_forward_by_distance(SCOUT_AREA_DISTANCE, true);
+			//clear_bit(SWITCH_PORT,LED_SWITCH_1);
 			
-		// }
+		}
 
 
 
-		//move_forward_by_distance(SCOUT_AREA_DISTANCE, t);
 
 
 
@@ -189,44 +160,17 @@ void play_game()
 		*/
 
 
-		// //if light sensors lux values are high enough to detect, we might be in range of IR
-		// if (heading != NO_LIGHT)
-		// {
-		// 	unsigned char comm_receive_and_send_successful = attempt_to_communicate_with_beacon();
-		// 	_delay_ms(5);
+		//if light sensors lux values are high enough to detect, we might be in range of IR
+		if (heading != NO_LIGHT)
+		{
 
-		// 	if (comm_receive_and_send_successful)
-		// 	{
-		// 		blink_led(LED_SWITCH_1);
-
-		// 		//in range.  double check capture was successful!
-		// 		unsigned char beacon_double_check = get_heading_from_light_sensors();
-		// 		if (beacon_double_check == NO_LIGHT)
-		// 		{
-		// 			//beacon captured! cool.
-		// 		}
-		// 		else
-		// 		{
-		// 			//try a few more times
-		// 			for (int i = 0; i < 3; i++)
-		// 			{
-		// 				attempt_to_communicate_with_beacon();
-		// 				_delay_ms(5);
-		// 				//blink_led(LED_SWITCH_1);
-		// 				if (get_heading_from_light_sensors() == NO_LIGHT)
-		// 				{
-		// 					//beacon finally captured
-		// 					break; // for
-		// 				}
-
-		// 			}
-		// 		}
-
-		// 	}
+			for (int i = 0; i < 10; ++i)
+			{
+				unsigned char comm_receive_and_send_successful = attempt_to_communicate_with_beacon();
+				_delay_ms(10);
+			}
 			
-		// 	//else out of range. try again next time.
-			
-		// }
+		}
 
 	}
 
@@ -248,94 +192,6 @@ void game_timer_test()
 	//clear_bit(&PORTC, 5);
 
 }
-
-
-		//check to make sure beacon was actually captured
-
-
-
-
-		//call movement with a flag that says whether or not you've see a beacon
-
-
-		//bool obstacle_detected_during_movement = false;
-
-		//move foreward 5 inches
-		//assign bool value there ^
-
-
-		//what if motors were capable of avoiding obstacles on their own?
-		//made recursive calls to turn, then move, then check again
-		//if the recursive call is entered too many times, the obstacle is a wall, and the robot must turn around
-		//should note direction traveling when obstacle was encountered
-
-
-
-
-		//use light sensors as eyes that always move towards brightest light
-
-
-
-
-
-
-
-
-
-
-
-
-	// 	if (hunt_for_beacon() == SUCCESS)
-	// 	{
-	// 		//navigate to light sensor
-	// 	}
-		
-	// 	//else keep hunting
-
-	// }
-
-
-
-	// while(time less than 3 minutes)//game is running
-	// {
-	// 	//think of the priorities
-
-	// 	if (lights visible)
-	// 	{
-	// 		navigate towards light. how???
-	// 		if(obstacle detected)
-	// 		{
-	// 			navigate around obstacle
-	// 		}
-
-
-	// 	}
-
-	// 	else
-	// 	{
-	// 		look for light
-
-	// 	}
-
-	// }
-
-
-	 //for now, move until obstacle is detected, then turn and keep moving
-
-	// unsigned char case;
-
-	// case = move_until_interupted()
-	
-	// if (case == 1)//light detected
-	// {
-	// 	move_towards_and_capture_beacon();
-	// }
-	// else//obstacle detected
-	// {
-	// 	avoid_obstacle();
-	// }
-
-
 
 
 
